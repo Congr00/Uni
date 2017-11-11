@@ -1,0 +1,19 @@
+\contentsline {section}{\numberline {1\relax .\kern .5em }Narz\k edzia}{1}{section.1}
+\contentsline {section}{\numberline {2\relax .\kern .5em }Rozdzia\IeC {\l }}{2}{section.2}
+\contentsline {subsection}{\numberline {2.1\relax .\kern .5em }Podrozdzia\IeC {\l }}{2}{subsection.2.1}
+\contentsline {subsection}{Podrozdzia\IeC {\l } bez numeru}{2}{subsection*.2}
+\contentsline {subsubsection}{\numberline {2.1.1\relax .\kern .5em }Podpodrozdzia\IeC {\l }}{2}{subsubsection.2.1.1}
+\contentsline {section}{\numberline {3\relax .\kern .5em }Odst\k epy}{2}{section.3}
+\contentsline {section}{\numberline {4\relax .\kern .5em }R\'o\.zne kroje i wielko\'sci czcionek.}{2}{section.4}
+\contentsline {section}{\numberline {5\relax .\kern .5em }Kompilacja -- linia polece\'n, cytowanie z bibliografii}{3}{section.5}
+\contentsline {section}{\numberline {6\relax .\kern .5em }Wynumerowania i wypunktowania}{3}{section.6}
+\contentsline {subsection}{\numberline {6.1\relax .\kern .5em }Wynumerowania}{3}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2\relax .\kern .5em }Wypunktowania}{3}{subsection.6.2}
+\contentsline {section}{\numberline {7\relax .\kern .5em }Wzory matematyczne}{3}{section.7}
+\contentsline {section}{\numberline {8\relax .\kern .5em }Kod programu i opis algorytmu}{5}{section.8}
+\contentsline {subsection}{\numberline {8.1\relax .\kern .5em }Kod przyk\IeC {\l }adowego programu}{5}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2\relax .\kern .5em }Przyk\IeC {\l }adowy algorytm w postaci listy krok\'ow}{6}{subsection.8.2}
+\contentsline {section}{\numberline {9\relax .\kern .5em }Tabele}{6}{section.9}
+\contentsline {section}{\numberline {10\relax .\kern .5em }Rysunki -- otoczenie figure}{8}{section.10}
+\contentsline {section}{\numberline {11\relax .\kern .5em }Obrazki}{9}{section.11}
+\contentsline {section}{Literatura}{10}{section*.3}
