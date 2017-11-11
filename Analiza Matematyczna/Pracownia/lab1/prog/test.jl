@@ -46,6 +46,19 @@ function plot_test(mult, n, expected_res, sort, x1, x2, start)
     return res
 end
 
+function plot_ex(n, ex, input)
+    exact(n1) = (10000 + 10000 + (n1 - 1)*1/100000)/2 * n1
+    res = Array{BigFloat,1}[[],[],[]]
+    mul = 16
+    while mul <= n
+        tmp = test(input[1:mul],exact(mul),true)
+        push!(res[1], tmp[1])
+        push!(res[2], tmp[2])
+        push!(res[3], tmp[3])
+        mul *= 2
+    end
+    return res
+end
 function plot_test2(mult, n, input::Array{Float64, 1}, start=100, exp=0)
     res = Array{BigFloat,1}[[],[],[]]
     for i in start:+mult:n
@@ -58,7 +71,7 @@ function plot_test2(mult, n, input::Array{Float64, 1}, start=100, exp=0)
     return res
 end
 
-function test(input_arr::Array{Float64,1}, expected_res=0, ret=false)
+function test(input_arr, expected_res=0, ret=false)
     n = sum_naive(input_arr)
     b = sum_binary(input_arr)
     k = sum_kahan(input_arr)
@@ -74,7 +87,7 @@ function test(input_arr::Array{Float64,1}, expected_res=0, ret=false)
         end
     end
     if ret
-        return [abs(k - expected_res - n),abs(k - expected_res - b),abs(k - expected_res - k)]
+        return [abs(expected_res - n),abs(expected_res - b),abs(expected_res - k)]
     end
 end
 
@@ -98,8 +111,25 @@ end
 function Eq_Array(n, f)
     res = [BigFloat(0.0)]
     pop!(res)
-    for i in 1:n
+    for i in 0:(n-1)sin
         push!(res, BigFloat(f(i)))
     end
     res
+end
+
+function abs_a(x)
+    res = x
+    for i in 1:(length(x))
+        res[i] = abs(x[i])
+    end
+    return res
+end
+
+function arithm(a1, r, n)
+    res = [BigFloat(a1)]
+    for i in 2:n
+        a1 = a1 + r
+        push!(res, a1)
+    end
+    return res
 end

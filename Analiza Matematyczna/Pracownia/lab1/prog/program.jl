@@ -2,8 +2,9 @@ setprecision(32)
 
 function sum_kahan(x)
     n = length(x)
-    if (n == 0)   return(0)  end
-
+    if (n == 0)   
+        return(0)
+    end
     s = x[1]
     c = 0
     for i in 2:n
@@ -28,11 +29,11 @@ function sum_naive(x)
 end
 
 function sum_binary(x)
-    if length(x) == 1
-        return BigFloat(x[1])
-    elseif length(x) == 2
+    # tylko n = 2^m, n > 0 brak sprawdzania dla szybkości
+    l = length(x)
+    if l == 2
         return BigFloat(x[1] + x[2])
     else
-        return BigFloat(sum_binary(x[1:(floor(Int64,length(x) / 2))]) + sum_binary(x[(floor(Int64,length(x) / 2) + 1):length(x)]))
+        return BigFloat(sum_binary(x[1:Int(l/2)]) + sum_binary(x[Int(l/2 + 1):l]))
     end
 end
