@@ -1,24 +1,17 @@
 include("program.jl")
-# losowanie liczb we wskazanym przedziale
-function random(count=100, a=0, b=10,file="rnd.out")
-    rng = MersenneTwister(23421)
-    open(file, "w") do f
-        for i in 1:count
-            r = randn(rng, Float64) + rand([a,b])
-            write(f, "$r\n")
-        end
-    end
-end
-function random_array(count=100, a=0, b=0, e=0)
+
+#losowanie liczb w zadanym przedziale [a:b], aby stworzyć liczby
+#ujemne ustawić neg na wartość, która będzie odejmowana
+function random_array(count=100, a=0, b=0, neg=0)
     res = []
-    rng = MersenneTwister(23421)
         for i in 1:count
-            r = (randn(rng, Float64) + rand([a,b]))
+            r = (rand(Float64) + rand(a:b))
+            r -= neg
             push!(res, r)
         end
     return res
 end
-#zwraca tablicę z [x1, x2]*n elementami x1, x2
+#zwraca tablicę z [x1, x2]*n elementami x1, x2, s ustawia sortowanie
 function multiply(x1, x2, n, s=0)
     res = [0.0]
     pop!(res) 
@@ -34,24 +27,12 @@ function multiply(x1, x2, n, s=0)
         return res
     end
 end
-#
-function plot_test(mult, n, expected_res, sort, x1, x2, start)
-    res = Array{BigFloat,1}[[],[],[]]
-    for i in 1:n
-        tmp = test(multiply(x1, x2, start*i*mult, sort),expected_res*i*mult*start,true)
-        push!(res[1], tmp[1])
-        push!(res[2], tmp[2])
-        push!(res[3], tmp[3])
-    end
-    return res
-end
-
+#funkcja pomocnicza do tworzenia danych do wykresu
 function plot_ex(n, ex, input)
-    exact(n1) = (10000 + 10000 + (n1 - 1)*1/100000)/2 * n1
     res = Array{BigFloat,1}[[],[],[]]
     mul = 16
     while mul <= n
-        tmp = test(input[1:mul],exact(mul),true)
+        tmp = test(input[1:mul],ex[Int(log2(mul)+1)],true)
         push!(res[1], tmp[1])
         push!(res[2], tmp[2])
         push!(res[3], tmp[3])
@@ -59,18 +40,7 @@ function plot_ex(n, ex, input)
     end
     return res
 end
-function plot_test2(mult, n, input::Array{Float64, 1}, start=100, exp=0)
-    res = Array{BigFloat,1}[[],[],[]]
-    for i in start:+mult:n
-        tmp = test(input[1:(start + i)], 0, true)
-        #tmp = test(input[1:(start + i*mult)], exp, true)
-        push!(res[1], tmp[1])
-        push!(res[2], tmp[2])
-        push!(res[3], tmp[3])    
-    end
-    return res
-end
-
+#funkcja testująca 3 algorytmy 
 function test(input_arr, expected_res=0, ret=false)
     n = sum_naive(input_arr)
     b = sum_binary(input_arr)
@@ -90,24 +60,7 @@ function test(input_arr, expected_res=0, ret=false)
         return [abs(expected_res - n),abs(expected_res - b),abs(expected_res - k)]
     end
 end
-
-function lff(file, sort=0, n=0)
-   f = open(file)
-   lines = readlines(f)
-   x = zeros(Float64, length(lines))
-   for ln = 1:length(lines)
-      x[ln] = parse(Float64, lines[ln])
-   end
-   close(f)
-   if sort == 0
-        return x
-   elseif sort == 1
-        return sort!(x)
-   else
-        return sort!(x, rev=true)
-   end
-end
-
+#funkcja do obliczania kolejnych wyrazów ciągu podanego wzorem f
 function Eq_Array(n, f)
     res = [BigFloat(0.0)]
     pop!(res)
@@ -116,7 +69,7 @@ function Eq_Array(n, f)
     end
     res
 end
-
+#funkcja zwraca tablicę wartości bezwzględnych z podanej tablicy 
 function abs_a(x)
     res = x
     for i in 1:(length(x))
@@ -124,7 +77,7 @@ function abs_a(x)
     end
     return res
 end
-
+#funkcja wylicza kolejne wyrazy ciągu arytmetycznego
 function arithm(a1, r, n)
     res = [BigFloat(a1)]
     for i in 2:n

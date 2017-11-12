@@ -1,12 +1,10 @@
-setprecision(32)
-
 function sum_kahan(x)
     n = length(x)
     if (n == 0)   
         return(0)
     end
     s = x[1]
-    c = 0
+    c = BigFloat(0.0)
     for i in 2:n
         t = s + x[i]
         if ( abs(s) >= abs(x[i]) )

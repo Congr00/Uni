@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.29)  11 NOV 2017 17:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.29)  12 NOV 2017 23:13
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -685,8 +685,23 @@ LaTeX Font Info:    Overwriting math alphabet `\mathbbmss' in version `bold'
 \CommentStream=\write3
 
 Excluding comment 'comment')
-\c@tw=\count116
-\c@alg=\count117
+(/usr/share/texlive/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
+\col@sep=\dimen134
+\extrarowheight=\dimen135
+\NC@list=\toks28
+\extratabsurround=\skip54
+\backup@length=\skip55
+)
+\rotheadsize=\dimen136
+\c@nlinenum=\count116
+\TeXr@lab=\toks29
+)
+\c@tw=\count117
+\c@alg=\count118
 
 
 LaTeX Warning: Unused global option(s):
@@ -695,91 +710,89 @@ LaTeX Warning: Unused global option(s):
 (./sprawozdanie.aux)
 \openout1 = `sprawozdanie.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for OT4/cmr/m/n on input line 26.
-LaTeX Font Info:    Try loading font information for OT4+cmr on input line 26.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for OT4/cmr/m/n on input line 27.
+LaTeX Font Info:    Try loading font information for OT4+cmr on input line 27.
  (/usr/share/texlive/texmf-dist/tex/latex/polski/ot4cmr.fd
 File: ot4cmr.fd 2008/02/24 v1.2.1 Font defs for fonts PL (MW)
 )
-LaTeX Font Info:    ... okay on input line 26.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 26.
-LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    ... okay on input line 27.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 27.
+LaTeX Font Info:    ... okay on input line 27.
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count118
-\scratchdimen=\dimen134
+\scratchcounter=\count119
+\scratchdimen=\dimen137
 \scratchbox=\box28
-\nofMPsegments=\count119
-\nofMParguments=\count120
-\everyMPshowfont=\toks28
-\MPscratchCnt=\count121
-\MPscratchDim=\dimen135
-\MPnumerator=\count122
-\makeMPintoPDFobject=\count123
-\everyMPtoPDFconversion=\toks29
+\nofMPsegments=\count120
+\nofMParguments=\count121
+\everyMPshowfont=\toks30
+\MPscratchCnt=\count122
+\MPscratchDim=\dimen138
+\MPnumerator=\count123
+\makeMPintoPDFobject=\count124
+\everyMPtoPDFconversion=\toks31
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box29
-Package hyperref Info: Link coloring OFF on input line 26.
+Package hyperref Info: Link coloring OFF on input line 27.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count124
+\c@section@level=\count125
 )
-LaTeX Info: Redefining \ref on input line 26.
-LaTeX Info: Redefining \pageref on input line 26.
-LaTeX Info: Redefining \nameref on input line 26.
+LaTeX Info: Redefining \ref on input line 27.
+LaTeX Info: Redefining \pageref on input line 27.
+LaTeX Info: Redefining \nameref on input line 27.
 
 (./sprawozdanie.out) (./sprawozdanie.out)
 \@outlinefile=\write4
 \openout4 = `sprawozdanie.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 28.
+LaTeX Font Info:    Try loading font information for U+msa on input line 29.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 28.
+LaTeX Font Info:    Try loading font information for U+msb on input line 29.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+bbm on input line 39.
+LaTeX Font Info:    Try loading font information for U+bbm on input line 44.
 
 (/usr/share/texlive/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
-)
-Overfull \hbox (4.38342pt too wide) in paragraph at lines 40--47
-\OT4/cmr/m/n/10.95 wa-nia \OT4/cmr/bx/n/10.95 Ju-lia v.0.6.1 \OT4/cmr/m/n/10.95
- w try-bie po-je-dy«-czej (\OT4/cmr/bx/n/10.95 Single\OT4/cmr/m/n/10.95 ) oraz 
-po-dwój-nej (\OT4/cmr/bx/n/10.95 Double\OT4/cmr/m/n/10.95 )
- []
-
-[1
+) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 70--73
+Underfull \hbox (badness 10000) in paragraph at lines 81--84
 
  []
 
-[2] [3]
-Overfull \hbox (4.39183pt too wide) detected at line 159
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 156--160
+
+ []
+
+[3]
+Overfull \hbox (4.39183pt too wide) detected at line 170
 \OT1/cmr/m/n/10.95 10000\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 0 + 3\OML/cmm/m
 /it/10.95 :\OT1/cmr/m/n/10.95 14159 + 2\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 
 71828 = 10003\OML/cmm/m/it/10.95 :\OT1/cmr/m/n/10.95 14159 + 2\OML/cmm/m/it/10.
@@ -788,44 +801,75 @@ Overfull \hbox (4.39183pt too wide) detected at line 159
 r/m/n/10.95 9
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 193--195
+
+ []
+
 [4]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 186.
- [5]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 186.
+Underfull \hbox (badness 10000) in paragraph at lines 196--200
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 201--204
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 238--245
+
+ []
+
+[5] [6]
+<wykres1.png, id=103, 608.2725pt x 401.5pt>
+File: wykres1.png Graphic file (type png)
+<use wykres1.png>
+Package pdftex.def Info: wykres1.png  used on input line 284. on input line 284
+.
+Package pdftex.def Info: Requested size: 243.30469pt x 160.59715pt on input lin
+e 284.
+ [7 <./wykres1.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 329.
+ [8]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 329.
  (./sprawozdanie.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 186.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 186.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 329.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 329.
 Package rerunfilecheck Info: File `sprawozdanie.out' has not changed.
-(rerunfilecheck)             Checksum: CF5B668D06BCBF6E06B20D92A6B7FED7;449.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 186.
+(rerunfilecheck)             Checksum: 769FA992149E5E3C4289446F6EC9B0BC;717.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 329.
  ) 
 Here is how much of TeX's memory you used:
- 8206 strings out of 494896
- 122504 string characters out of 6179974
- 205487 words of memory out of 5000000
- 11364 multiletter control sequences out of 15000+600000
- 15223 words of font info for 51 fonts, out of 8000000 for 9000
+ 8448 strings out of 494896
+ 125130 string characters out of 6179974
+ 211213 words of memory out of 5000000
+ 11580 multiletter control sequences out of 15000+600000
+ 19258 words of font info for 65 fonts, out of 8000000 for 9000
  34 hyphenation exceptions out of 8191
- 42i,6n,38p,436b,330s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/pl/plrm.enc} </home/lukas/.tex
-live2017/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.657pk></usr/share/texlive/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-d
-ist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-sy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/pl/plbx10.pfb></usr/share/t
-exlive/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texlive/texmf-di
-st/fonts/type1/public/pl/plr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/pl/plr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/pl/plr17.p
-fb>
-Output written on sprawozdanie.pdf (5 pages, 135466 bytes).
+ 42i,14n,38p,436b,381s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/pl/plit.enc}{/usr/share/texliv
+e/texmf-dist/fonts/enc/dvips/pl/plrm.enc} </home/lukas/.texlive2017/texmf-var/f
+onts/pk/ljfour/public/bbm/bbm10.657pk></usr/share/texlive/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cmextra/cmex8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/pl/plbx10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/pl/plbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/publi
+c/pl/plr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/pl/plr12.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/pl/plr17.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/pl/plr9.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/pl/plsl10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/pl/plti10.pfb>
+Output written on sprawozdanie.pdf (8 pages, 178210 bytes).
 PDF statistics:
- 134 PDF objects out of 1000 (max. 8388607)
- 110 compressed objects within 2 object streams
- 18 named destinations out of 1000 (max. 500000)
- 65 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 188 PDF objects out of 1000 (max. 8388607)
+ 156 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
+ 102 words of extra memory for PDF output out of 10000 (max. 10000000)
 
