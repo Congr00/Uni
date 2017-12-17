@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.29)  17 DEC 2017 20:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2017.10.29)  17 DEC 2017 21:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -799,15 +799,20 @@ LaTeX Font Info:    Try loading font information for OT4+cmss on input line 75.
 
 (/usr/share/texlive/texmf-dist/tex/latex/polski/ot4cmss.fd
 File: ot4cmss.fd 2008/02/24 v1.2.1 Font defs for fonts PL (MW)
-) [2]
-Overfull \hbox (43.92534pt too wide) detected at line 159
+)
+Underfull \hbox (badness 10000) in paragraph at lines 78--82
+
+ []
+
+[2]
+Overfull \hbox (43.92534pt too wide) detected at line 160
 [][] [] [] []
  []
 
 [3]
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:196: Undefined control sequence.
-l.196         \rigth
+tex:197: Undefined control sequence.
+l.197         \rigth
                     \}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -816,10 +821,10 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:197: Extra }, or forgotten \right.
+tex:198: Extra }, or forgotten \right.
 <template> }
             $\hfil \endtemplate 
-l.197 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
+l.198 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -828,10 +833,10 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:197: Missing \right. inserted.
+tex:198: Missing \right. inserted.
 <inserted text> 
                 \right .
-l.197 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
+l.198 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
                                                   
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -840,10 +845,10 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:197: Missing } inserted.
+tex:198: Missing } inserted.
 <inserted text> 
                 }
-l.197 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
+l.198 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
                                                   
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -852,8 +857,8 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:210: Undefined control sequence.
-l.210             \rigth
+tex:211: Undefined control sequence.
+l.211             \rigth
                         \}
 The control sequence at the end of the top line
 of your error message was never \def'ed. If you have
@@ -862,10 +867,10 @@ spelling (e.g., `I\hbox'). Otherwise just continue,
 and I'll forget about whatever was undefined.
 
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:211: Extra }, or forgotten \right.
+tex:212: Extra }, or forgotten \right.
 <template> }
             $\hfil \endtemplate 
-l.211 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
+l.212 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
                                                   
 I've deleted a group-closing symbol because it seems to be
 spurious, as in `$x}$'. But perhaps the } is legitimate and
@@ -874,10 +879,10 @@ the way to recover is to insert both the forgotten and the
 deleted material, e.g., by typing `I$}'.
 
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:211: Missing \right. inserted.
+tex:212: Missing \right. inserted.
 <inserted text> 
                 \right .
-l.211 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
+l.212 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
                                                   
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -886,10 +891,10 @@ really didn't forget anything, try typing `2' now; then
 my insertion and my current dilemma will both disappear.
 
 /home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:211: Missing } inserted.
+tex:212: Missing } inserted.
 <inserted text> 
                 }
-l.211 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
+l.212 ... = (0, \ldots, i-1), i = (1, \ldots, n)\\
                                                   
 I've inserted something that you may have forgotten.
 (See the <inserted text> above.)
@@ -901,73 +906,73 @@ my insertion and my current dilemma will both disappear.
 <wykres1.png, id=93, 625.33624pt x 411.5375pt>
 File: wykres1.png Graphic file (type png)
 <use wykres1.png>
-Package pdftex.def Info: wykres1.png  used on input line 260. on input line 260
+Package pdftex.def Info: wykres1.png  used on input line 261. on input line 261
 .
 Package pdftex.def Info: Requested size: 250.13007pt x 164.61208pt on input lin
-e 260.
+e 261.
  [6 <./wykres1.png>]
 <wykres2.png, id=101, 612.2875pt x 409.53pt>
 File: wykres2.png Graphic file (type png)
 <use wykres2.png>
-Package pdftex.def Info: wykres2.png  used on input line 270. on input line 270
+Package pdftex.def Info: wykres2.png  used on input line 271. on input line 271
 .
 Package pdftex.def Info: Requested size: 244.91066pt x 163.80908pt on input lin
-e 270.
-
-/home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
-tex:293: Extra alignment tab has been changed to \cr.
-<recently read> \endtemplate 
-                             
-l.293         10 & losowe       & 5.477561e+01 &
-                                                 5.477561e+01 & 5.477561e+01...
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-
-Overfull \hbox (30.9004pt too wide) in paragraph at lines 287--301
- [] 
- []
-
-[7 <./wykres2.png>]
+e 271.
+ [7 <./wykres2.png>]
 <wykres3.png, id=108, 617.30624pt x 404.51125pt>
 File: wykres3.png Graphic file (type png)
 <use wykres3.png>
-Package pdftex.def Info: wykres3.png  used on input line 307. on input line 307
+Package pdftex.def Info: wykres3.png  used on input line 315. on input line 315
 .
 Package pdftex.def Info: Requested size: 246.91812pt x 161.80162pt on input lin
-e 307.
+e 315.
  [8 <./wykres3.png>] [9]
 <wykres4.png, id=118, 618.31pt x 412.54124pt>
 File: wykres4.png Graphic file (type png)
 <use wykres4.png>
-Package pdftex.def Info: wykres4.png  used on input line 371. on input line 371
+Package pdftex.def Info: wykres4.png  used on input line 383. on input line 383
 .
 Package pdftex.def Info: Requested size: 247.31961pt x 165.01357pt on input lin
-e 371.
+e 383.
 <wykres5.png, id=119, 620.3175pt x 412.54124pt>
 File: wykres5.png Graphic file (type png)
 <use wykres5.png>
-Package pdftex.def Info: wykres5.png  used on input line 381. on input line 381
+Package pdftex.def Info: wykres5.png  used on input line 394. on input line 394
 .
 Package pdftex.def Info: Requested size: 248.1226pt x 165.01357pt on input line
- 381.
- [10 <./wykres4.png>] [11 <./wykres5.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 404.
+ 394.
+
+[10 <./wykres4.png>]
+
+/home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.
+tex:398: LaTeX Error: There's no line here to end.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.398 
+      
+Your command was ignored.
+Type  I <command> <return>  to replace it with another command,
+or  <return>  to continue without it.
+
+[11 <./wykres5.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 422.
  [12]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 404.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 422.
  (./sprawozdanie.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 404.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 404.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 422.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 422.
 Package rerunfilecheck Info: File `sprawozdanie.out' has not changed.
 (rerunfilecheck)             Checksum: 5852C3DA2E0C53CC026CEA375CFC1817;518.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 404.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 422.
  ) 
 Here is how much of TeX's memory you used:
- 8473 strings out of 494896
- 125305 string characters out of 6179974
- 214016 words of memory out of 5000000
- 11591 multiletter control sequences out of 15000+600000
+ 8475 strings out of 494896
+ 125324 string characters out of 6179974
+ 214104 words of memory out of 5000000
+ 11593 multiletter control sequences out of 15000+600000
  17007 words of font info for 57 fonts, out of 8000000 for 9000
  34 hyphenation exceptions out of 8191
  42i,14n,38p,436b,440s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -986,10 +991,10 @@ live/texmf-dist/fonts/type1/public/pl/plbx12.pfb></usr/share/texlive/texmf-dist
 lic/pl/plr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/pl/plr17.pfb
 ></usr/share/texlive/texmf-dist/fonts/type1/public/pl/plr9.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/public/pl/plss10.pfb>
-Output written on sprawozdanie.pdf (12 pages, 288623 bytes).
+Output written on sprawozdanie.pdf (12 pages, 290251 bytes).
 PDF statistics:
- 204 PDF objects out of 1000 (max. 8388607)
- 162 compressed objects within 2 object streams
+ 206 PDF objects out of 1000 (max. 8388607)
+ 164 compressed objects within 2 object streams
  43 named destinations out of 1000 (max. 500000)
  98 words of extra memory for PDF output out of 10000 (max. 10000000)
 

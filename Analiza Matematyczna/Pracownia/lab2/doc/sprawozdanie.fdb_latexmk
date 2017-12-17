@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1513537422 "/home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.tex" "sprawozdanie.pdf" "sprawozdanie" 1513537519
+["pdflatex"] 1513542325 "/home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.tex" "sprawozdanie.pdf" "sprawozdanie" 1513542325
   "/etc/texmf/web2c/texmf.cnf" 1509220317 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.tex" 1513537422 19820 0cc90382ce0e55970bbfbc02fd20ccef ""
+  "/home/lukas/Documents/Uni/Analiza Matematyczna/Pracownia/lab2/doc/sprawozdanie.tex" 1513542325 21112 8bf573fcd33fa49ed656b91f8bffc637 ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/pl/plrm.enc" 1480098668 1944 1845592c00bbe510359fd6887a83ff72 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1480098698 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -117,16 +117,16 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1503024366 32036 8f10cb8f6ef259fb5791f09c065d3d13 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1509271798 2001225 5c612c4a755eccee7d57011286621917 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1509269975 777185 6b5d8be4046f006e64296d7158d96de1 ""
-  "sprawozdanie.aux" 1513537423 1660 853e2f4de5406eaad0d8237dfe8b5d93 ""
-  "sprawozdanie.out" 1513537423 518 5852c3da2e0c53cc026cea375cfc1817 ""
-  "sprawozdanie.tex" 1513537422 19820 0cc90382ce0e55970bbfbc02fd20ccef ""
+  "sprawozdanie.aux" 1513542324 1787 d92061cd099bd2cf34d2382669e36a2c ""
+  "sprawozdanie.out" 1513542324 518 5852c3da2e0c53cc026cea375cfc1817 ""
+  "sprawozdanie.tex" 1513542325 21112 8bf573fcd33fa49ed656b91f8bffc637 ""
   "wykres1.png" 1513525090 27968 d4083cb0e4228ad90a466e8f553a66ce ""
   "wykres2.png" 1513526220 24726 fb610c7f75f3a57374ebf2d14d4559a0 ""
   "wykres3.png" 1513528725 24379 2c0cffdccb3149bfb7131a68d6dad3a9 ""
   "wykres4.png" 1513531641 29031 f6e4c1c19e310fa6068023ddb9df0ea1 ""
   "wykres5.png" 1513532328 36793 db99bf74cdd1b3471ddedfe0431f7ec1 ""
   (generated)
-  "sprawozdanie.out"
-  "sprawozdanie.pdf"
   "sprawozdanie.aux"
   "sprawozdanie.log"
+  "sprawozdanie.out"
+  "sprawozdanie.pdf"

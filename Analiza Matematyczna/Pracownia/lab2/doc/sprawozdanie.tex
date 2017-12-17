@@ -79,10 +79,11 @@ Dzieląc to przez (3), otrzymamy \textsf{barycentryczną formułę} wielomianu (
 dla $\lambda$ takiej samej jak (2). Dalej, przy testowaniu będziemy go nazywać 
 \textsf{wielomianem barycentrycznym}.
 \\
+
 Zauważmy, że dzięki takiej postaci $\lambda_i$ nie korzysta ze zmiennej $x$.
 Dzięki temu dla zadanych węzłów wystarczy raz ją wyliczyć i przy wyznaczaniu wartości
-wielomianu używać tej stałem bez ponawiania obliczeń. Ponadto jeśli 
-dodamy nowe wężły, to w celu wyliczenia nowej wartości $\lambda_i$, wystarczy
+wielomianu używać tej stałej bez ponawiania obliczeń. Ponadto jeśli 
+dodamy nowe węzły, to w celu wyliczenia nowej wartości $\lambda_i$, wystarczy
 przemnożyć ją przez odpowiedni iloraz $\frac{1}{t_i - t_j}$.
 \subsection{Węzły Chebyszewa}
 Taka postać wielomianu ma również inną własność. Jeśli zaaplikujemy
@@ -100,7 +101,7 @@ niezależnych od $i$ otrzymamy
     \lambda_i = (-1)^j sin\frac{(2j + 1)\pi}{2n + 2}
 \end{equation}
 Podobnie można postępować w przypadku węzłów Chebyszewa innego rodzaju.
-\section{Algorytm Wernera}
+\section{Algorytm Wernera}\label{werner}
 Przytoczmy wielomian w postaci Newtona. Wyraża się on wzorem
 \begin{equation}
     P_n(x) = \sum_{i=0}^{n}a_i p_i(x)
@@ -115,7 +116,7 @@ natomiast współczynniki $a_i$ obliczamy za pomocą ilorazu różnicowego
 \end{equation*}
 Główną zaletą tej formy jest mniejsza ilość operacji do wyliczenia wartości
 wielomianu w porównaniu do postaci Lagrang'a. Użyjemy tą postać do wyznaczenia algorytmu
-wyliczającego $\lambda_i$ w wielominie barycentrucznym z (4).
+wyliczającego $\lambda_i$ w wielominie barycentrycznym z (4).
 \\
 Biorąc (1) oraz podstawiając za $f$ funkcję stałą $f(x) = 1$, otrzymamy
 \begin{equation}
@@ -157,7 +158,7 @@ Zatem problem ogranicza się do rozwiązania układów równań:
         \lambda_n
     \end{array}\right)
 \end{equation} 
-Może on być rozwiązany za pomocą metody eliminacji Gauss'a, który zastosujemy w 
+Może on być rozwiązany za pomocą metody eliminacji Gauss'a, którą zastosujemy w 
 innej kolejności niż zwykle:
 \begin{enumerate}
     \item Podzielmy pierwsze równanie z (9) przez $x_0 - x_1$, oznaczmy
@@ -190,7 +191,7 @@ Kontynując w ten sposób otrzymujemy algorytmu
 \begin{aligned}
         &a_k^{(0)} := a_k, \hspace*{1cm} (k = 0,\ldots, n)\\
         &\left.\begin{aligned}
-                &a_k^{i} := a_k^{(i-1)}/(x_k - x_i)\\
+                &a_k^{(i)} := a_k^{(i-1)}/(x_k - x_i)\\
                 &a_i^{(k+1)} := a_i^{(k)} - a_k^{(i)}
               \end{aligned}
         \rigth\}
@@ -204,7 +205,7 @@ wartości $\lambda_i$ z (4)
     \begin{aligned}
             &a_0^{(0)} := 0, a_k^{(0)} := 0, \hspace*{1cm} (k = 1,\ldots, n)\\
             &\left.\begin{aligned}
-                    &a_k^{i} := a_k^{(i-1)}/(x_k - x_i)\\
+                    &a_k^{(i)} := a_k^{(i-1)}/(x_k - x_i)\\
                     &a_i^{(k+1)} := a_i^{(k)} - a_k^{(i)}
                   \end{aligned}
             \rigth\}
@@ -213,14 +214,14 @@ wartości $\lambda_i$ z (4)
     \end{aligned}
 \end{equation}
 Zatem otrzymaliśmy algorytm Wernera, który pozwala na szybsze obliczenie
-wagi barycentrycznej niż w przypadku standardowego wyrażenia. Dzięki temu wykonujemy mniejsza
+wagi barycentrycznej niż w przypadku standardowego wyrażenia. Dzięki temu wykonujemy mniej
 operacji i otrzymujemy mniejszy błąd przez utratę cyfr znaczących.
 \section{Testy i analiza}
-w pierwszym doświadczeniu sprawdzono jak zachowują się poszczególne algorytmy
+W pierwszym doświadczeniu sprawdzono jak zachowują się poszczególne algorytmy
 kiedy zostaną one użyte do interpolacji funkcji wielomianowej. W teori jako, że same
 zwracają wielomian, to powinny interpolować ją bezbłędnie. Ale oczywiście jako że działamy na 
 liczbach maszynowych, to zwykle otrzymujemy wynik z pewnym błędem. Ten test pokaże, które
-algorytmy są na nie bedziej podatne.
+algorytmy są na niego bardziej podatne.
 \begin{center}
     Interpolujemy funkcję $f(x) = x(x - 3)(x - 2)^2(x - 1)(x + 4)$\\
     na przedziale $[a,b] = [-5,5]$, dla $10 \leq n \leq 500$ węzłów
@@ -245,7 +246,7 @@ oraz rodzaju węzłów.
         30 & Chebyszew    & 7.275958e-12 & 5.456968e-12 & 7.275958e-12 \\ \hline
         50 & Chebyszew    & 1.637090e-11 & 5.456968e-12 & 3.829205e-06 \\ \hline        
         70 & Chebyszew    & 2.000888e-11 & 5.456968e-12 & 7.281773e+03 \\ \hline
-       500 & Chebyszew    & 5.275069e-11 & 9.094947e-12 & -
+       500 & Chebyszew    & 5.275069e-11 & 9.094947e-12 & inf            \\ \hline
     \end{tabular}
 \end{center}
 
@@ -253,14 +254,14 @@ oraz rodzaju węzłów.
 Jak można zauważyć, w przypadku węzłów równoodległych najlepiej poradził sobie
 wielomian Lagrang'a obliczany w standardowy sposób. Jest to prawdopodobnie spowodowane tym,
 że jest to "pierwotny" algorytm na znalezienie takiego wielomianu bez żadnych modyfikacji, dzieki czemu
-wylicza najlepiej. Widać również, zależność między ilością węzłów a błęde. Od $10$ węzłów
-wzwyż wszystkie trzy algorytmy zaczęły być obarczone coraz większym błędem. Jest on największy
+wylicza się najlepiej. Widać również zależność między ilością węzłów a błędem. Od $10$ węzłów
+wzwyż wszystkie trzy algorytmy są obarczone coraz większym błędem. Jest on największy
 przy krańcach przedziału, co widać na poniższym wykresie:
 \begin{center}
     \includegraphics[scale=0.4]{wykres1}\\
     Rysunek 1. $n = 60, [-5,-4]$, węzły równoodległe
 \end{center}
-Przy węzłach losowych widać, że najmniejszy błąd ma postać barycentryczna. Uwidacznia także, że branie
+Przy węzłach losowych , najmniejszy błąd ma postać barycentryczna. Widać także, że branie
 losowych węzłów nie jest najlepszym pomysłem, ponieważ już przy 50 węzłach osiągamy wyniki o wiele gorsze niż w przypadku
 równoodległych. Podobnie jak wcześniej tutaj też problemy występują na krańcach przedziału. Z kolei węzły 
 Chebyszewa, jak można się było spodziewać powodują w przypadku wielomianu Lagrang'a oraz jego barycentrycznej postaci
@@ -277,9 +278,12 @@ Kolejny test został przeprowadzony na znanej funkcji Rungego, danej wzorem:
     f(x) = \frac{1}{(1 + 25x^2)}
 \end{equation*}
 $$
-[a,b] = [-1,1], 10 \leq n \leq 80
+[a,b] = [-1,1], 10 \leq n \leq 1000
 $$
+Jest ona znana z tego, że pomimo zwiększenia ilości węzłów pogarsza się jakość interpolacji wielomianowej, głównie
+dla węzłów równoodległych.
 Poniżej wyniki:
+
 \begin{center}
     TABLICA 2.
 \end{center}
@@ -289,19 +293,23 @@ Poniżej wyniki:
         10 & równoodległe & 1.915643e+00 & 1.915643e+00 & 1.915643e+00 \\ \hline
         30 & równoodległe & 2.277742e+03 & 2.277742e+03 & 2.278585e+03 \\ \hline
         50 & równoodległe & 4.712420e+06 & 4.712025e+06 & 4.712548e+06 \\ \hline
-        80 & równoodległe &  
         10 & losowe       & 5.477561e+01 & 5.477561e+01 & 5.477561e+01 \\ \hline
         30 & losowe       & 2.380647e+06 & 2.382197e+06 & 2.905441e+06 \\ \hline
         10 & Chebyszew    & 1.089290e-01 & 1.089290e-01 & 1.089290e-01 \\ \hline
         30 & Chebyszew    & 2.061544e-03 & 2.061544e-03 & 2.061544e-03 \\ \hline
         50 & Chebyszew    & 3.885790e-05 & 3.885790e-05 & 3.885790e-05 \\ \hline        
         70 & Chebyszew    & 7.376980e-07 & 7.376980e-07 & 7.367889e+01 \\ \hline
-      1000 & Chebyszew    & 1.788379e+03 & 2.553513e-15 & -
+      1000 & Chebyszew    & 1.788379e+03 & 2.553513e-15 & inf           \\ \hline
     \end{tabular}
 \end{center}
 
-Tutaj podobnie jak wcześniej widać przewagę węzłów Czebyszewa. Jednak w tym przykładzie wszystkie algorytmy
-miały zbliżone błędy oraz zachowanie w stosunku do ilośco węzłów nawet przy losowych. Wyjątkiem jest znowu algorytm Wernera,
+
+Zatem jak można się było spodziewać, węzły równoodległe oraz losowe już od 10 węzłów wykazują
+tendencję do pogorszania jakości interpolowania. Natomiast węzły Czebyszewa wręcz przeciwnie. 
+Jest to spowodowane ty, że funkcja Rungego powoduje psucie się interpolacji na krańcach przedziału. 
+Ponieważ węzły Czebyszewa są gęściej upakowane na końcach przedziału, to negują ten efekt i dla większego $n$ dają rzeczywiście
+coraz lepsze przybliżenie. W tym przykładzie wszystkie algorytmy
+miały zbliżone błędy oraz zachowanie w stosunku do ilości węzłów nawet przy losowych. Wyjątkiem jest znowu algorytm Wernera,
 który dla dużej wartości $n$ podobnie jak wcześniej generuje błędy po prawej stronie wykresu:
 \begin{center}
     \includegraphics[scale=0.4]{wykres3}\\
@@ -310,9 +318,11 @@ który dla dużej wartości $n$ podobnie jak wcześniej generuje błędy po praw
 Jak widać w rozdziale (3) algorytm jest wyznaczony
 z odpowiednio zbudowanej macierzy. Zatem jest on podatny na błąd spowodowany zbyt dużym 
 wyznacznikiem zadania. Zatem błąd jest prawtopodobnie spowodowany tym, że dla zbyt dużej ilości
-węzłów rośnie on na tyle, ze powoduje takie zabużenia, które widać na wykresie. 
+węzłów rośnie on na tyle, ze powoduje takie zabużenia, które widać na wykresie. Warto również
+wspomnieć o tym, że przy 1000 węzłów Lagrange zaczął się pogarszać, gdzie postać barycentryczna
+była wciąż bardzo dobrym przybliżeniem.
 \subsection{funkcja trygonometryczna}
-W następnym doświadczeniu wypróbowano interpolacji na funkcji trygonometrycznej
+W następnym doświadczeniu wypróbowano interpolacji na funkcji trygonometrycznej.
 \begin{equation*}
     f(x) = arctg(x)
 \end{equation*}
@@ -333,11 +343,13 @@ $$
         10 & Chebyszew    & 6.221038e-02 & 6.221038e-02 & 6.221038e-02 \\ \hline
         30 & Chebyszew    & 5.819183e-04 & 5.819183e-04 & 5.819183e-04 \\ \hline
         70 & Chebyszew    & 9.971887e-08 & 9.971887e-08 & 2.000006e+00 \\ \hline
-       800 & Chebyszew    & 1.398002e+03 & 3.387095e-08 & -
+       800 & Chebyszew    & 1.398002e+03 & 3.387095e-08 & inf            \\ \hline
     \end{tabular}
 \end{center}
 Zatem dla funkcji $arctg(x)$ algorytmy zachowują się konsekwentnie jak w poprzednich testach.
-\subsection{funkcja nieciągła}
+Dla węzłów równoodległych oraz losowych przybliżenie zaczyna słabnąć przy więcej niż 10 węzłach, a w przypadku
+Chebyszewa błąd jest stabilny nawet do $n = 800$
+\subsection{funkcja nieciągła}\label{nieciagla}
 Tym razem zastosowano interpolację dla funkcji, która dla danego przedziału nie jest ciągła.
 $$
     f(x) = max(0, 1 - 4x)
@@ -360,7 +372,7 @@ istnieje pochodna. W tym przypadku $x = \frac{1}{4}$
         30 & Chebyszew    & 3.225152e-01 & 3.225152e-01 & 3.225152e-01 \\ \hline
         50 & Chebyszew    & 1.091766e-01 & 1.091766e-01 & 2.927421e+00 \\ \hline
         70 & Chebyszew    & 6.761971e-02 & 6.761971e-02 & 6.681778e+04 \\ \hline
-       700 & Chebyszew    & 6.744000e+04 & 7.081382e+00 & -
+       700 & Chebyszew    & 6.744000e+04 & 7.081382e+00 & inf          \\ \hline    
     \end{tabular}
 \end{center}
 Przez to, że funkcja nie jest ciągła, to nawet węzły Chebyszewa nie były w stanie osiągnąć 
@@ -377,24 +389,30 @@ Poniżej inny ciekawy przykład interpolowania po części ułamkowej $x$ :
 $$
     f(x) = x - floor(x)
 $$
+który ukazuje problem interpolacji funkcji nieciągłej:
 \begin{center}
     \includegraphics[scale=0.4]{wykres5}\\
     Rysunek 5. $n = 40, [-1,1]$, węzły Chebyszewa
 \end{center}
+\\
+
+Można zauważyć podobne zachowanie interpolacji jak w przypadku funkcji Rungego - dla węzłów innych
+niż Chebyszewa przyblieżenie interpolacji wraz ze zwiększeniem węzłów rośnie. I rzeczywiście
+takie zachowanie można zauważyć zawsze kiedy funkcja jest nieciągła na danym przedziale.
 \section{Podsumowanie}
 Po przeprowadzonych eksperymentach, można wywnioskować, że o ile interpolacja
-wielomianem Lagrang'a nie jest najepszą metodą interpolacji funkcji - można to zrobić 
+wielomianem Lagrang'a nie jest najepszą - można to zrobić 
 z bardzo dobrym przybliżeniem np. funkcjami sklejanymi, to przy odpowiednio dobranych węzłach oraz
 ich ilości, można otrzymać całkiem zadowalające rezultaty. Widać to w tablicy (1), (2) oraz (3). Udało się
-uzyskać błąd maksymalny nawet rzędu $10^{-11}$. Niestety w przypadku funkcji, które nie są ciągłe nie jesteśmy już w stanie
-uzyskać dobrego przybliżenia, co zostało pokazane w (4.3). Poza tym postać Lagrang'a szybciej od postaci barycentrycznej zaczyna
-zwiększać błąd związany ze zbyt dużą liczbą węzłów, w szczególności w postaci Chebyszewa. Widać to w każdej tabelce,
+uzyskać błąd maksymalny rzędu $10^{-15}$. Niestety w przypadku funkcji, które nie są ciągłe, nie jesteśmy już w stanie
+uzyskać dobrego przybliżenia, co zostało pokazane w \ref{nieciagla}. Poza tym postać Lagrang'a szybciej od postaci barycentrycznej zaczyna
+zwiększać błąd związany ze zbyt dużą liczbą węzłów. Widać to w każdej tabelce,
 różnią się tylko wartością $n$, dla której różnica zaczyna być zauważalna. Natomiast algorytm
 Wernera szybko przestawał polepszać przybliżenie funkcji gdy zaaplikowaliśmy do niego więcej niż 50 węzłów. 
 Powoduje to, że ma on najlepsze zastosowanie, kiedy nie zależy nam na bardzo precyzyjnych wynikach, ale na szybkości, ponieważ
-jak pozaliśmy w rodziale 3, wykonuje się on znacznie szybciej w porównaniu do postaci barycentrycznej, a już tym bardziej niż 
-postać Lagrang'a. W przypadku kiedy chcemy najlepsze przybliżenie, to nalezy zastosować algorytm barycentryczny, ponieważ jest szybszy od Lagrang'a a uzyskuje
-podobne bądź lepsze rezultaty. 
+jak pozaliśmy w rodziale \ref{werner}, wykonuje się on znacznie szybciej w porównaniu do postaci barycentrycznej, a już tym bardziej niż 
+postać Lagrang'a. W przypadku kiedy chcemy najlepsze przybliżenie, to należy zastosować algorytm barycentryczny, ponieważ jest szybszy od Lagrang'a a uzyskuje
+podobne bądź lepsze rezultaty
 \begin{thebibliography}{9}
     \itemsep2pt
     \bibitem{RI} C. Schneider and W. Werner, Some New Aspects of Rational Interpolation 1986
