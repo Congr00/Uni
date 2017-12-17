@@ -1,0 +1,229 @@
+\documentclass[11pt, wide]{article}
+    
+    \usepackage[utf8]{inputenc}
+    \usepackage[OT4]{polski}
+    
+    \usepackage{graphicx}
+    \usepackage{caption}
+    \usepackage{subcaption}
+    \usepackage{epstopdf}
+    \usepackage{amsmath, amssymb, amsfonts, amsthm, mathtools}
+    
+    \usepackage{hyperref}
+    \usepackage{url}
+    \usepackage{bbm}
+    \usepackage{comment}
+    \usepackage{makecell}
+    
+    \date{Wrocław, \today}
+    \title{\LARGE\textbf{Pracownia z analizy numerycznej}\\Sprawozdanie do zadania \textbf{P2.8}\\
+    Prowadzący pracownię: Paweł Woźny}
+    \author{Łukasz Klasiński}
+
+
+    \newtheorem{tw}{Twierdzenie}
+    \newtheorem{alg}{Algorytm}
+
+    \begin{document}
+    \maketitle
+    \thispagestyle{empty}
+    \section{Wstęp}
+    Problem przybliżania funkcji może być rozwiązany między innymi dzięki
+    użyciu interpolacji wielomianowej. Głównym celem niniejszego sprawozdania
+    będzie testowanie kilku algorytmów do obliczania wielomianu \textbf{Lagrang'a}, 
+    którego postać wygląda następująco:
+    \\
+    \\
+    Wielomian $L_n \in \Pi _n$, spełniający dla danych parami różnych liczb $x_0, x_1, \ldots x_n$ 
+    oraz wartości funkcji $f$ w tych punktach, taki że 
+    \\\begin{center}
+        $L_n(x_k) = f(x_k), (k = 0,1,\ldots,n)$
+    \end{center}
+    można zapisać w postaci
+    \begin{equation}\label{Lagrange}
+        L_n(x) = \sum_{i=0}^{n} \lambda_i f(x_i) \prod_{j=0,j\neq i}^{n}(x - x_j)
+    \end{equation}
+    gdzie
+    \begin{equation}
+        \lambda_i = \prod_{j=0,j\neg i}^{n}\frac{1}{(t_i - t_j)}
+    \end{equation}
+    Zbadana zostanie stabilność różnych algorytmów na wybór węzłów oraz jaki generują błąd 
+    dla danej ich ilości.
+    
+    Wszystkie testy numeryczne przeprowadzono przy użyciu języka programowania \textbf{Julia v.0.6.1} w trybie 
+    podwójnej (\textbf{Double}) precyzji, czyli 64 bitowej dokładności.
+\section{Postać Barycentryczna}
+Weźmy równanie (1) i oznaczmy $l_i$ jako $\lambda_i *\prod_{j\neq i}^{n} = \prod_{j\neq i}^{n}\frac{x - x_j}{x_i - x_j} $ z (2)
+\\ Zauważmy, że licznik $l_i$ może zostać zapisany jako równość
+\begin{equation*}
+    l(x) = (x - x_0)(x - x_1)\ldots(x - x_n)
+\end{equation*} 
+dzielony przez $x - x_i$. Wtedy $\lambda_i = 1/l'(x_i)$, więc $l_i$ można zapisać jako
+\begin{center}
+    $l_i(x) = l(x)\frac{\lambda_i}{(x - x_i)}$
+\end{center}
+Zauważmy, że składniki sumy (1) zawierają $l(x)$, który nie zależy od $i$. Dlatego go
+wyciągnąć przed sumę, aby otrzymać
+\begin{equation}
+    L_n(x) = l(x)\sum_{i=0}^{n}\frac{\lambda}{x - x_i}f(x_i)
+\end{equation}
+Teraz załózmy, że interpolujemy funkcję stałą $ = 1$. Wtedy wstawiając to do (3),
+otrzymamy równość                           
+\begin{equation*}
+    1 = \sum_{i=0}^{n}l_i(x) = l(x)\sum_{i=0}^{n}\frac{\lambda_i}{(x - x_i)}
+\end{equation*}
+Dzieląc to przez (3), otrzymamy \textsf{barycentryczną formułę} wielomianu (1)
+\begin{equation}
+    L_n(x) = \frac{\sum_{i=0}^{n}\frac{\lambda}{x - x_i}f(x_i)}{\sum_{i=0}^{n}\frac{\lambda}{x - x_i}}
+\end{equation}
+dla $\lambda$ takiej samej jak (2). Dalej, przy testowaniu będziemy go nazywać 
+\textsf{wielomianem barycentrycznym}.
+\\
+Zauważmy, że dzięki takiej postaci $\lambda_i$ nie korzysta ze zmiennej $x$.
+Dzięki temu dla zadanych węzłów wystarczy raz ją wyliczyć i przy wyznaczaniu wartości
+wielomianu używać tej stałem bez ponawiania obliczeń. Ponadto jeśli 
+dodamy nowe wężły, to w celu wyliczenia nowej wartości $\lambda_i$, wystarczy
+przemnożyć ją przez odpowiedni iloraz $\frac{1}{t_i - t_j}$.
+\subsection{Węzły Chebyszewa}
+Taka postać wielomianu ma również inną własność. Jeśli zaaplikujemy
+do niego węzły Chebyszewa pierwszego rodzaju:
+\begin{equation}
+x_i = cos\frac{(2i + 1)\pi}{2n + 2}, \hspace*{1cm} (i = 0, \ldots n)
+\end{equation}
+to wzór na poszczególne wartości $\lambda_i$ z (4) znacząco się upraszcza.
+\\
+Z własności $\lambda_i = \frac{1}{l'(x)}$, o której była mowa wcześniej, możemy
+uzyskać ogólną formułę na $w_i$.
+Po zaaplikowaniu do niej węzłów Chebyszewa i usunięciu czynników 
+niezależnych od $i$ otrzymamy
+\begin{equation}
+    \lambda_i = (-1)^j sin\frac{(2j + 1)\pi}{2n + 2}
+\end{equation}
+Podobnie można postępować w przypadku węzłów Chebyszewa innego rodzaju.
+\section{Algorytm Wernera}
+Przytoczmy wielomian w postaci Newtona. Wyraża się on wzorem
+\begin{equation}
+    P_n(x) = \sum_{i=0}^{n}a_i p_i(x)
+\end{equation}
+gdzie $p_i$ jest wielomianem węzłowym
+\begin{equation*}
+    p_i(x) = (x - x_0)(x - x_1)\ldots(x - x_{i-1})
+\end{equation*}
+natomiast współczynniki $a_i$ obliczamy za pomocą ilorazu różnicowego
+\begin{equation*}
+    a_i = f[x_0,x_1\ldots x_i]
+\end{equation*}
+Główną zaletą tej formy jest mniejsza ilość operacji do wyliczenia wartości
+wielomianu w porównaniu do postaci Lagrang'a. Użyjemy tą postać do wyznaczenia algorytmu
+wyliczającego $\lambda_i$ w wielominie barycentrucznym z (4).
+\\
+Biorąc (1) oraz podstawiając za $f$ funkcję stałą $f(x) = 1$, otrzymamy
+\begin{equation}
+    1 = \sum_{i = 0}^n\lambda_i\prod_{j=0,j\neq i}^{n}(x - x_i)
+\end{equation}
+Jeśli rozważymy lewą stronę równania (8) jako wielomian w formie Newtona, to mamy
+\begin{equation*}
+    P_n(x) = \sum_{i = 0}^n\lambda_i\prod_{j=0,j\neq i}^{n}(x - x_i)
+\end{equation*}
+Możemy teraz rozwiązać ten wielomian metodą Newtona.
+Po przekształceniach tego równania otrzymujemy
+\begin{equation*}
+    a_k = \sum_{i=0}^{k}\lambda_i\prod_{j=k+1}^{n}(x_i - x_j),\hspace*{1cm} (k = 0, \ldots n)
+\end{equation*}
+Zatem problem ogranicza się do rozwiązania układów równań:
+\begin{equation}
+    \left(\begin{array}{c}
+        a_0\\
+        a_1\\
+        a_2\\
+        \vdots\\
+        a_{n-1}\\
+        a_n
+    \end{array}\right)
+    \left(\begin{array}{ccccc}
+        \prod_{j=1}^{n}(x_0 - x_j) & 0 & 0 & \ldots & 0\\
+        \prod_{j=2}^{n}(x_0 - x_j) & \prod_{j=2}^{n}(x_1 - x_j) & 0 & \ldots & 0\\
+        \prod_{j=3}^{n}(x_0 - x_j) & \prod_{j=3}^{n}(x_1 - x_j) & \prod_{j=3}^{n}(x_2 - x_j) & \ldots & 0\\
+        \vdots & \vdots & \vdots & \vdots & \vdots\\
+        x_0 - x_n & x_1 - x_n & x_2 - x_n & \ldots & 0\\
+        1 & 1 & 1 & \ldots & 1
+    \end{array}\right)
+    \left(\begin{array}{c}
+        \lambda_0\\
+        \lambda_1\\
+        \lambda_2\\
+        \vdots\\
+        \lambda_{n-1}\\
+        \lambda_n
+    \end{array}\right)
+\end{equation} 
+Może on być rozwiązany za pomocą metody eliminacji Gauss'a, który zastosujemy w 
+innej kolejności niż zwykle:
+\begin{enumerate}
+    \item Podzielmy pierwsze równanie z (9) przez $x_0 - x_1$, oznaczmy
+    \begin{equation*}
+        a_0^{(1)} := a_0/(x_0 - x_1)
+    \end{equation*}
+    \item Odejmijmy pierwsze równianie od drugiego, oznaczmy
+    \begin{equation*}
+        a_1^{(1)} := a_1 - a_0^{(1)}
+    \end{equation*}
+    \item Podzielmy pierwsze równianie przez $x_0 - x_2$, oznaczmy
+    \begin{equation*}
+        a_0^{(2)} := a_0^{(1)}/(x_0 - x_2)
+    \end{equation*}
+    \item Odejmijmy pierwsze równianie od trzeciego, oznaczmy
+    \begin{equation*}
+        a_2^{(1)} := a_2 - a_0^{(2)}
+    \end{equation*}
+    \item Podzielmy drugie równanie przez $x_1 - x_2$, oznaczmy
+    \begin{equation*}
+        a_1^{(2)} := a_1^{(1)}/(x_1 - x_2)
+    \end{equation*}
+    \item Odejmijmy drugie równanie od trzeciego, oznaczmy
+    \begin{equation*}
+        a_2^{(2)} := a_2^{(1)} - a_1^{(2)} 
+    \end{equation*}
+\end{enumerate}
+Kontynując w ten sposób otrzymujemy algorytmu   
+\begin{equation}
+\begin{aligned}
+        &a_k^{(0)} := a_k, \hspace*{1cm} (k = 0,\ldots, n)\\
+        &\left.\begin{aligned}
+                &a_k^{i} := a_k^{(i-1)}/(x_k - x_i)\\
+                &a_i^{(k+1)} := a_i^{(k)} - a_k^{(i)}
+              \end{aligned}
+        \rigth\}
+        \qquad k = (0, \ldots, i-1), i = (1, \ldots, n)\\
+        &\lambda_i := a_i^{(n)}, \hspace*{1cm} (i = 0, \ldots,n)
+\end{aligned}
+\end{equation}
+Po zastosowaniu go do (8) dostajemy algorytm na wydajne obliczanie 
+wartości $\lambda_i$ z (4) 
+\begin{equation}
+    \begin{aligned}
+            &a_0^{(0)} := 0, a_k^{(0)} := 0, \hspace*{1cm} (k = 1,\ldots, n)\\
+            &\left.\begin{aligned}
+                    &a_k^{i} := a_k^{(i-1)}/(x_k - x_i)\\
+                    &a_i^{(k+1)} := a_i^{(k)} - a_k^{(i)}
+                  \end{aligned}
+            \rigth\}
+            \qquad k = (0, \ldots, i-1), i = (1, \ldots, n)\\
+            &\lambda_i := a_i^{(n)}, \hspace*{1cm} (i = 0, \ldots,n)
+    \end{aligned}
+\end{equation}
+Zatem otrzymaliśmy algorytm Wernera, który pozwala na szybsze obliczenie
+wagi barycentrycznej niż w przypadku standardowego wyrażenia. Dzięki temu wykonujemy mniejsza
+operacji i otrzymujemy mniejszy błąd przez utratę cyfr znaczących.
+\section{Testy}
+
+\section{Podsumowanie}
+\begin{thebibliography}{9}
+    \itemsep2pt
+    \bibitem{RI} C. Schneider and W. Werner, Some New Aspects of Rational Interpolation 1986
+    \bibitem{BLI} J. Berrut and L. N. Trefethen, Baricentric Lagrange Interpolation 2004
+    \bibitem{LVN} W. Werner, Polynomial Interpolation: Lagrange versus Newton 1984
+\end{thebibliography}    
+\end{document}
+
+
