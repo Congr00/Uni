@@ -327,7 +327,7 @@ W następnym doświadczeniu wypróbowano interpolacji na funkcji trygonometryczn
     f(x) = arctg(x)
 \end{equation*}
 $$
-    [a,b] = [-5,5], 10 \leq n \leq 70
+    [a,b] = [-1,1], 10 \leq n \leq 70
 $$
 \begin{center}
     TABLICA 3.
@@ -335,20 +335,22 @@ $$
 \begin{center}
     \begin{tabular}{|c|c|c|c|c|} \hline
         \thead {n} & \thead{Węzły} & \thead{Wielomian \\ Lagrang'a} & \thead{Postać \\ barycentryczna} & \thead{Algorytm \\ Wernera} \\ \hline
-        10 & równoodległe & 2.026094e-01 & 2.026094e-01 & 2.026094e-01 \\ \hline
-        30 & równoodległe & 6.617643e+01 & 6.617643e+01 & 6.621559e+01 \\ \hline
-        50 & równoodległe & 7.602352e+04 & 7.599844e+04 & 7.602236e+04 \\ \hline
-        10 & losowe       & 1.780903e+00 & 1.209930e+01 & 2.001605e-01 \\ \hline
-        30 & losowe       & 5.587935e+06 & 1.195152e+02 & 1.416674e+06 \\ \hline
-        10 & Chebyszew    & 6.221038e-02 & 6.221038e-02 & 6.221038e-02 \\ \hline
-        30 & Chebyszew    & 5.819183e-04 & 5.819183e-04 & 5.819183e-04 \\ \hline
-        70 & Chebyszew    & 9.971887e-08 & 9.971887e-08 & 2.000006e+00 \\ \hline
+        10 & równoodległe & 1.065712e-04 & 1.065712e-04 & 1.065712e-04 \\ \hline
+        30 & równoodległe & 2.316384e-09 & 2.474288e-09 & 2.315359e-09 \\ \hline
+        70 & równoodległe & 2.593411e+01 & 1.599404e+02 & 7.072912e+00 \\ \hline
+        10 & losowe       & 3.956925e-04 & 1.176645e-02 & 1.185675e-04 \\ \hline
+        30 & losowe       & 1.484253e-05 & 7.276726e-01 & 4.771568e-02 \\ \hline
+        70 & losowe       & 6.075408e+06 & 9.657790e-01 & 1.613932e+00 \\ \hline
+        10 & Chebyszew    & 1.477877e-05 & 1.477877e-05 & 1.477877e-05 \\ \hline
+        30 & Chebyszew    & 1.214168e-13 & 1.213057e-13 & 1.213057e-13 \\ \hline
+        70 & Chebyszew    & 1.776357e-15 & 9.992007e-16 & 2.690387e-01 \\ \hline
        800 & Chebyszew    & 1.398002e+03 & 3.387095e-08 & inf            \\ \hline
     \end{tabular}
 \end{center}
-Zatem dla funkcji $arctg(x)$ algorytmy zachowują się konsekwentnie jak w poprzednich testach.
-Dla węzłów równoodległych oraz losowych przybliżenie zaczyna słabnąć przy więcej niż 10 węzłach, a w przypadku
-Chebyszewa błąd jest stabilny nawet do $n = 800$
+Jak widać do interpolowania po funkcji arctg nadają się nawet węzły równoodległe. 
+Przy $n = 30$ błąd jest bardzo niewielki i dopiero powyżej zaczyna wzrastać. Jednak w przypadku
+węzłów Chebyszewa mamy o wiele lepsze przybliżenie, które utrzymuje się nawet przy dużych ilościach węzłów. Reszta wniosków
+jest konsekwentna jak w poprzednich testach.
 \subsection{funkcja nieciągła}\label{nieciagla}
 Tym razem zastosowano interpolację dla funkcji, która dla danego przedziału nie jest ciągła.
 $$
