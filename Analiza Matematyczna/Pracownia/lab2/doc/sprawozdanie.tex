@@ -112,11 +112,11 @@ gdzie $p_i$ jest wielomianem węzłowym
 \end{equation*}
 natomiast współczynniki $a_i$ obliczamy za pomocą ilorazu różnicowego
 \begin{equation*}
-    a_i = f[x_0,x_1\ldots x_i]
+    a_i = f[x_0,x_1,\ldots,x_i]
 \end{equation*}
 Główną zaletą tej formy jest mniejsza ilość operacji do wyliczenia wartości
 wielomianu w porównaniu do postaci Lagrang'a. Użyjemy tą postać do wyznaczenia algorytmu
-wyliczającego $\lambda_i$ w wielominie barycentrycznym z (4).
+wyliczającego $\lambda_i$ w wielomanie barycentrycznym z (4).
 \\
 Biorąc (1) oraz podstawiając za $f$ funkcję stałą $f(x) = 1$, otrzymamy
 \begin{equation}
@@ -131,7 +131,7 @@ Po przekształceniach tego równania otrzymujemy
 \begin{equation*}
     a_k = \sum_{i=0}^{k}\lambda_i\prod_{j=k+1}^{n}(x_i - x_j),\hspace*{1cm} (k = 0, \ldots n)
 \end{equation*}
-Zatem problem ogranicza się do rozwiązania układów równań:
+Zatem problem ogranicza się do rozwiązania układu równań:
 \begin{equation}
     \left(\begin{array}{c}
         a_0\\
@@ -273,7 +273,7 @@ powyżej 30 węzłów.
 \end{center}
 Można zauważyć, że największe błędy algorytmu Wernera są skumulowane po prawej stronie wykresu.
 \subsection{funkcja Rungego}
-Kolejny test został przeprowadzony na znanej funkcji Rungego, danej wzorem:
+Kolejny test został przeprowadzony na funkcji Rungego, danej wzorem:
 \begin{equation*}
     f(x) = \frac{1}{(1 + 25x^2)}
 \end{equation*}
@@ -317,7 +317,7 @@ który dla dużej wartości $n$ podobnie jak wcześniej generuje błędy po praw
 \end{center}
 Jak widać w rozdziale (3) algorytm jest wyznaczony
 z odpowiednio zbudowanej macierzy. Zatem jest on podatny na błąd spowodowany zbyt dużym 
-wyznacznikiem zadania. Zatem błąd jest prawtopodobnie spowodowany tym, że dla zbyt dużej ilości
+wyznacznikiem zadania. Dla zbyt dużej ilości
 węzłów rośnie on na tyle, ze powoduje takie zabużenia, które widać na wykresie. Warto również
 wspomnieć o tym, że przy 1000 węzłów Lagrange zaczął się pogarszać, gdzie postać barycentryczna
 była wciąż bardzo dobrym przybliżeniem.
@@ -399,22 +399,21 @@ który ukazuje problem interpolacji funkcji nieciągłej:
 \\
 
 Można zauważyć podobne zachowanie interpolacji jak w przypadku funkcji Rungego - dla węzłów innych
-niż Chebyszewa przyblieżenie interpolacji wraz ze zwiększeniem węzłów rośnie. I rzeczywiście
+niż Chebyszewa przybliżenie interpolacji wraz ze zwiększeniem węzłów rośnie. I rzeczywiście
 takie zachowanie można zauważyć zawsze kiedy funkcja jest nieciągła na danym przedziale.
 \section{Podsumowanie}
 Po przeprowadzonych eksperymentach, można wywnioskować, że o ile interpolacja
 wielomianem Lagrang'a nie jest najepszą - można to zrobić 
 z bardzo dobrym przybliżeniem np. funkcjami sklejanymi, to przy odpowiednio dobranych węzłach oraz
-ich ilości, można otrzymać całkiem zadowalające rezultaty. Widać to w tablicy (1), (2) oraz (3). Udało się
+ich ilości, można otrzymać całkiem zadowalające rezultaty. Widać to z tablicy (1), (2) oraz (3). Udało się
 uzyskać błąd maksymalny rzędu $10^{-15}$. Niestety w przypadku funkcji, które nie są ciągłe, nie jesteśmy już w stanie
 uzyskać dobrego przybliżenia, co zostało pokazane w \ref{nieciagla}. Poza tym postać Lagrang'a szybciej od postaci barycentrycznej zaczyna
-zwiększać błąd związany ze zbyt dużą liczbą węzłów. Widać to w każdej tabelce,
-różnią się tylko wartością $n$, dla której różnica zaczyna być zauważalna. Natomiast algorytm
+zwiększać błąd związany ze zbyt dużą liczbą węzłów. Jest to ukazane w każdej tabelce. Natomiast algorytm
 Wernera szybko przestawał polepszać przybliżenie funkcji gdy zaaplikowaliśmy do niego więcej niż 50 węzłów. 
 Powoduje to, że ma on najlepsze zastosowanie, kiedy nie zależy nam na bardzo precyzyjnych wynikach, ale na szybkości, ponieważ
 jak pozaliśmy w rodziale \ref{werner}, wykonuje się on znacznie szybciej w porównaniu do postaci barycentrycznej, a już tym bardziej niż 
 postać Lagrang'a. W przypadku kiedy chcemy najlepsze przybliżenie, to należy zastosować algorytm barycentryczny, ponieważ jest szybszy od Lagrang'a a uzyskuje
-podobne bądź lepsze rezultaty
+podobne bądź lepsze rezultaty i jest bardziej stabilny.
 \begin{thebibliography}{9}
     \itemsep2pt
     \bibitem{RI} C. Schneider and W. Werner, Some New Aspects of Rational Interpolation 1986
