@@ -1,6 +1,7 @@
 using Polynomials
 using QuadGK
-using Cubature
+using Remez
+import Remez: ratfn_minimax
 
 
 function eq_nodes(n, a, b)
@@ -11,6 +12,24 @@ function eq_nodes(n, a, b)
 	end	
 	return x
 end
+
+function eq_nodesB(n, a, b)
+	x = Array{BigFloat}(n)
+	for k = 0:n-1
+		x[k+1] = BigFloat(a + (b - a)*k/(n))
+	end	
+	return x
+end
+
+function ch_nodesB(n, a, b)
+    x = Array{BigFloat}(n)
+    n += 1
+	for k = 1:n-1
+		x[k] = BigFloat(0.5*(a + b) + 0.5*(b - a)cos((2*k - 1)*pi/(2*n)))
+	end	
+	return x
+end
+
 
 function ch_nodes(n, a, b)
     x = [0.0] 
@@ -120,9 +139,11 @@ function cheb_optimal(n, f, Pn, a, b)
     function optimal(x)
         sum = 0.0
         for k in 0:n
-            sum += scalar_cheb(f, Pn(k*2), 1.0, 1.0, x) * (Pn(k*2))(x)
-            if k == 0
-                sum *= 0.5
+            if k % 2 == 0
+                sum += scalar_cheb(f, Pn(k), 1.0, 1.0, x) * (Pn(k))(x)
+                if k == 0
+                    sum *= 0.5
+                end
             end
         end
         return sum * (2.0 / pi)
