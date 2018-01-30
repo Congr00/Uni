@@ -1,0 +1,34 @@
+Aby skompilować program należy użyć polecenia make.
+Zostanie utworzony plik wykonywalny "program".
+
+W celu uruchomienia należy wpisać ./program NP MIN MAX IT ,przy czym:
+NP  -> oznacza ilość procesów do utworzenia
+MIN -> minimalna wartość w mikrosekundach (1/1 000 000 sekundy) , którą dany proces będzie czekać pomiędzy dostępami
+MAX -> maksymalna --||--
+IT  -> ilość iteracji (czyli dostępów do plików), które każdy proces ma wykonać, po czym się zakończyć.
+Przy czym zmienna IT jest opcjonalna, jeśli jej nie podamy, to procesy będą wykonają dokładnie 
+MAX_INT*2 dostępów do pliku (czyli kiedyś się zakończą).
+
+Przykładowe użycie:
+
+$ make
+$ ./program 10 1000000 3000000
+spowoduje, że program utworzy 10 procesów, które będą czekać od 1 do 3 sekund (losowo).
+
+Działanie:
+po uruchomieniu w konsoli będą się wyświetlać napisy informujące który proces skończył obsługiwać pliki.
+Aby przedwcześnie skończyć program (oraz zamknąć wszystkie podprocesy) należy w konsoli wpisać pojedyńczy
+znak 'e', po czym potwierdzić enterem. 
+UWAGA przy małych wartościach zmiennych MIN i MAX ze wzgledu na to, że może się wtedy poważnie obciążyć 
+komputer, to zamykanie programu za pomocą 'e' może mieć kilkusekundowy czas reakcji.
+
+Program najlepiej wypróbować program nadająć zmiennym MIN i MAX małe wartości - wtedy przetestowana zostanie podatność
+programu na zakleszczenia. Jeśli chcemy dokładnie zobaczyć co się dzieje, w jakiej kolejności procesy otrzymują
+dostępy do pliku, należy celować w wartości bliższe sekundom(tak jak na przykładzie). Dodatkowo dostępy
+są zapisywane w plikach, które można po zakończeniu programu przejrzeć.
+
+Po skończeniu testowania aby wyczyścić środowisko, należy użyć polecenia "make clean". Usunie ono
+pliki wykonywalne programu oraz tekstowe, które były wykorzystywane przez procesy.
+
+Zaznaczam, że program został napisany i przetestowany w środowisku linuksowym i tylko na nim poprawnie
+się skompiluje oraz zadziała.
