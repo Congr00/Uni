@@ -14,7 +14,6 @@
 
 typedef struct{
     int val;
-    int processes[2];
     char file[20];
     bool stolen;
     bool dirty;
@@ -91,17 +90,17 @@ int main(int argc, char** argv){
         min = atoi(argv[2]);
         max = atoi(argv[3]);       
     }
-    else
+    else{
         printf("need at least 3 arguments");
+        return EXIT_FAILURE;
+    }
     if(argc >= 5){
         iterate = atoi(argv[4]);
     }
         
-        
+
     int *forkid = (int*)malloc(sizeof(int)*procn);
-
     mox = mmap(NULL, sizeof(semaphore*)*procn, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-
 
     for(int i = 0; i < procn; i++){
         *(mox+i) = (semaphore*)malloc(sizeof(semaphore));
@@ -110,7 +109,7 @@ int main(int argc, char** argv){
         FILE *fp = fopen((*(mox+i))->file, "w+");
         fclose(fp);
         (*(mox+i))->stolen = false;
-        (*(mox+i))->dirty     = true;
+        (*(mox+i))->dirty  = true;
     }
     for(int i = 0; i < procn; i++){
         int pid = fork();
@@ -123,6 +122,7 @@ int main(int argc, char** argv){
             run_process(i, *(mox+i), *(mox+(((i-1)%procn)+procn)%procn), min, max, iterate);
         }
         else{
+            forkid[i] = pid;
             //parent
         }
     }
@@ -136,6 +136,7 @@ int main(int argc, char** argv){
                 kill(forkid[i], SIGKILL);
             }
             munmap(mox, sizeof(semaphore*)*procn);
+            printf("processes killed, exiting!\n");
             return EXIT_SUCCESS;
         }
     }

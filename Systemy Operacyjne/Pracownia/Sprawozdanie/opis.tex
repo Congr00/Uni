@@ -1,0 +1,265 @@
+\documentclass[11pt, wide]{article}
+    
+    \usepackage[utf8]{inputenc}
+    \usepackage[OT4]{polski}
+    
+    \usepackage{graphicx}
+    \usepackage{caption}
+    \usepackage{subcaption}
+    \usepackage{epstopdf}
+    
+    \usepackage{hyperref}
+    \usepackage{url}
+    \usepackage{bbm}
+    \usepackage{comment}
+    \usepackage{makecell}
+    \usepackage{xcolor}
+    \usepackage{listings}
+    \usepackage{secdot}
+
+    \definecolor{mGreen}{rgb}{0,0.6,0}
+    \definecolor{mGray}{rgb}{0.5,0.5,0.5}
+    \definecolor{mPurple}{rgb}{0.58,0,0.82}
+    \definecolor{backgroundColor}{rgb}{0.95,0.95,0.92}
+    \lstdefinestyle{CStyle}{
+        backgroundcolor=\color{backgroundColor},
+        commentstyle=\color{mGreen},
+        keywordstyle=\color{magenta},
+        numberstyle=\tiny\color{mGray},
+        stringstyle=\color{mPurple},
+        basicstyle=\footnotesize,
+        breakatwhitespace=false,
+        breaklines=true,
+        captionpos=b,
+        keepspaces=true,
+        numbers=left,
+        numbersep=5pt,
+        showspaces=false,
+        showstringspaces=false,
+        showtabs=false,
+        tabsize=2,
+        language=C
+    }
+
+    \date{Wrocław, \today}
+    \title{Łukasz Klasiński\\\LARGE\textbf{Opis pracowni z Systemów Operacyjnych}
+    Prowadzący pracownię: Zdzisław Płoski}
+    \begin{document}
+    \maketitle
+    \thispagestyle{empty}
+    \section{Wstęp}
+    Tematem pracowni jest wykorzystanie semaforów do jakiegoś problemu programistycznego. 
+    Mój program bazuje na problemie "Ucztujących filozofów". Tworzy on 
+    $n$ procesów, z czego każdy chce otrzymać dostęp do dwóch plików, czyli widelców w oryginalnym 
+    zadaniu. Siedzą oni przy "stole", więc dwa sąsiednie procesy dzielą jeden plik ze sobą. 
+    Zaimplementowane jest także zasymulowane przetrzymywanie dostępu, czyli "jedzenie" oraz przerwa międzi nim.
+    Dzięki temu powstaje problem, który najlepiej jest rozwiązać za pomocą semaforów.
+    \section{Funkcje i struktury}
+    Program można podzielić na funkcje, zmienną globalną oraz strukturę semafora.
+    \begin{lstlisting}[style=CStyle]
+        typedef struct{
+            int val;
+            char file[20];
+            bool stolen;
+            bool dirty;
+        } semaphore;\end{lstlisting}
+    Przedstawia strukturę semafora. Przeznaczenie poszczególnych pól zostanie wyjaśnione później.
+    \begin{lstlisting}[style=CStyle]
+                static semaphore** mox;\end{lstlisting}
+    Jest zmienna globalną, dzieloną między procesami, która umożliwia im dostęp do semafora.
+    \begin{lstlisting}[style=CStyle]
+        int wait_s(semaphore* s, semaphore* holder)\end{lstlisting}
+    Odpowiada za przydzielanie dostępu do semafora.
+    \begin{lstlisting}[style=CStyle]
+        void signal_s(semaphore* s)\end{lstlisting}
+    Sygnalizuje zwolnienie semafora.
+    \begin{lstlisting}[style=CStyle]         
+    int rand_num(int a, int b)\end{lstlisting}
+    Losuje losowe liczby z podanego przedziału. Potrzebne do losowania ile dany proces ma czekać.
+    \begin{lstlisting}[style=CStyle]
+        void run_process(int i, semaphore* s1, semaphore* s2, int min, int max, int iterate)\end{lstlisting}
+        Jest kodem wykonywanym przez procesy. W argumentach otrzymuje dwa semafory, które umożliwiają dostęp do pliku,
+        minimalny i maksymalny czas czekania, które używane są przy funkcji $randnum$, oraz ile ma wykonać dostępów do pliku.
+    \begin{lstlisting}[style=CStyle]
+        int main(int argc, char** argv)\end{lstlisting}
+        Funkcja główna programu, która odpowiada za inicjalizację zmiennych, uruchomienie procesów oraz obsługę interfejsu.
+    \section{Analiza kodu}
+    \subsection{Funkcja Main}
+    \begin{lstlisting}[style=CStyle]
+        int procn = 0;
+        int min = 0;
+        int max = 0;
+        int iterate = -1;
+        if(argc >= 4){
+            procn = atoi(argv[1]);
+            min = atoi(argv[2]);
+            max = atoi(argv[3]);       
+        }
+        else{
+            printf("need at least 3 arguments");
+            return EXIT_FAILURE;
+        }
+        if(argc >= 5){
+            iterate = atoi(argv[4]);
+        }
+            
+    
+        int *forkid = (int*)malloc(sizeof(int)*procn);
+        mox = mmap(NULL, sizeof(semaphore*)*procn, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);\end{lstlisting}
+        Na początku w funkcji main inicjalizujemy zmienne początkowe, czyli:
+        \begin{enumerate}
+            \item procn - zmienna ta przetrzymuje ilość nowych procesów, które zostaną utworzone.
+            \item min   - odpowiada za minimalny czas czekania procesu.
+            \item max   - odpowiada za maksymlny czas czekania procesu.
+            \item iterate - mówi ile dany proces ma wykonać dostępów do plików.
+        \end{enumerate}
+        Następnie wykonywane jest sprawdzenie, czy użytkownik wprowadził argumenty oraz sparsowanie ich z przedstawionymi wcześniej 
+        zmiennymi.
+        W lini 19 inicjalizujemy zmienną $forkid$, która będzie przetrzymywać id utworzonych procesów. Będzie to potrzebne,
+        aby je potem zamknąć. 
+        W ostatnim wierszu rezerwujemy pamięć na zmienna globalną
+        \begin{lstlisting}[style=CStyle]
+        static semaphore** mox;\end{lstlisting}
+        która jest tak naprawdę dwuwymiarową tablicą, zawierającą $n$ struktur semafora.
+        \begin{lstlisting}[style=CStyle]
+    for(int i = 0; i < procn; i++){
+        *(mox+i) = (semaphore*)malloc(sizeof(semaphore));
+        (*(mox+i))->val = 1;
+        sprintf((*(mox+i))->file, "file_%d.txt", i);
+        FILE *fp = fopen((*(mox+i))->file, "w+");
+        fclose(fp);
+        (*(mox+i))->stolen = false;
+        (*(mox+i))->dirty  = true;
+    }\end{lstlisting}
+    Kolejny fragment kodu odpowiada za inicjalizację struktury semafora oraz utworzenie plików, do których mają umożliwiać dostęp.
+    \begin{lstlisting}[style=CStyle]
+        for(int i = 0; i < procn; i++){
+            int pid = fork();
+            if(pid < 0){
+                exit(EXIT_FAILURE);
+            }
+            if(!pid){
+                // process
+                srand(time(NULL)+i);            
+                run_process(i, *(mox+i), *(mox+(((i-1)%procn)+procn)%procn), min, max, iterate);
+            }
+            else{
+                //parent
+                forkid[i] = pid;
+            }
+        }\end{lstlisting}
+    Następna pętla inicjalizuje procesy za pomocą funkcji $fork$. Sprawdza, czy otrzymane id jest
+    nieujemne, co sygnalizuje błąd przy tworzeniu procesu, różny od zera, co znacza, że utworzony został nowy proces oraz czy jest równe zeru - wtedy
+    wiemy, że jesteśmy w głównym procesie programu. Jeśli nastąpił błąd, program kończy proces, sygnalizująć błąd.
+    W przeciwnym przypadku inicjalizuje "seed", który będzie służyć do losowania czasu czekania przez proces, 
+    oraz uruchamiamy funkcję wykonywalną procesu. Przekazujemy jego numer, semafory oraz resztę zmiennych omawianych wcześniej.
+    W kodzie wykonywanym przez główny proces zapamiętujemy id procesów.
+    \begin{lstlisting}[style=CStyle]
+        char c;
+        while(true){
+            scanf("%c", &c);
+            if(c == 'e')
+            {
+                for(int i = 0; i < procn; ++i){
+                    free(*(mox+i));
+                    kill(forkid[i], SIGKILL);
+                }
+                munmap(mox, sizeof(semaphore*)*procn);
+                printf("processes killed, exiting!\n");
+                return EXIT_SUCCESS;
+            }
+        }\end{lstlisting}
+    W kolejnej sekcji oczekujemy na sygnał od uzytkownika, na zakończenie programu. 
+    Jeśli go otrzymamy, to zwalniamy pamięć oraz zabijamy utworzone procesy.
+    \subsection{Procesy}
+    Opiszemy funkcję
+    \begin{lstlisting}[style=CStyle]
+        void run_process(int i, semaphore* s1, semaphore* s2, int min, int max, int iterate){
+            while(iterate -- != 0){
+                usleep(rand_num(min, max));
+                wait_s(s1, NULL);
+                // got access to file 1
+                while(true){
+                    if(wait_s(s2, s1))
+                        break;
+                    else{
+                        s1->dirty = false;
+                        signal_s(s1);
+                        wait_s(s1, NULL);
+                    }
+                }
+                // got access to file 2
+                usleep(rand_num(min, max));     // holding files        
+                FILE *fp = fopen(s1->file, "a+");
+                fprintf(fp, "process %d eated this file!\n", i);
+                fclose(fp);
+                fp = fopen(s2->file, "a+");
+                fprintf(fp, "process %d eated this file!\n", i);
+                fclose(fp);
+                printf("process %d eated!\n", i);
+                s1->dirty = true;
+                s2->dirty = true;
+                if(s1->stolen)
+                    s1->dirty = false;
+                if(s2->stolen)
+                    s2->dirty = false;
+                signal_s(s1);
+                signal_s(s2);   
+            }
+            exit(EXIT_SUCCESS);
+        }\end{lstlisting}
+        Potrzebna jest także implementacja $wait$ oraz $signal$
+        \begin{lstlisting}[style=CStyle]
+            int wait_s(semaphore* s, semaphore* holder){
+                s->stolen = true;
+                if(holder != NULL){
+                    while(s->val <= 0){
+                        if(holder->stolen && !holder->dirty)
+                            return false;
+                    }
+                }
+                else{
+                    while(s->val <= 0);
+                }
+                s->val--;
+                s->stolen = false;
+                return true;
+            }
+            
+            void signal_s(semaphore* s){
+                s->val++;
+            }\end{lstlisting}
+        Proces na początku wchodzi do pętli while, która wykonuje się określoną liczbę razy, zależnie od zmiennej $iterate$.
+        Następnie usypiamy go na losowy czas. Kiedy się wybudzi próbuje otrzymać dostęp do pierwszego semafora.
+        Zauważmy, że przekazujemy jeden argumen jako $NULL$, co powoduje, że funkcja $wait$ wykona prostą pętlę, która czeka, aż semafor się zwolni.
+        Po otrzymaniu dostępu następuje próba dostępu do drugiego semafora. Tym razem jest inaczej, ponieważ proces posiada już jeden. W celu wykluczenia zakleszczeń
+        został zaimplementowany pomysł, który polega na oznaczaniu semaforów jako $dirty$, co pozwala procesom "ukraść" posiadany już semafor, jeśli jest "brudny". W taki przypadku proces musi oddać ten "widelec" i 
+        oznaczyć go jako "czysty". Zatem jak widać w kodzie wchodzimy do nieskończonej pętli, którą opuścimy dopiero po 
+        otrzymaniu dostępu do obu plików. We fragmencie
+        \begin{lstlisting}[style=CStyle]
+        while(true){    
+            if(wait_s(s2, s1))
+            break;
+        else{
+            s1->dirty = false;
+            signal_s(s1);
+            wait_s(s1, NULL);
+        }\end{lstlisting}
+        ,czekamy na drugi semafor, podając w drugim argumencie posiadany.
+        Wtedy podczas czekania na dostęp w funkcji $wait$ 
+        \begin{lstlisting}[style=CStyle]
+            while(s->val <= 0){
+                if(holder->stolen && !holder->dirty)
+                    return false;
+            }\end{lstlisting}
+        sprawdzamy także, czy podczas oczekiwania inny proces nie oznaczył naszego semafora jako $stolen$. Wtedy jeśli 
+        semafor jest "brudny", to musimy go oddać, więc funkcja $wait$ przerywa działanie i zwraca $false$, który sygnalizuje procesowi, że musi oddać posiadany semafor i spróbować jeszcze raz dostać do niego dostęp. Natomiast
+        jeśli uda nam się zawczasu otrzymać dostęp, to zwraca $true$ i pętla procesu się kończy. 
+        Następnie przetrzymujemy dostęp do plików emulując "jedzenie" z oryginalnego problemu i wpisujemy do pliku informację, że dany proces go odwiedził.
+        Na koniec zwalniamy semafory. Należy tu jeszcze dodać, że jeśli podczas używania plików jakiś inny plik sygnalizował próbę otrzymania dostępu (poprzez pole $stolen$ w semaforze), to 
+        zmieniamy pole $dirty$ na $false$.
+        \\
+        \\
+        W uogólnieniu, problem zakleszczenia został rozwiązany w podobny sposób, jak zaproponowali to K. Mani Chandy i J. Misra w oryginalnym problemie ucztujących filozofów.
+\end{document}
+
