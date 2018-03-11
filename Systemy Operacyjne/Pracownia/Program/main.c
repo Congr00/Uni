@@ -87,8 +87,8 @@ int main(int argc, char** argv){
     int iterate = -1;
     if(argc >= 4){
         procn = atoi(argv[1]);
-        min = atoi(argv[2]);
-        max = atoi(argv[3]);       
+        min   = atoi(argv[2]);
+        max   = atoi(argv[3]);
     }
     else{
         printf("need at least 3 arguments");
