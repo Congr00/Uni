@@ -5,18 +5,20 @@ prowadzący: Andrzej Łukaszewski
 plik: reciver.h
 */
 
-#include <arpa/inet.h>
-#include <netinet/ip.h>
 #include <stdlib.h>
-#include <sys/select.h>
-#include <netinet/ip_icmp.h>
 #include <stdio.h>
 #include <string.h>
+#include <arpa/inet.h>
+#include <netinet/ip.h>
+#include <netinet/ip_icmp.h>
+#include <sys/select.h>
 #include <sys/time.h>
+#include <errno.h>
 
-#define MAX_PACKAGE_COUNT 10
-#define ICMP_PADDING 4
+#define ICMP_PADDING     4
 #define ICMP_PADDING_TTL 8
+#define SELECT_ERROR       "Select error: %s\n"
+#define RECIVE_ERROR       "Reciver error: %s\n"
 
 struct package{
     char            ip[20];
@@ -24,15 +26,10 @@ struct package{
     struct icmphdr* icmp_header;
     u_int8_t*       icmp_packet;
     float           w_time;
-};
-
-struct unpacked{
-    struct package* arr[MAX_PACKAGE_COUNT];
-    int            packet_cnt;
-    int            valid;
+    short           valid;
 };
 
 float timediff(struct timeval t0, struct timeval t1);
 void print_hex(int length, u_int8_t* buff);
-struct unpacked* get_packet(int sockid, int id, int seq[3], const char* ip_dst, float wait_time); 
+struct package* get_packet(int sockid, int id, int* seq, int seql, const char* ip_dst, float wait_time); 
 

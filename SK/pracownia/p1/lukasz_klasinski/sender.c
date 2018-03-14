@@ -19,19 +19,23 @@ u_int16_t compute_icmp_checksum(const void* buff, int length){
 
 
 int send_packet(int seqnr, const char* dst_addr, int ttl, int sockid){
+    // create structure of packet
     struct icmphdr icmp_header;
     icmp_header.type = ICMP_ECHO;
     icmp_header.code = 0;
     icmp_header.un.echo.id = getpid();
     icmp_header.un.echo.sequence = seqnr;
     icmp_header.checksum = 0;
+    //compute checksum
     icmp_header.checksum = compute_icmp_checksum((u_int16_t*)&icmp_header, sizeof(icmp_header));
 
+    //set recipient and destination address
     struct sockaddr_in recipient;
     bzero(&recipient, sizeof(recipient));
     recipient.sin_family = AF_INET;
     inet_pton(AF_INET, dst_addr, &recipient.sin_addr);
 
+    //send packet!
     setsockopt(sockid, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
     ssize_t bytes_send = sendto(sockid, &icmp_header, sizeof(icmp_header), 0, 
     (struct sockaddr*)&recipient, sizeof(recipient));
