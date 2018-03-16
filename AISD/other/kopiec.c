@@ -57,16 +57,17 @@ heap_min_max* init_heap_mm(unsigned int initial_size){
 }
 
 void pace_max(heap_min_max* h, unsigned int i){   
+    unsigned int grandson = (i << 1 | 1) << 1 | 1;
+    unsigned int max_index = grandson;    
+    unsigned int parent = ((i+1) >> 1) - 1;   
+    unsigned int grandparent = (((i+1) >> 1) >> 1) - 1;      
     if(i != 0){
-        unsigned int parent = ((i+1) >> 1) - 1; 
         if(h->arr[parent] > h->arr[i]){                         
             swap(h->arr, parent, i);                    
             pace_min(h, parent);
             pace_max(h, i);
         }
     }
-    unsigned int grandson = (i << 1 | 1) << 1 | 1;
-    unsigned int max_index = grandson;
     if(grandson > h->length){
         for(int j = 0; j < 4; ++j)
             if(grandson + i > h->length)
@@ -78,7 +79,6 @@ void pace_max(heap_min_max* h, unsigned int i){
         }
     }
     if(i > 2){
-        unsigned int grandparent = (((i+1) >> 1) >> 1) - 1;
         if(grandparent || i == 2){
             if(h->arr[grandparent] < h->arr[i]){
                 swap(h->arr, grandparent, i);
@@ -88,17 +88,19 @@ void pace_max(heap_min_max* h, unsigned int i){
     }
 }
 
+
 void pace_min(heap_min_max* h, unsigned int i){  
+    int grandson = (i << 1 | 1) << 1 | 1;
+    int min_index = grandson;  
+    unsigned int parent = ((i+1) >> 1) - 1;     
+    int grandparent = (((i+1) >> 1) >> 1) - 1;      
     if(i != 0){
-        unsigned int parent = ((i+1) >> 1) - 1;
         if(h->arr[parent] < h->arr[i]){
             swap(h->arr, parent, i);
             pace_max(h, parent);            
             pace_min(h, i);            
         }
-    }
-    int grandson = (i << 1 | 1) << 1 | 1;
-    int min_index = grandson;    
+    }   
     if(grandson > h->length){
         for(int j = 0; j < 4; ++j)
             if(grandson + i > h->length)
@@ -110,7 +112,6 @@ void pace_min(heap_min_max* h, unsigned int i){
         }
     }
     if(i > 2){
-        int grandparent = (((i+1) >> 1) >> 1) - 1;
         if(grandparent || (i >= 3 && i <= 6)){
             if(h->arr[grandparent] > h->arr[i]){   
                 swap(h->arr, grandparent, i);
@@ -326,8 +327,7 @@ void heapsort_fast(int* arr, const int size){
     }    
 }
 
-#define SIZE 128
-
+#define SIZE 65
 int rand_num(int a, int b){
     return (rand() % (b + 1 - a)) + a;
 }
@@ -345,13 +345,14 @@ int main(){
 
 
     heap_min_max* h = init_heap_mm(1);
-    for(int i = 0; i < SIZE; ++i){
+    int i;
+    for(i = 0; i < SIZE; ++i){
         add_key_mm(h, rand_num(-1000, 1000));
     }
     printf("min:%d, max:%d\n", get_min_mm(h), get_max_mm(h));
     int max = -2000;
     int min = 2000;
-    for(int i = 0; i < h->count; ++i){
+    for(i = 0; i < h->count; ++i){
         if(h->arr[i] > max)
             max = h->arr[i];
         if(h->arr[i] < min)

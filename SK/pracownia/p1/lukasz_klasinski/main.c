@@ -3,21 +3,23 @@ author:     Łukasz Klasiński
 indeks:     290043
 prowadzący: Andrzej Łukaszewski
 plik: main.c
+description:
+My own implementation of popular tracing program "traceroute".
 */
 
 #include "reciver.h"
 #include "sender.h"
 
-#define WRONG_ARGUMENT_MSG "Usage:\ntraceroute [src_addres]\n"
+#define WRONG_ARGUMENT_MSG "Usage:\ntraceroute [destination addres]\n"
 #define WRONG_IP_ADDRESS   "Wrong ip address!\n"
 #define SOCKET_ERROR       "Socket error: %s\n"
 #define TLE                "*\n"
 #define SEND_ERROR         "Sending package error: %s\n"
 #define UNCALC_MEDIAN      "???\n"
 
-#define WAIT_TIME   1.0f // how long wait for packages
-#define S_PACKAGE_C 3    // number of packages to send (default = 3)
-#define TTL_LIMIT   30   // limit of ttl
+#define WAIT_TIME   1.0f //how long wait for packages
+#define S_PACKAGE_C 3    //number of packages to send (default = 3)
+#define TTL_LIMIT   30   //limit of ttl
 
 
 int isValidIp(char* addr);
@@ -82,7 +84,7 @@ int main(int argc, char** argv){
             for(i = 0; i < S_PACKAGE_C; ++i)
                 if(r->icmp_header->un.echo.sequence == seqa[i])
                     in[i] = r;
-            // if we've caugth them all, nothing more to do here
+            //if we've caugth them all, nothing more to do here
             int all = 1;
             for(i = 0; i < S_PACKAGE_C; ++i)
                 if(in[i] == NULL)
@@ -98,15 +100,18 @@ int main(int argc, char** argv){
 
         char ip[20];
         for(i = 0; i < S_PACKAGE_C; ++i)
-            if(in[i] != NULL)
-                memcpy(ip, in[0]->ip, 20);
-        for(i = 0; i < S_PACKAGE_C; ++i)
-            if(in[i] != NULL)
-                free(in[i]);    
-        // if we reached destination SUCCESS!                               
+            if(in[i] != NULL){
+                memcpy(ip, in[i]->ip, 20);
+                break;
+            }
+        //if we reached destination SUCCESS!                               
         if(!strcmp(ip, dst_addr))       
             return EXIT_SUCCESS;
+        for(i = 0; i < S_PACKAGE_C; ++i)
+            if(in[i] != NULL)
+                free(in[i]);                
     }
+    //we ran out of ttl limit before reaching destination ;(
     return EXIT_SUCCESS;
 }
 
@@ -125,6 +130,7 @@ void print_results(struct package* in[S_PACKAGE_C], int cnt){
     for(i = 0; i < S_PACKAGE_C; ++i)
         if(in[i] != NULL)
             isaNULL = 0;
+    //if every ip is empty, print "*"
     if(isaNULL){
         printf(TLE);
         return;
@@ -133,6 +139,7 @@ void print_results(struct package* in[S_PACKAGE_C], int cnt){
     for(i = 0; i < S_PACKAGE_C; ++i)
         addr[i] = NULL;
     int addrc = 0;
+    //get nonempty addresses and print every diffrent
     for(i = 0; i < S_PACKAGE_C; ++i)
         if(in[i] != NULL){
             int tmp = 0;
@@ -149,6 +156,7 @@ void print_results(struct package* in[S_PACKAGE_C], int cnt){
                 printf(" ");
             addrc++;
         }
+    //if there is an empty address, cant calculate median time
     for(i = 0; i < S_PACKAGE_C; ++i)
         if(in[i] == NULL)
             isaNULL = 1;
