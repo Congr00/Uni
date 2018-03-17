@@ -1,3 +1,4 @@
+*tar.*
 *.o ./AISD/other/kopiec
 ./AISD/themis/main
 ./AISD/pracownia/2018_A/.git/hooks/post-update.sample

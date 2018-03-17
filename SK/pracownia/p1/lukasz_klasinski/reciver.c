@@ -29,17 +29,15 @@ struct package* get_packet(int sockid, int id, int* seq, int seql, const char* i
     fd_set descriptors;
     FD_ZERO(&descriptors);
     FD_SET(sockid, &descriptors);
-    struct timeval tv, start, stop;
+    struct timeval tv;
     float passed = 0;
     tv.tv_sec = 0;
     tv.tv_usec = 1000*wait_time;
 
     //select checks if there is a package awaiting in a buffer
-    gettimeofday(&start, NULL);
     int ready = select(sockid+1, &descriptors, NULL, NULL, &tv);
-    gettimeofday(&stop, NULL);
-    passed = timediff(start, stop) + 1000.0f - wait_time;
-
+    passed = (1000.0f - tv.tv_usec / 1000.0f);
+    
     if(ready < 0){
         fprintf(stderr, SELECT_ERROR, strerror(errno));
         exit(EXIT_FAILURE);
@@ -89,9 +87,10 @@ struct package* get_packet(int sockid, int id, int* seq, int seql, const char* i
         if(id == p->icmp_header->un.echo.id && !foreign_p){
             //one correct package at the time
             p->valid = 1;
-            free(res);
+            free(res);      
             return p;            
         }
+
         free(p);
     }
 }
