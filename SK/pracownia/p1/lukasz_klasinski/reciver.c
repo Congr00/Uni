@@ -49,7 +49,6 @@ struct package* get_packet(int sockid, int id, int* seq, int seql, const char* i
         res->valid = 0;
         return res;
     }
-
     loop {
         //parsing package contents to structures
         struct    sockaddr_in sender;
