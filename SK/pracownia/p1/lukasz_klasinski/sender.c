@@ -39,5 +39,9 @@ int send_packet(int seqnr, const char* dst_addr, int ttl, int sockid){
     setsockopt(sockid, IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
     ssize_t bytes_send = sendto(sockid, &icmp_header, sizeof(icmp_header), 0, 
     (struct sockaddr*)&recipient, sizeof(recipient));
+    if(bytes_send < 0){
+        fprintf(stderr, SENDTO_ERROR, strerror(errno));
+        exit(EXIT_FAILURE);
+    }
     return (int)bytes_send;
 }

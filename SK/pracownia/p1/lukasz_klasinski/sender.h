@@ -13,6 +13,11 @@ plik: sender.h
 #include <strings.h>
 #include <netinet/ip.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
+#define SENDTO_ERROR "sendto error: %s\n"
 
 u_int16_t compute_icmp_checksum(const void* buff, int length);
 
