@@ -10,8 +10,8 @@ My own implementation of popular tracing program "traceroute".
 #include "reciver.h"
 #include "sender.h"
 
-#define WRONG_ARGUMENT_MSG "Usage:\ntraceroute [destination addres]\n"
-#define WRONG_IP_ADDRESS   "Wrong ip address!\n"
+#define WRONG_ARGUMENT_MSG "%s\nUsage:\ntraceroute [destination addres]\n"
+#define WRONG_IP_ADDRESS   "%s\n"
 #define SOCKET_ERROR       "Socket error: %s\n"
 #define TLE                "*\n"
 #define SEND_ERROR         "Sending package error: %s\n"
@@ -172,11 +172,11 @@ void print_results(struct package* in[S_PACKAGE_C], int cnt){
 
 void parse_arguments(int argc, char** argv){
     if(argc != 2){
-        printf(WRONG_ARGUMENT_MSG);
+        fprintf(stderr, WRONG_ARGUMENT_MSG, strerror(E2BIG));        
         exit(EXIT_FAILURE);
     }
     if(!isValidIp(argv[1])){
-        printf(WRONG_IP_ADDRESS);
+        fprintf(stderr, WRONG_IP_ADDRESS, strerror(EINVAL));
         exit(EXIT_FAILURE);
     }
 }
