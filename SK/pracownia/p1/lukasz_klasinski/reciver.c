@@ -69,7 +69,6 @@ struct package* get_packet(int sockid, int id, int* seq, int seql, const char* i
         }
         inet_ntop(AF_INET, &(sender.sin_addr), p->ip, sizeof(p->ip));
         p->ip_header = (struct iphdr*)buffer;
-
         //check if it's ttl or normal response to ICMP
         if(!strcmp(ip_dst, p->ip))
             p->icmp_packet = buffer + ICMP_PADDING * p->ip_header->ihl;
