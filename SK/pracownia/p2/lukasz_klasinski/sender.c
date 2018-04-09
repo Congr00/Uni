@@ -7,7 +7,7 @@ plik:       sender.c
 
 #include "sender.h"
 
-void broadcast_package(reg addr, char dst[15]){
+void broadcast_package(reg addr, reg dst, uint32_t ind){
 
 	struct sockaddr_in server_address;
     s_package message;
@@ -16,85 +16,87 @@ void broadcast_package(reg addr, char dst[15]){
 	server_address.sin_family = AF_INET;
 	server_address.sin_port   = htons(PORT);
 
-	inet_pton(AF_INET, dst		     , &server_address.sin_addr);
-    inet_pton(AF_INET, addr.broadcast, &message.ip             );
 
-    message.mask     = (char)addr.mask    ;
-    message.distance =       addr.distance;
+	inet_pton(AF_INET, dst.broadcast , &server_address.sin_addr);
+    inet_pton(AF_INET, addr.subnet   , &message.ip             );
 
+    message.mask     = (char)addr.mask     ;
+    message.distance = htonl(addr.distance);
 	if (sendto(_sockfd, &message, sizeof(s_package), 0, (struct sockaddr*) &server_address, sizeof(server_address)) != sizeof(s_package)) {
-		fprintf(stderr, "sendto error: %s\n", strerror(errno)); 
-		exit(EXIT_FAILURE);		
-	}    
+		//network unreachable
+		__semaphore->_route_tbl[ind].distance = INF;	
+	}    	
 }
 
-void run_client(semaphore* sem){
-	int turn = 0;
+void run_client(void){
+	uint32_t turn = 0;
 	while(1){
 		wait_s();
-		send_all(sem);
-		remove_inf(sem);
-		print_all(sem);
+		//send table to neibs
+		send_all();
+		//remove values with inf (if not neib)
+		remove_inf();
+		//print everything 		
+		print_all();
+		//every 30th turn rewrite array of regs
+		//if(turn % 30)
+		//	remake_reg(__semaphore);		
 		signal_s();
+		//wait for next turn
 		sleep(TURN);
 		turn++;
 	}
 }
 
-void send_all(semaphore* sem){
-    for(uint32_t i = 0; i < sem->_route_cnt; ++i){
-        if(sem->_route_tbl[i].broadcast_inf != LOST && sem->_route_tbl[i].direct){
-			for(uint32_t j = 0; j < sem->_route_cnt; ++j){
-				if(i != j && sem->_route_tbl[j].broadcast_inf != LOST)
-					broadcast_package(sem->_route_tbl[j], sem->_route_tbl[i].ip_address);			
+void send_all(void){
+    for(uint32_t i = 0; i < __semaphore->_route_cnt; ++i){
+        if(__semaphore->_route_tbl[i].broadcast_inf != LOST && __semaphore->_route_tbl[i].direct){
+			for(uint32_t j = 0; j < __semaphore->_route_cnt; ++j){
+				if( __semaphore->_route_tbl[j].broadcast_inf != LOST){
+					broadcast_package(__semaphore->_route_tbl[j], __semaphore->_route_tbl[i], i);	
+				}
 			}
 		}
 	}
 }
 
-void print_all(semaphore* sem){
-	for(uint32_t i = 0; i < sem->_route_cnt; ++i){
-		if(sem->_route_tbl[i].broadcast_inf != LOST || sem->_route_tbl[i].direct){
-			printf("%s/%d ", sem->_route_tbl[i].subnet, sem->_route_tbl[i].mask);
-			int tmp = 15 - strlen(sem->_route_tbl[i].subnet);
-			if(sem->_route_tbl[i].mask > 9)
-				tmp += 1;
-			for(int j = 0; j < tmp; ++j)
-				printf(" ");
-			if(sem->_route_tbl[i].distance != INF){
-				printf("distance %u ", sem->_route_tbl[i].distance);
-				//tmp = sem->_route_tbl[i].distance / 10;
-				//for(int j = 0; j < tmp; ++j)
-			//		printf(" ");					
-			}
+void print_all(void){
+	puts("");
+	for(uint32_t i = 0; i < __semaphore->_route_cnt; ++i){
+		if(__semaphore->_route_tbl[i].broadcast_inf != LOST || __semaphore->_route_tbl[i].direct){
+			printf("%s/%d ", __semaphore->_route_tbl[i].subnet, __semaphore->_route_tbl[i].mask);
+			if(__semaphore->_route_tbl[i].distance != INF)
+				printf("distance %u ", __semaphore->_route_tbl[i].distance);				
 			else
 				printf("unreachable ");
-			if(sem->_route_tbl[i].direct)
-				printf("connected directly\n");
+			if(__semaphore->_route_tbl[i].direct)
+				printf("connected directly");
 			else
-				printf("via %s\n", sem->_route_tbl[i].ip_address);
+				printf("via %s", __semaphore->_route_tbl[i].ip_address);
+			printf(" last msg:%u int:%d\n", __semaphore->_route_tbl[i].last_msg, __semaphore->_route_tbl[i].broadcast_inf);
 		}
 	}
+	puts("");	
 }
 
-void remove_inf(semaphore* sem){
-    for(uint32_t i = 0; i < sem->_route_cnt; ++i){
-        if(sem->_route_tbl[i].broadcast_inf != LOST && sem->_route_tbl[i].distance == INF)
-			sem->_route_tbl[i].broadcast_inf--;
+void remove_inf(void){
+    for(uint32_t i = 0; i < __semaphore->_route_cnt; ++i){
+        if(__semaphore->_route_tbl[i].broadcast_inf != LOST && __semaphore->_route_tbl[i].distance == INF)
+			__semaphore->_route_tbl[i].broadcast_inf--;
 	}
 }
 
-void remake_reg(semaphore* sem){
-	reg* nreg = (reg*)malloc(sizeof(reg)*sem->_route_len);
+void remake_reg(void){
+	reg* nreg = (reg*)malloc(sizeof(reg)*__semaphore->_route_len);
 	if(nreg == NULL){
 		fprintf(stderr, "%s\n", strerror(errno));
 		exit(EXIT_FAILURE);                    
 	}
 	uint32_t j = 0;
-	for(uint32_t i = 0; i < sem->_route_cnt; ++i)
-		if(sem->_route_tbl[i].broadcast_inf != LOST || sem->_route_tbl[i].direct)
-			nreg[j++] = sem->_route_tbl[i];
-	free(sem->_route_tbl);
-	sem->_route_tbl = nreg;
-	sem->_route_cnt = j;
+	for(uint32_t i = 0; i < __semaphore->_route_cnt; ++i)
+		if(__semaphore->_route_tbl[i].broadcast_inf != LOST || __semaphore->_route_tbl[i].direct)
+			nreg[j++] = __semaphore->_route_tbl[i];
+	free(__semaphore->_route_tbl);
+	__semaphore->_route_tbl = nreg;
+	__semaphore->_route_cnt = j   ;
 }

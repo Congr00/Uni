@@ -7,9 +7,9 @@ plik:       sender.h
 
 #include "utils.h"
 
-void broadcast_package(reg addr, char dst[15]);
-void run_client       (semaphore* sem)        ;
-void send_all         (semaphore* sem)        ;
-void print_all        (semaphore* sem)        ;
-void remove_inf       (semaphore* sem)        ;
-void remake_reg       (semaphore* sem)        ;
+void broadcast_package(reg addr, reg dst, uint32_t ind);
+void run_client       (void)                           ;
+void send_all         (void)                           ;
+void print_all        (void)                           ;
+void remove_inf       (void)                           ;
+void remake_reg       (void)                           ;

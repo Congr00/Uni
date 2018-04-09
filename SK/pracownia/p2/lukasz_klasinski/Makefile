@@ -1,31 +1,38 @@
 default: router
 
 main.o : main.c
-	gcc -c main.c -o main.o -std=c99 -Wall -Wextra
+	gcc -std=gnu99 -c main.c -o main.o -Wall -Wextra
 
 sender.o : sender.c
-	gcc -c sender.c -o sender.o -std=c99 -Wall -Wextra
+	gcc -std=gnu99 -c sender.c -o sender.o -Wall -Wextra
 
 reciver.o : reciver.c
-	gcc -c reciver.c -o reciver.o -std=c99 -Wall -Wextra
+	gcc -std=gnu99 -c reciver.c -o reciver.o -Wall -Wextra
 
 utils.o : utils.c
-	gcc -c utils.c -o utils.o -std=c99 -Wall -Wextra	
+	gcc -std=gnu99 -c utils.c -o utils.o -Wall -Wextra	
 
 router: main.o sender.o reciver.o utils.o
-	gcc main.o sender.o reciver.o utils.o -o router
+	gcc -std=gnu99 main.o sender.o reciver.o utils.o -o router
+
+main32.o : main.c
+	gcc -std=gnu99 -c main.c -o main32.o -m32 -Wall -Wextra
+
+sender32.o : sender.c
+	gcc -std=gnu99 -m32 -c sender.c -o sender32.o -Wall -Wextra
+
+reciver32.o : reciver.c
+	gcc -std=gnu99 -m32 -c reciver.c -o reciver32.o -Wall -Wextra
+
+utils32.o : utils.c
+	gcc -std=gnu99 -m32 -c utils.c -o utils32.o -Wall -Wextra	
+
+router32: main32.o sender32.o reciver32.o utils32.o
+	gcc -std=gnu99 -m32 main32.o sender32.o reciver32.o utils32.o -o router32
 
 clean:
-	-rm -f main.o
-	-rm -f sender.o
-	-rm -f reciver.o
-	-rm -f utils.o
-	-rm -f .fmap
-
+	-rm -f *.o
 distclean:
-	-rm -f main.o
-	-rm -f sender.o
-	-rm -f reciver.o	
-	-rm -f utils.o
-	-rm -f router
-	-rm -f .fmap
+	-rm -f *.o
+	-rm -f router	
+	-rm -f router32	
