@@ -1,0 +1,129 @@
+\documentclass[a4paper]{article}
+
+%% Language and font encodings
+\usepackage[polish]{babel}
+\usepackage{polski}
+\usepackage{secdot}
+\frenchspacing
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\usepackage[shortlabels]{enumitem}
+\usepackage[]{algorithm2e}
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 0.5ex minus 0.2ex}
+\newcommand\doubleplus{+\kern-1.3ex+\kern0.8ex}
+
+\title{Rozwiązanie zadania 2.3}
+\author{Piotr Pietrzak}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+
+\section{Problem}
+
+Rozważ następującą wersję problemu wydawania reszty: dla danych liczb naturalnych $a$, $b$ $(a \leq b)$ chcemy przedstawić ułamek $\frac{a}{b}$ jako sumę różnych ułamków o licznikach równych 1.
+
+\begin{enumerate}[a)]
+\item Udowodnij, że algorytm zachłanny zawsze daje rozwiązanie.
+\item Czy zawsze jest to rozwiązanie optymalne (tj. o najmniejszej liczbie składników)?
+\end{enumerate}
+
+Najpierw, dla przypomnienia, wprowadzę algorytm, później odpowiem na pytania w zadaniu.
+
+\section{Algorytm}
+
+\subsection{Idea}
+
+W zadaniu rozważamy algorytm zachłanny, czyli taki, który w każdym kroku dokonuje lokalnie najbardziej obiecującego wyboru. Dla naszego problemu, jest to algorytm, który w i-tym kroku bierze największy ułamek $\frac{1}{d_{i}}$, taki że $\frac{1}{d_{i}} < \frac{a_{i}}{b_{i}}$.
+
+Zauważmy, że największym ułamkiem o liczniku $1$ nie większym od $\frac{x}{y}$ jest $\frac{1}{\ceil{\frac{y}{x}}}$. Pozostaje nam wyprowadzić wzór na pozostały ułamek, który wykorzystamy w algorytmie.
+$$
+	\frac{a_{i}}{b_{i}} = \frac{x}{y}
+$$
+
+$$
+	\frac{a_{i + 1}}{b_{i + 1}} =
+    \frac{x}{y} - \frac{1}{\ceil{\frac{y}{x}}} = \frac{
+    	x\ceil{\frac{y}{x}} - y
+    }{
+    	y\ceil{\frac{y}{x}}
+    }
+$$
+
+\subsection{Pseudokod}
+
+Rozwiązanie możemy opisać poniższym pseudokodem.
+
+
+\begin{algorithm}[H]
+ \KwData{$a$, $b$; $a \leq b$}
+ \KwResult{
+ 	List of denominators $D = [d_{1}, ..., d_{n}]$,\newline 
+	where $\sum_{k=1}^{n} \frac{1}{d_k} = \frac{a}{b}$\newline
+    and $\forall d_{i}, d_{j} \in D \quad i \neq j \implies d_{i} \neq d_{j}$
+ }
+ $D = []$\;
+ \While{$a > 0$}{
+ 	$d = \ceil{\frac{b}{a}}$\;
+    $D = [d] \doubleplus D$\;
+    $a = a*d - b$\;
+    $b = b*d$\;
+ }
+ \Return D
+\end{algorithm}
+
+\section{Dowód}
+
+\begin{enumerate}[a)]
+\item Udowodnij, że algorytm zachłanny zawsze daje rozwiązanie.
+
+Widzimy, że algorytm buduje tylko rozwiązania w poprawnej formie. Pozostaje nam pokazać, że ma własność stopu.
+Wystarczy zauważyć, że licznik ($a$) dąży do 0.
+Ponieważ $a$ i $b$ są naturalne, wystarczy pokazać, że $a$ maleje.
+
+$$
+	a_{i} > a_{i + 1}
+$$
+$$
+	x > x\ceil[\bigg]{\frac{y}{x}} - y
+$$
+$ x \neq 0 $, więc możemy podzielić przez $x$:
+$$
+	1 > \ceil[\bigg]{\frac{y}{x}} - \frac{y}{x}
+$$
+
+Zauważmy, że $\forall x \in \mathbb{R}$ $\left(\ceil{x} - x\right) \in [0, 1)$, co kończy dowód.
+
+\item Czy zawsze jest to rozwiązanie optymalne (tj. o najmniejszej liczbie składników)?
+
+Nie. Dla $\frac{13}{40}$ rozwiązanie optymalne ma 2 składniki, a zachłanne 3.
+
+$$
+	\frac{13}{40} =
+    \frac{1}{5} +
+    \frac{1}{8} =
+    \frac{1}{4} +
+    \frac{1}{14} +
+    \frac{1}{280}
+$$
+
+
+\end{enumerate}
+
+\end{document}

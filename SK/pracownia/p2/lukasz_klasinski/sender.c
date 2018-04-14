@@ -23,9 +23,15 @@ void broadcast_package(reg addr, reg dst, uint32_t ind){
     message.mask     = (char)addr.mask     ;
     message.distance = htonl(addr.distance);
 	if (sendto(_sockfd, &message, sizeof(s_package), 0, (struct sockaddr*) &server_address, sizeof(server_address)) != sizeof(s_package)) {
-		//network unreachable
+		//network unreachable, usually doesnt work in virtualbox VM's
 		__semaphore->_route_tbl[ind].distance = INF;	
-	}    	
+	}    
+	//we might just recovered lost connection!	
+	else{
+		__semaphore->_route_tbl[ind].distance      = __semaphore->_route_tbl[ind].distance_d;
+		__semaphore->_route_tbl[ind].broadcast_inf = INF_BR    ;
+		__semaphore->_route_tbl[ind].last_msg      = ROUND_WAIT; 
+	}
 }
 
 void run_client(void){
@@ -50,7 +56,9 @@ void run_client(void){
 
 void send_all(void){
     for(uint32_t i = 0; i < __semaphore->_route_cnt; ++i){
-        if(__semaphore->_route_tbl[i].broadcast_inf != LOST && __semaphore->_route_tbl[i].direct){
+        //if(__semaphore->_route_tbl[i].broadcast_inf != LOST && __semaphore->_route_tbl[i].direct){
+			//broadcast to direct even if unreachable
+		if( __semaphore->_route_tbl[i].direct){
 			for(uint32_t j = 0; j < __semaphore->_route_cnt; ++j){
 				if( __semaphore->_route_tbl[j].broadcast_inf != LOST){
 					broadcast_package(__semaphore->_route_tbl[j], __semaphore->_route_tbl[i], i);	

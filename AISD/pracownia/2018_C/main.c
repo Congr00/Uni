@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//drzewa przedziałowe
+
 typedef struct{
     long dist;
     unsigned long cost;

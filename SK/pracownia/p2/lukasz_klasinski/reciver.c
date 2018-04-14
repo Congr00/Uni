@@ -140,8 +140,8 @@ void insert_reg(reg r){
                         }
                     }
                     __semaphore->_route_tbl[i].broadcast_inf = INF_BR;
-                    __semaphore->_route_tbl[i].last_msg = ROUND_WAIT;             
-                    __semaphore->_route_tbl[i].distance = __semaphore->_route_tbl[i].distance_d;       
+                    __semaphore->_route_tbl[i].last_msg      = ROUND_WAIT;             
+                    __semaphore->_route_tbl[i].distance      = __semaphore->_route_tbl[i].distance_d;       
                     return;
                 }
                 if(r.distance == INF){
@@ -183,9 +183,10 @@ void insert_reg(reg r){
                     __semaphore->_route_tbl[i].broadcast_inf = INF_BR;  
                     __semaphore->_route_tbl[i].last_msg = ROUND_WAIT;                 
                 }
-                // connecting update
-                else if(__semaphore->_route_tbl[i].distance == r.distance + dst.distance){
-                    __semaphore->_route_tbl[i].last_msg = ROUND_WAIT;    
+                // connecting update from same address
+                else if(__semaphore->_route_tbl[i].distance == r.distance + dst.distance && 
+                !strcmp(__semaphore->_route_tbl[i].ip_address, r.ip_address)){
+                    __semaphore->_route_tbl[i].last_msg = ROUND_WAIT;
                 }
 
                 return;
