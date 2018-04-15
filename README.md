@@ -1,2 +1,2 @@
 # Uni
-My backup of uni labs, project and other stuff
+My backup of uni labs, projects and other stuff
