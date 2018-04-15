@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <stdint.h>
+#include <limits.h>
 typedef struct{
-    long          dist;
+    long dist;
     long cost;
-    long          val;
+    long long  val;
 }p_station;
 
 long          road_l;
@@ -61,7 +62,7 @@ int main(){
         printf("0");
         return 0;
     }
-    long min = -1;
+    long long min = -1;
     for(unsigned long i = 0; i < r_i; ++i){
         while(front != back && 
         (deque[back-1].val + deque[back-1].cost >= stat[i].cost + stat[i].val))
@@ -71,7 +72,7 @@ int main(){
         (deque[front].dist + tank < stat[r_i].dist))
             pop_front();        
         if(stat[i].dist + tank >= road_l){
-            if((stat[i].cost + stat[i].val > min) || min == -1)
+            if((stat[i].cost + stat[i].val < min) || min == -1)
                 min = stat[i].val + stat[i].cost;
         } 
     }
@@ -96,7 +97,7 @@ int main(){
     if(min == -1)
         printf("NIE");
     else
-        printf("%ld", min);
+        printf("%lld", min);
     
     return 0;
 }
