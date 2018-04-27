@@ -1,0 +1,1 @@
+input x in let y = fn(x:int)->x+x in y x+1

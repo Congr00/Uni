@@ -1,0 +1,8 @@
+fun map(x:(int->int)*(int list)):int list = match snd x with
+                                            | []    -> []:int list
+                                            | y::ys -> ((fst x) y)::map(fst x,ys)
+fun sum(x:int list):int = match x with
+                          | []   -> 0
+                          | y::ys -> y + sum(ys)
+
+input x y z in sum map(fn(x1:int)->x1 + 42,[x,y,z]:int list)

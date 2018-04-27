@@ -1,0 +1,7 @@
+fun neverlucky(x:int list):bool = if thedream(x) = 42 then true else false
+fun thedream(x:int list):int = match x with
+                               | [] -> 0
+                               | y::ys -> y + thedream(ys)
+input x1 x2 x3 x4 in
+if neverlucky([x1,x2,x3,x4]:int list) then 42 else 42 div 0
+

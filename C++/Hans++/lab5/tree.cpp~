@@ -1,0 +1,88 @@
+
+#include "tree.h"
+
+// Easiest way to implement Rvalue assignment is by swap.
+
+void tree::operator = (tree&& t){
+	std::swap( pntr, t. pntr );
+}
+
+void tree::operator = (const tree& t){
+   *this = tree(t); // tree(t) is a temporary variable which will bind
+                    // to Rvalue assignment.
+}			
+
+const string& tree::functor() const{
+	return pntr->f;
+}
+
+const tree& tree::operator [] (size_t i) const{
+	return pntr->subtrees[i];
+}
+
+size_t tree::nrsubtrees() const{
+	return pntr->subtrees.size();
+}
+
+tree::~tree(){
+	this->pntr->refcnt--;
+	if(!this->pntr->refcnt){
+		delete pntr;
+	}
+}
+
+std::ostream& operator << (std::ostream& stream, const tree& t){
+	stream << t.functor() << " ";
+	for(size_t i = 0; i < t.nrsubtrees(); i++){
+		stream << t[i] << " ";
+	}
+	return stream;
+}
+
+void tree::ensure_not_shared(){
+	if(this->pntr->refcnt != 1){
+		trnode* nnode = new trnode(this->pntr->f, this->pntr->subtrees,1);
+		this->pntr->refcnt--;		
+		this->pntr = nnode;
+	}
+}
+
+string& tree::functor(){
+	ensure_not_shared();
+	return this->pntr->f;
+}
+
+tree& tree::operator [](size_t i){
+	ensure_not_shared();
+	return this->pntr->subtrees[i];
+}
+
+tree subst( const tree& t, const string& var, const tree& val ){
+	tree res = t;
+	if(res.nrsubtrees() == 0){
+		if(res.functor() == var){
+			res = val;
+
+		}
+	}
+
+	for(size_t i = 0; i < res.nrsubtrees(); i++){
+		res[i] = subst(res[i], var, val);
+	}
+	return res;
+}
+
+void replacesubtree( size_t i, const tree& t ){
+
+}
+	// Replace i-th subtree.
+void replacefunctor( const string& f ){	
+
+}
+						
+
+
+
+
+
+

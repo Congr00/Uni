@@ -1,0 +1,43 @@
+
+
+Pliki relokowalne:
+zwykle .o w linux
+
+rodzaj pliku obiektowego generowanego przez kompilator lub assembler podczas kompilacji pliku z kodem zrodlowym.
+Plik relokowany moze powstac w wyniku polaczenia kilku plikow relokowalnych (konsolidacja). Przeznaczone do
+przetwarzania przez konsolidator w celu otrzymania pliku wykonywalnego lub biblioteki dynamicznej. Mozna go zaladowac
+do pamieci i odwolywac sie do zdefiniowwanych w tym pliku zmiennych globalnych oraz wywolywac funkcje.
+Wykorzystywane np do ladowania wtyczek, modulow jadra itp.
+
+1) statyczne biblioteki - archiva plikow.o - relokowalnych
+
+liba.a 1579
+libm.a 471
+wc -l
+
+
+objdump -a
+nm -o --print-file-name
+readelf -h --file-header
+
+chyba o to chodzi
+
+2)
+
+tak, opcja -g dodaje do pliku wykonywalnego dodatkowe informacje dla debugera
+
+objdump -g dla debug information (chyba o to chodzi ze jest rozne) objdump -x dla headersow
+readelf --debug-dump
+nm --debug-syms
+
+3)
+ 0x0000000000000001 (NEEDED)             Shared library: [libpthread.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x0000000000000001 (NEEDED)             Shared library: [libdl.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libutil.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libz.so.1]
+ 0x0000000000000001 (NEEDED)             Shared library: [libm.so.6]
+
+readelf -d --dynamic
+objdump -x --all-headers
+nm ??? chyba niema

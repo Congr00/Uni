@@ -1,0 +1,9 @@
+def something(_) =
+	2 % 1
+def fuu(A) =
+	A = something(A), A = A @ 2
+def fuu2(B) =
+	if B <= 10 then
+		B = something(B)
+	else
+		B = B[fuu(B)]

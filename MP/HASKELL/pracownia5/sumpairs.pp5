@@ -1,0 +1,3 @@
+fun sumpair(x:(int*int)*(int*int)):int*int = (fst (fst x) + snd (fst x), fst (snd x) + snd (snd x))
+in
+let x = sumpair(((20,1),(10,11))) in fst x + snd x

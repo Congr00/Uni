@@ -1,0 +1,4 @@
+def test(_) = 
+	10
+def test2(A) =
+	test2(10), test2(20)

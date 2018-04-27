@@ -1,0 +1,2 @@
+fun f(x:((int->int)*int)):int = (fst x) (snd x) + 1
+input x in f (fn(x1:int)->x1+x,x)

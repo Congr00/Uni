@@ -1,0 +1,10 @@
+
+dzieje sie tak, poniewaz mamy 2 typy zmiennych globalnych -> silne i slabe. Slabe sa kiedy nie sa zainicjalizowane, silne wpp.
+Poniewaz char main nie byl zainicjalizowany zostal on nadpisany innym symbolem globalnym main, ktory juz byl.
+dlatego w jego 2 bajty zostanie wpisana wartosc funkcji main, ktora zostanie wypisana jako kawalek adresu.
+Gdybysmy przypisali wartosc, to char takze stalby sie zmienna silnie globalna, wiec mielibysmy blad linkera, 
+bo nie moga wystepowac 2 takie same silne symbole.
+
+
+
+

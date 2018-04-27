@@ -1,0 +1,24 @@
+    MConst    1
+    MPush
+    MConst    1
+    MAnd
+    MPush
+    MGetLocal 0
+    MPush
+    MGetLocal 2
+    MPush
+    MConst    42
+    MBranch   NE  lbl_0
+    MConst    0
+    MJump     lbl_1
+lbl_0
+    MConst    1
+lbl_1
+    MAnd
+    MBranch   Z   lbl_2
+    MConst    42
+    MJump     lbl_3
+lbl_2
+    MConst    24
+lbl_3
+    MRet

@@ -1,0 +1,9 @@
+
+
+<s> ::= <znak><liczbam><ulamek>
+<znak> ::= + | - | eps
+<ulamek> ::= <przecinek> | <wykladnik> | <przecinek><wykladnik> | eps
+<przecinek> ::= .<liczbam>
+<wykladnik> ::= e<znak><liczbam>
+<liczbam> ::= 1-9<liczba>
+<liczba> ::= 1-9<liczba> | eps

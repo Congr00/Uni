@@ -1,0 +1,1 @@
+input x y z in (fn(x':int)->fn(y':int)->fn(z':int)->x'+y'+z') x y z

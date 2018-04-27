@@ -1,0 +1,1 @@
+input a b c in if a = 0 then if b = 0 then 0 else -c div b else b*b-4*a*c

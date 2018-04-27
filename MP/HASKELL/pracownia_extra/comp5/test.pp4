@@ -1,0 +1,2 @@
+input y in let y = (true and true) in if (y) then 42 else 24
+

@@ -1,0 +1,6 @@
+0 - pusty znak null \0
+4 - koniec transmisji np tekstow, w unixsie jako end of file- ctrl+d 
+7 - sygnal dzwiekowy - potrzebna uwaga, kontrola alarmow itp
+10 - znak nastepnej lini \n
+12 - znak nastepnej strony/formy \f
+

@@ -1,0 +1,8 @@
+def fuu1(A,B) =
+	A = B ^ 11, B = 20 | A, B = A @ B, ~2000
+def fuu2(A) =
+	if fuu1(A,20) >= fuu1(A,30) then
+		~fuu2(A)
+	else
+		A = []
+def tmp(_) = [20 + 21]

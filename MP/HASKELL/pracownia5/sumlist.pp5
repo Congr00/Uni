@@ -1,0 +1,6 @@
+fun sum(x:int list):int = sumlist((x, 0))
+fun sumlist(x:int list*int):int = match fst x with
+                                  | [] -> snd x
+                                  | y::ys -> sumlist((ys,snd x + y))
+in
+sum([1,2,3,4,5,6,6,7,8]:int list)

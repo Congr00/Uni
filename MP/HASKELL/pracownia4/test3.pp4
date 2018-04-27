@@ -1,0 +1,1 @@
+input x in let y = x * x in let z = true in z + y

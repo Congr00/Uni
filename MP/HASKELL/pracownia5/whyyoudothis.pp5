@@ -1,0 +1,5 @@
+fun x1(x:bool list):int = match x with
+                          | [] -> 21
+                          | y::ys -> if y then 10 + x1(ys) else 21
+in
+x1([true,true,false,false]:bool list)

@@ -1,0 +1,2 @@
+fun f(x:int):int = 42 div x
+input x in let y = fn(x:int->int)->x 42 in y f

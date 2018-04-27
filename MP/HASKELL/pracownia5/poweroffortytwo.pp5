@@ -1,0 +1,4 @@
+fun _42_positive(x:int):bool = if x = 42 then true else false
+fun _42_super_positive(x:int*int):bool = if _42_positive(fst x) and _42_positive(snd x) then true else false
+input x y in
+if _42_super_positive((x,y)) then 42 else 42 div 0

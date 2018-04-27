@@ -1,0 +1,8 @@
+1) 6(%rax),%rdx = x + 6
+2) (%rax,%rcx),%rdx = x + y
+3) (%rax, %rcx, 4), %rdx = x + y * 4
+4) 7(%rax,%rax,8),%rdx = x + x * 8 + 4 = 9x + 4
+5) 0xA(,%rcx,4),%rdx = 4y + 10
+6) 9(%rax, %rcx, 2),%rdx = x + 2y + 9
+
+

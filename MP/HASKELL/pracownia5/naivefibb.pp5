@@ -1,0 +1,5 @@
+fun fibb(n:int):int = 
+    if n <= 1 then n
+    else fibb(n-1) + fibb(n-2)
+in
+fibb(9) + 8

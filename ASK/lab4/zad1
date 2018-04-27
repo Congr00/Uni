@@ -1,0 +1,12 @@
+1) %rax = 0x100
+2) 0x104 0xAB?
+3) 0x108 - stala
+4) (%rax) = 0xFF
+5) 4(%rax) = [rax + 4] = 0xAB
+6) 9(%rax,%rdx) = (%rax + %rdx + 9) = 0x11
+7) 260(%rcx,%rdx) = (%rcx + %rdx + 260) = 264 = 0x108 = 0x13
+8) 0xFC(,%rcx,4) = %rcx * 4 + 252 = 4 + 252 = 256 = 0x100 = 0xFF
+9) (%rax, %rdx, 4) = %rax + %rdx * 4 = 0x100 + 12 = 0x10C = 0x11
+
+
+

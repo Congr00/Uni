@@ -1,0 +1,29 @@
+
+dekorowanie polega na przypisywaniu kazdej zmiennej unikalnego identyfikatora,
+jest to stosowane aby nie bylo problemow przy przeciazaniu, jest to stosowane zawsze nawet jak nie ma
+przeciazenia
+
+dekorowane zmienne zaczynaja sie od _Z, _X kest zarezerwowane prze C++ aby nie bylo problemow za takimi zmiennymi
+
+
+1) func(char const*, int&)
+4func - nazwa + 4 dla length
+PKc - pointer const char
+Ri - reference int
+2) Bar::baz(char*)
+N -> namespace 3Bar
+Bar - nazwa namespace
+baz -> nazwa funkcji
+E -> koniec namespace
+Pc -> pointer char
+3) Bar::Bar(Bar const&)
+--||--
+C1 -> copy wczesniejsze
+RK ref const
+S_ copy wczesniej
+
+4) foo::strlen(string&)
+foo -> foo::
+strlen -> strlen
+R6string -> ref string
+

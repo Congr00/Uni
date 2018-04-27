@@ -1,0 +1,6 @@
+def foo(A) =
+ A = A - 21
+def goy(N,M) =
+ if N <> M then N = M
+ else
+ M = N

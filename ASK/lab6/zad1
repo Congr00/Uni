@@ -1,0 +1,33 @@
+SYMBOL TABLE:
+0000000000000000 l    df *ABS*  0000000000000000 zad1.c
+0000000000000000 l    d  .text  0000000000000000 .text
+0000000000000000 l    d  .data  0000000000000000 .data
+0000000000000000 l    d  .bss   0000000000000000 .bss
+
+0000000000000008 l     O .bss   0000000000000008 bufp1
+0000000000000000 l     F .text  0000000000000016 incr
+0000000000000010 l     O .bss   0000000000000004 count.1838
+0000000000000000 g     O .data  0000000000000008 bufp0
+0000000000000000         *UND*  0000000000000000 buf
+0000000000000016 g     F .text  0000000000000059 swap
+
+
+                 U buf
+0000000000000000 D bufp0
+0000000000000000 b bufp1
+0000000000000008 b count.1835
+0000000000000000 t incr
+0000000000000016 T swap
+
+swap = 74
+incr = 22
+
+.text -> funkcje, kody bloku
+.bss -> zmienne niezainicjowane
+.data -> zmienne  zainicjalizowane
+*UND* -> znienne wymagajace dopisania przy tablicy relokacji -> extern
+
+rozmiary -> przed nazwa
+
+l - local
+g - global

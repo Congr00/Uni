@@ -1,0 +1,14 @@
+b = byte
+s = short = 16bit or 32 float
+w = word = 16bit
+l = long = 32 bit or 64 float
+q = quad = 64 bit
+t = ten = 80bit float
+
+
+1) movl
+2) movw
+3) movb
+4) mov
+5) movl
+5) movw

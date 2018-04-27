@@ -1,0 +1,2 @@
+fun f(x:int->int):int->int = fn(x1:int)->x(x1) 
+input x in let y = fn(x:int)->42+x in f y x

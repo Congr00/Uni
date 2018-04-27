@@ -1,0 +1,1 @@
+input x in let y = fn(x1:int)->x1 div x in let x = 42 in y x

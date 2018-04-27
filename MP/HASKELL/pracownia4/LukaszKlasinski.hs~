@@ -1,0 +1,44 @@
+-- Wymagamy, by moduł zawierał tylko bezpieczne funkcje
+-- {-# LANGUAGE Safe #-}
+-- Definiujemy moduł zawierający rozwiązanie.
+-- Należy zmienić nazwę modułu na {Imie}{Nazwisko} gdzie za {Imie}
+-- i {Nazwisko} należy podstawić odpowiednio swoje imię i nazwisko
+-- zaczynające się wielką literą oraz bez znaków diakrytycznych.
+module LukaszKlasinski (typecheck, eval) where
+
+-- Importujemy moduły z definicją języka oraz typami potrzebnymi w zadaniu
+import AST
+import DataTypes
+
+
+import Debug.Trace
+
+-- Funkcja sprawdzająca typy
+-- Dla wywołania typecheck vars e zakładamy, że zmienne występujące
+-- w vars są już zdefiniowane i mają typ int, i oczekujemy by wyrażenia e
+-- miało typ int
+-- UWAGA: to nie jest jeszcze rozwiązanie; należy zmienić jej definicję.
+typecheck :: [Var] -> Expr p -> TypeCheckResult p
+typecheck x (ENum p n) = trace("negro :( " ++ show n)(Ok)
+typecheck x (EBinary p BAdd (p1) (p2)) = typecheck_int x (EBinary p BAdd (p1) (p2))
+typecheck x expr = trace(show x) (Ok)
+
+typecheck_int :: [Var] -> Expr p -> TypeCheckResult p
+typecheck_int x (ENum p const) = trace("Num: " ++ show const)(Ok)
+typecheck_int x (EVar p var) = trace("Var: " ++ show var)(Ok) -- check if exists
+typecheck_int x (EBinary p BAdd | BSub (p1) (p2)) = case typecheck_int x p1 of
+                                             Error p msg -> Error p msg
+                                             Ok          -> case typecheck_int x p2 of
+                                                            Error p msg -> Error p msg
+                                                            Ok -> Ok
+typecheck_int x ()
+typecheck_int _ prog = Error pr "Must be int value" where pr = getData prog
+
+-- Funkcja obliczająca wyrażenia
+-- Dla wywołania eval input e przyjmujemy, że dla każdej pary (x, v)
+-- znajdującej się w input, wartość zmiennej x wynosi v.
+-- Możemy założyć, że wyrażenie e jest dobrze typowane, tzn.
+-- typecheck (map fst input) e = Ok
+-- UWAGA: to nie jest jeszcze rozwiązanie; należy zmienić jej definicję.
+eval :: [(Var,Integer)] -> Expr p -> EvalResult
+eval items expr = trace("nigger2 " ++ show expr)Value 0

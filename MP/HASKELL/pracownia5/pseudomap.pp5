@@ -1,0 +1,9 @@
+fun pseudomap(x:int list):int list = match x with
+                                     | []    -> []:int list
+                                     | y::ys -> mapped(y)::pseudomap(ys)
+fun mapped(y:int):int = y + 10
+in
+let x = pseudomap([0,10,2]:int list) in match x with
+                               | []   ->  0
+                               | y::ys -> 42
+ 

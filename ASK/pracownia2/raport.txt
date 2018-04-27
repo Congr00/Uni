@@ -1,0 +1,255 @@
+zadanie 1)
+
+BLOCK_SIZE = 8
+
+przed:
+
+./transpose -n 14 -v 0
+Generate matrix 16384 x 16384 (1048576 KiB)
+Performing matrix transposition.
+Time elapsed: 10.607003 seconds.
+
+./transpose -n 13 -v 0
+Generate matrix 8192 x 8192 (262144 KiB)
+Performing matrix transposition.
+Time elapsed: 2.204817 seconds.
+
+po:
+
+./transpose -n 14 -v 1
+Generate matrix 16384 x 16384 (1048576 KiB)
+Performing matrix transposition.
+Time elapsed: 2.137557 seconds.
+
+./transpose -n 13 -v 1
+Generate matrix 8192 x 8192 (262144 KiB)
+Performing matrix transposition.
+Time elapsed: 0.352013 seconds.
+
+BLOCK_SIZE = 4
+
+./transpose -n 14 -v 1
+Generate matrix 16384 x 16384 (1048576 KiB)
+Performing matrix transposition.
+Time elapsed: 3.335479 seconds.
+
+./transpose -n 13 -v 1
+Generate matrix 8192 x 8192 (262144 KiB)
+Performing matrix transposition.
+Time elapsed: 0.594489 seconds.
+
+widać, że gdy wczytujemy wiersze o długości 4 to tracimy na wydajności, ponieważ procesor ładuje po 8 int-ów
+
+zadanie 2)
+
+przed:
+
+./randwalk -n 7 -s 16 -t 14 -v 0
+Generate matrix 128 x 128 (16 KiB)
+Performing 16384 random walks of 65536 steps.
+Time elapsed: 7.313385 seconds.
+
+po:
+
+./randwalk -n 7 -s 16 -t 14 -v 1
+Generate matrix 128 x 128 (16 KiB)
+Performing 16384 random walks of 65536 steps.
+Time elapsed: 4.840991 seconds.
+
+
+zadanie 3)
+
+przed:
+
+./bsearch -n 23 -t 24 -v 0
+Generate array of 2^23-1 elements (32767 KiB)
+Performing 16777216 searches.
+Time elapsed: 10.550177 seconds.
+
+./bsearch -n 20 -t 23 -v 0
+Generate array of 2^20-1 elements (4095 KiB)
+Performing 8388608 searches.
+Time elapsed: 1.944132 seconds.
+
+po:
+
+./bsearch -n 23 -t 24 -v 1
+Generate array of 2^23-1 elements (32767 KiB)
+Performing 16777216 searches.
+Time elapsed: 4.409172 seconds.
+
+./bsearch -n 20 -t 23 -v 1
+Generate array of 2^20-1 elements (4095 KiB)
+Performing 8388608 searches.
+Time elapsed: 1.290142 seconds.
+
+zadanie 4)
+
+Dzięki odpowiedniemu permutowaniu możemy wykonywać skoki po pamieci.
+Pozwala to na stwierdzenie jaka jest długość lini pamięci podręcznej, ponieważ jeśli będziemy skakać o za duże
+odległołci, to będzie trzeba za każdym razem wczytywać z cache dane (miss)).
+
+(testy byly powtórzone kilka razy i przytoczone dane są tymi bez brzegowych)
+
+1)
+
+skok o 2:
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 0.251283 seconds.
+
+skok o 4:
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 0.281562 seconds.
+
+skok o 8: 
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 0.349878 seconds.
+
+skok o 16:
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 0.695049 seconds.
+
+skok o 32
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 1.306176 seconds.
+
+skok o 64:
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 2.643648 seconds.
+
+skok o 128
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 3.392522 seconds.
+
+skok o 256
+
+./cache -n 22 -s 22 -t 20 
+Generate array of 4194304 elements (16384 KiB)
+Perfom walk 20 times with 4194304 steps each.
+Time elapsed: 4.062927 seconds.
+
+komentarz:
+
+jak widać przy skokach o 2,4,8 zmiany czasowe byly nieznaczne, dopiero przy 16 do 128 czas zwiększał się po
+dwukrotnie, a przy 256 różnica zmalała i sie ustabilizowała. Wynika z tego, że przy skokach o
+16 wzrosła ilość missow, dlatego długość wynosi 8.
+
+
+2)
+
+Używając skoków o 8 sprawdzam czasy wykonywania się dla coraz większych danych. Dzięki temu można zauważyć drastyczne spowolnienie programu
+spowodowane zmianą pamięci na wolniejszą, co pozwala na weryfikacje jej rozmiarów.
+
+16 KB:
+
+./cache -n 12 -s 19 -t 20 
+Generate array of 4096 elements (16 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.026844 seconds.
+
+32 KB:
+
+./cache -n 13 -s 19 -t 20 
+Generate array of 8192 elements (32 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.026805 seconds.
+
+64KB:
+
+./cache -n 14 -s 19 -t 20 
+Generate array of 16384 elements (64 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.069921 seconds.
+
+Widać, że przy 16 oraz 32 KB czas był taki sam, a dla 64 znacząco sie wydłużył. Zatem 32KB wyznacza L1.
+
+128KB:
+
+./cache -n 15 -s 19 -t 20 
+Generate array of 32768 elements (128 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.071861 seconds.
+
+256KB
+
+./cache -n 16 -s 19 -t 20 
+Generate array of 65536 elements (256 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.114139 seconds.
+
+O ile w 64 oraz 128 nie było różnicy teraz jest lekka. Myslę że jest to spowodowane tym ze cześć pamięci jest
+zajęta przez coś innego (np instrukcje), przez co czasami są missy wpadające w L3 ktore spowalniają działanie.
+
+512KB
+
+./cache -n 17 -s 19 -t 20 
+Generate array of 131072 elements (512 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.157089 seconds.
+
+Widać, że od tego miejsca czas się stabilizuje, zatem skończyła się L2 i jesteśmy w L3. Z tego wynika że L2 ma 256 KB.
+Niestety podobnie jak na zajęciach L2 nie jest tak stabilna jak pozostałe.
+
+1MB
+
+./cache -n 18 -s 19 -t 20 
+Generate array of 262144 elements (1024 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.159700 seconds.
+
+2MB
+
+./cache -n 19 -s 19 -t 20 
+Generate array of 524288 elements (2048 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.170478 seconds.
+
+4MB
+
+./cache -n 20 -s 19 -t 20 
+Generate array of 1048576 elements (4096 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.271692 seconds.
+
+Widac tutaj juz wydluzony czas ktory swiadczy o tym ze konczy sie nam L3
+
+./cache -n 21 -s 19 -t 20 
+Generate array of 2097152 elements (8192 KiB)
+Perfom walk 20 times with 524288 steps each.
+Time elapsed: 0.590039 seconds.
+
+Tutaj już dobitnie korzystaliśmy z RAM'u ,ponieważ czas się dwukrotnie wydlużył. Zatem L3 musi miec 4MB.
+
+
+
+
+
+
+
+
+
+
+
+
+

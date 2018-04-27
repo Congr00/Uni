@@ -1,0 +1,5 @@
+fun list'(x:int list):int = match x with
+                           | [] -> 42
+                           | y::ys -> 42 div 0
+in
+list'([true,false,false]:bool list)

@@ -1,0 +1,1 @@
+input x y in if x > y then let z = x * y in if z < 0 then 0 else -z * y + 25 else let z = 20 in z - y - x

@@ -1,0 +1,1 @@
+input x in let x = fn(y:unit)->x+x in x()

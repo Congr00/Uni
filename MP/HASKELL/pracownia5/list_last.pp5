@@ -1,0 +1,11 @@
+fun length(x : int list) : int =
+	match x with
+	| []	-> 0
+	| x :: xs -> length xs + 1
+
+fun list_last(l : int list) : int = 
+	match l with
+	| []	-> 0
+	| x :: xs -> if length xs = 0 then x else list_last xs
+
+in list_last([1,2,3] : int list)

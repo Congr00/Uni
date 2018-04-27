@@ -1,0 +1,5 @@
+fun simple(x:int list):int = match x with
+                             | []   -> 42
+                             | y::ys -> simple(ys)
+in
+let x = [1,2,3]:int list in simple(x)

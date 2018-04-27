@@ -1,0 +1,1 @@
+input x in let z = x in let z = z * z in let z = z * z in z

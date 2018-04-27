@@ -1,0 +1,4 @@
+def fun(A, B) =
+	A + B
+def call_fun(C, D) = 
+	fun(C, D)
