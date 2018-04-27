@@ -68,13 +68,13 @@
     \textbf{Lemat 3a.}
 
     Jeśli czas trwania i-tego zadania $a_i = 0, a_i \in A$, to można przenieść je wraz z 
-    odpowiadającym mu zadaniem wykonywanym na maszynie B na początek kolejki bez pogorszenia całkowitego czasu wykonywania zadań.
+    odpowiadającym mu zadaniem wykonywanym na maszynie B na początek kolejki, bez pogorszenia całkowitego czasu wykonywania zadań.
     
     
     \textbf{Lemat 3b.}
 
     Jeśli czas trwania i-tego zadania $b_i = 0, b_i \in B$, to można przenieść je wraz z 
-    odpowiadającym my zadaniem wykonywanym na maszynie A na koniec kolejki bez pogorszenia całkowitego czasu wykonywania zadań.
+    odpowiadającym my zadaniem wykonywanym na maszynie A na koniec kolejki, bez pogorszenia całkowitego czasu wykonywania zadań.
     \\
 
     \textbf{Obserwacja 1.}
@@ -86,9 +86,9 @@
     \textbf{Obserwacja 2.}
     Załóżmy, że w zbiorze $S$ mamy pary zadań $a_i$, $b_i$, a zbiór $O$ jest pusty. Wyjmijmy ze zbioru $S$ parę z największym elementem.
     Dodajmy ją do zbioru $O$ i usuńmy z $S$. Następnie przesuńmy na początek|koniec listy, zależnie czy wybraliśmy element z pary, należący do $A|B$.
-    Oczywiście po dodaniu pierwszego elementu $O$ wykonuje się optymalnie. Powtarzajmy, aż zbiór $S$ będzie pusty. 
-    Tak budowany zbiór $O$ po dodaniu kolejnego elementu, przesunie go na początek|koniec listy,
-    a ponieważ będzie on najmniejszy to z obserwacji 1, wiemy, że takie przesunięcie zachowuje optymalny czas wykonania zadań. 
+    Oczywiście po dodaniu pierwszej pary $O$ wykonuje się optymalnie. Powtarzajmy, aż zbiór $S$ będzie pusty. 
+    Tak budowany zbiór $O$ po dodaniu kolejnych par, przesunie je na początek|koniec listy,
+    a ponieważ będzie ona najmniejsza to z obserwacji 1 wiemy, że takie przesunięcie zachowuje optymalny czas wykonania zadań. 
     Zatem po opróżnieniu zbioru $S$, zbiór $O$ będzie optymalny.
 
     \subsection{Pseudokod}
@@ -96,7 +96,7 @@
     Zauważmy, że zbiór $O$ z obserwacji 2, jest do pewnego momentu posortowany
     rosnąco po elemencie $a_i \in A$ z pary $(a_i, b_i)$, a potem malejąco względem
     elementu $b_i$. Zatem możemy skonstruować algorytm, który będzie porządkować te 
-    pary zależnie od tego który element był mniejszy w dwóch oddzielnych zbiorach $L, R$,
+    pary zależnie od tego który element był mniejszy w dwóch oddzielnych zbiorach $L$ i $R$,
     które po wykorzystaniu wszystkich zadań będą połączone i utworzą $O$.
 
 
@@ -129,8 +129,8 @@
     Weżmy dowolne rozwiązanie optymalne $O$ i należący do niego 
     element $a_i$ taki, że $a_i \in A$. Niech $b_k \in B$ będzie pierwszym elementem, który rozpoczyna się po $a_i$. 
     Wszystkie zadania od $b_k$ włącznie do $b_i$ nazwijmy sekcją. 
-    Wyjmijmy z rozwiązania $b_i$. Teraz możemy przesunąć sekcję o czas wykonania $b_i$, ponieważ przesunięcie ich w prawo
-    nie zmieni czasu rozwiązania. Utworzyła się przerwa wielkości $b_i$ po $a_i$, gdzie wstawiamy usunięty wcześniej element.
+    Wyjmijmy z rozwiązania $b_i$. Teraz możemy przesunąć sekcję o czas wykonywania $b_i$, ponieważ przesunięcie ich w prawo
+    nie zmieni czasu rozwiązania. W ten sposób utworzyła się przerwa wielkości $b_i$ po $a_i$, gdzie wstawiamy usunięty wcześniej element.
     
     \hspace*{12cm} $\Box$
     \\
@@ -140,7 +140,7 @@
     Weźmy $S_1$,$S_2$ z lematu. Niech $R_1$ będzie optymalnym
     rozwiązaniem dla $S_1$, a $R_2$ dla $S_2$. Przejście z $S_1$ do $S_2$ nazwijmy
     \textbf{\textit{kurczeniem}}, a z $S_2$ do $S_1$ \textbf{\textit{rozciąganiem}}. Pokażemy, że
-    $R_1|R_2$ jest optymalne dla dla $S_2|S_1$.     
+    $R_1|R_2$ jest optymalne dla $S_2|S_1$.     
     \\
 
     \textbf{Obserwacja \textit{rozciąganie, kurczenie}}
@@ -171,15 +171,15 @@
     \end{gather*}
 
     \textbf{D-d lematu 3a.}
-    Zadanie $a_i$, możemy przestawić na początek kolejki maszyny $A$, ponieważ nic nie trwa, więc nie
+    Zadanie $a_i$ możemy przestawić na początek kolejki maszyny $A$, ponieważ nic nie trwa, zatem nie
     przesunie pozostałych zadań. Natomiast odpowiadające zadanie $b_i$
-    podobnie jak w dowodzie lematu 1, możemy wyciągnąć, przesunąć poprzedzającą go sekcję o jego czas trwania
+    podobnie jak w dowodzie lematu 1 możemy wyciągnąć, przesunąć poprzedzającą go sekcję o jego czas trwania
     i w wstawić na początek kolejki maszyny $B$ bez pogorszenia całkowitego czasu działania.
     \hspace*{12cm} $\Box$
 
     \textbf{D-d lematu 3b.}
-    Podobnie jak w lemacie 3b, zadanie $b_i$ możemy przestawić na koniec, ponieważ nic nie trwa, więc nie wydłuży czasu wykonania,
-    natomiast odpowiadające mu zadanie $a_i$ możemy wyciągnąć, następujące po nim zadania przesunąć w lewo o jego czas trwania i 
+    Podobnie jak w lemacie 3a, zadanie $b_i$ możemy przestawić na koniec, ponieważ nic nie trwa, więc nie wydłuży czasu wykonania,
+    natomiast odpowiadające mu zadanie $a_i$ możemy wyciągnąć, następujące po nim zadania przesunąć w lewo o czas jego trwania i 
     wstawić na koniec kolejki $A$.
     \hspace*{12cm} $\Box$
 
