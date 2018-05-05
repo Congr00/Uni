@@ -10,6 +10,7 @@
 #include <stdbool.h>
 #include <strings.h>
 #include <math.h>
+#include <limits.h>
 
 #define LEFT_CHILD(I) \
                  (I<<1)+1
@@ -65,4 +66,6 @@ size_t _avl_max(size_t index);
 void  _avl_del_i(size_t index);
 bool  _check_bt(size_t index);
 int   _avl_valueAt(size_t index);
+int _avl_lower(int value, size_t lowest, int l);
+int _avl_upper(int value, size_t upp, int u);
 //#endif //AVL_TREE

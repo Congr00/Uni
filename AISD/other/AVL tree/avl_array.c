@@ -330,3 +330,19 @@ bool _check_bt(size_t index){
 int _avl_valueAt(size_t index){
     return __tree_str->tree[index].key;
 }
+
+int _avl_lower(int value, size_t upp, int u){
+    if(!__tree_str->tree[upp].init)
+        return u;
+    if(__tree_str->tree[upp].key <= value)
+          return _avl_lower(value, RIGHT_CHILD(upp), __tree_str->tree[upp].key);
+    return _avl_lower(value, LEFT_CHILD(upp), u);
+}
+
+int _avl_upper(int value, size_t upp, int u){
+    if(!__tree_str->tree[upp].init)
+        return u;
+    if(__tree_str->tree[upp].key >= value)
+          return _avl_upper(value, LEFT_CHILD(upp), __tree_str->tree[upp].key);
+    return _avl_upper(value, RIGHT_CHILD(upp), u);
+}
