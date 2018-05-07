@@ -91,7 +91,7 @@ void  _avl_print(bool buff){
         for(j = 0; j < (size_t)(1 << i); ++j){
             if(!tree[el].init){
                 el++;
-                printf(" 0 ");
+                printf("   ");
                 continue;
             }            
             
@@ -123,6 +123,8 @@ void  _avl_insert(int value, int key){
 
 void _avl_insert_r(int value, int key, size_t index){
     if(__tree_str->tree[index].init){
+        if(__tree_str->tree[index].key == key)
+            return;
         if(__tree_str->tree[index].key < key){
             //add increasing left/right subtree height and rotation if diffrence if > 1
             _avl_insert_r(value, key, RIGHT_CHILD(index));
@@ -245,13 +247,10 @@ int _avl_search(int value, size_t index){
     if(__tree_str->tree[index].init){
         if(__tree_str->tree[index].key == value)
             return index;
-        else if(__tree_str->tree[index].key < value){
-            //add increasing left/right subtree height and rotation if diffrence if > 1
+        else if(__tree_str->tree[index].key < value)
             return _avl_search(value, RIGHT_CHILD(index));
-        }
-        else{
+        else
             return _avl_search(value, LEFT_CHILD(index));
-        }
     }
     return -1;
 }
@@ -298,7 +297,6 @@ void  _avl_init  (size_t init_size, size_t key_length, size_t value_length){
     }
 }
 void _avl_uninit(void){
-    printf("weigth %d\n", __tree_str->tree[2].weight);
     free(__tree_str->tree);
     free(__tree_str);
     free(__tree_buffer);
@@ -334,15 +332,24 @@ int _avl_valueAt(size_t index){
 int _avl_lower(int value, size_t upp, int u){
     if(!__tree_str->tree[upp].init)
         return u;
-    if(__tree_str->tree[upp].key <= value)
-          return _avl_lower(value, RIGHT_CHILD(upp), __tree_str->tree[upp].key);
-    return _avl_lower(value, LEFT_CHILD(upp), u);
+    if(__tree_str->tree[upp].key == value){
+        return value;
+    }
+    if(__tree_str->tree[upp].key > value)
+        return _avl_lower(value, LEFT_CHILD(upp), u);
+    else if(__tree_str->tree[upp].key > u || u == INT_MIN)
+        return _avl_lower(value, RIGHT_CHILD(upp), __tree_str->tree[upp].key);
+    return u;
 }
 
 int _avl_upper(int value, size_t upp, int u){
     if(!__tree_str->tree[upp].init)
         return u;
-    if(__tree_str->tree[upp].key >= value)
-          return _avl_upper(value, LEFT_CHILD(upp), __tree_str->tree[upp].key);
-    return _avl_upper(value, RIGHT_CHILD(upp), u);
+    if(__tree_str->tree[upp].key == value)
+        return value;
+    if(__tree_str->tree[upp].key < value)
+        return _avl_upper(value, RIGHT_CHILD(upp), u);
+    else if(__tree_str->tree[upp].key < u || u == INT_MAX)
+        return _avl_upper(value, LEFT_CHILD(upp), __tree_str->tree[upp].key);
+    return u;
 }
