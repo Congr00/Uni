@@ -24,7 +24,7 @@ plik:       utils.h
 #define SERVER_IP   "156.17.4.30"
 #define MAX_PORT    65535
 #define MIN_PORT    1
-#define WINDOW_SIZE 100
+#define WINDOW_SIZE 150
 #define PCKG_SIZE   1000
 float select_wait;
 

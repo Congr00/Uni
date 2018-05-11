@@ -22,7 +22,6 @@ void download_file(struct sockaddr_in* serv_addr){
         window[i].valid = false;
         window[i].start = i * PCKG_SIZE;
     }
-
     //set descriptor
     fd_set descriptors;
     FD_ZERO(&descriptors);
@@ -31,7 +30,8 @@ void download_file(struct sockaddr_in* serv_addr){
     size_t k = 0;
     while(start_pckg != end_pckg){
         //print % done
-        if(!(k % 100))
+        puts("");
+        if(!(k % 10))
             printf("%%%f\n", ((float)start_pckg / (float)pckg_to_send) * 100);   
         //send all packages from window that are missing
         send_pckg(serv_addr);

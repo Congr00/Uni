@@ -16,7 +16,7 @@ int main(int argc, char** argv ){
     //parse arguments
     file_name[0] = '\0';    
     parse_arg(argc, argv);    
-    select_wait = 500000.0f; // 1 sec
+    select_wait = 1000000; // 1 sec
 
     //create socket
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
@@ -30,12 +30,14 @@ int main(int argc, char** argv ){
 	server_address.sin_family      = AF_INET;
 	server_address.sin_port        = htons(port);
 	server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-	inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);    
 
     //bind for udp
-	if (bind (sockfd, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
+    if (bind (sockfd, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
         RET_F_ERROR(BIND_ERROR);
 	}
+
+	inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);    
+
     //create file for write
     file = fopen(file_name, "w");
     if(file == NULL){
@@ -63,8 +65,8 @@ int main(int argc, char** argv ){
         file_b = (file_size / 1024) / 1024;
         strcpy(byte_type, "GB");
     }
-    printf("sent %d %s in %fs\n", file_b, byte_type, timediff(stop, start));
-    close(sockfd);
+    printf("sent %d %s in %fs\n", file_b, byte_type, timediff(start, stop));
+    close(sockfd); 
     fclose(file);
     return EXIT_SUCCESS;
 }
