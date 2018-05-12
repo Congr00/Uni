@@ -10,6 +10,6 @@ plik:       reciver.h
 
 #include "utils.h"
 
-msg recive_package(struct timeval* tv, fd_set* descriptors);
+int recive_package(struct timeval* tv, msg* win, size_t start_pckg);
 
 #endif //RECIVER_H

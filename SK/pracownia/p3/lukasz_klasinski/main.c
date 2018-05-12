@@ -16,15 +16,13 @@ int main(int argc, char** argv ){
     //parse arguments
     file_name[0] = '\0';    
     parse_arg(argc, argv);    
-    select_wait = 1000000; // 1 sec
+    select_wait = 2000*100; // 0.2 sec
 
     //create socket
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);
 	if (sockfd < 0) {
         RET_F_ERROR(SOCKET_ERROR);
-	} 
-
-    //create server info for sender
+    }
 	struct sockaddr_in server_address;
 	bzero (&server_address, sizeof(server_address));
 	server_address.sin_family      = AF_INET;
@@ -35,7 +33,6 @@ int main(int argc, char** argv ){
     if (bind (sockfd, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
         RET_F_ERROR(BIND_ERROR);
 	}
-
 	inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);    
 
     //create file for write
@@ -44,45 +41,52 @@ int main(int argc, char** argv ){
         RET_F_ERROR(FILE_ERROR);
     }
 
-    //calculate total downlaod time
+    //calculate total download time
     struct timeval start, stop;
     gettimeofday(&start, NULL);
-
-    download_file(&server_address);
-
-    gettimeofday(&stop, NULL);
     char byte_type[3];
     int file_b;
+    //set readable output
     if(file_size < 1024){
         file_b = file_size;
         strcpy(byte_type, "B");
     }
     else if(file_size < 1024*1024){
         file_b = file_size / 1024;
-        strcpy(byte_type, "MB");
+        strcpy(byte_type, "KB");
     }
     else{
         file_b = (file_size / 1024) / 1024;
-        strcpy(byte_type, "GB");
+        strcpy(byte_type, "MB");
     }
-    printf("sent %d %s in %fs\n", file_b, byte_type, timediff(start, stop));
+    printf("reciving %d %s of data\n", file_b, byte_type);
+
+    download_file(&server_address);
+
+    gettimeofday(&stop, NULL);
+    printf("recived %d %s in %fs\n", file_b, byte_type, timediff(start, stop) / 1000);
+
+    //close everything
     close(sockfd); 
     fclose(file);
+
     return EXIT_SUCCESS;
 }
 void parse_arg(int argc, char** argv){
     if(argc != 4){
         RET_ERROR(WRONG_ARGCNT);
     }
+    // port must be from range
     port = atoi(argv[1]);
     if(port < MIN_PORT || port > MAX_PORT){
         RET_ERROR(WRONG_PORT);
     }
+    //not null filename
     strcpy(file_name, argv[2]);
     if(file_name[0] == '\0'){
         RET_ERROR(WRONG_FILENAME);
     }
-
+    //natural file size
     file_size = atoi(argv[3]);
     if(file_size < 1){
         RET_ERROR(WRONG_FILESIZE);

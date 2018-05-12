@@ -24,7 +24,7 @@ plik:       utils.h
 #define SERVER_IP   "156.17.4.30"
 #define MAX_PORT    65535
 #define MIN_PORT    1
-#define WINDOW_SIZE 150
+#define WINDOW_SIZE 1000
 #define PCKG_SIZE   1000
 float select_wait;
 
@@ -42,6 +42,7 @@ float select_wait;
 #define WRONG_PORT     "Wrong port number\n"
 #define WRONG_FILENAME "Wrong file name\n"
 #define WRONG_FILESIZE "Wrong file size\n"
+#define FWRITE_ERROR   "%s\n"
 #define FILE_ERROR     "%s\n"
 
 //package struct

@@ -21,7 +21,7 @@ size_t pckg_to_send;
 
 msg window[WINDOW_SIZE];
 
-void rcv_pckg(fd_set* descriptors);
+void rcv_pckg(void);
 void write_data(void);
 void send_pckg(struct sockaddr_in* serv_addr);
 void download_file(struct sockaddr_in* serv_addr);

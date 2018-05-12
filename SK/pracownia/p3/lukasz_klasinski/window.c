@@ -22,61 +22,52 @@ void download_file(struct sockaddr_in* serv_addr){
         window[i].valid = false;
         window[i].start = i * PCKG_SIZE;
     }
-    //set descriptor
-    fd_set descriptors;
-    FD_ZERO(&descriptors);
-    FD_SET(sockfd, &descriptors);
-
+    char progress[20];
+    sprintf(progress, "%%%.2f\n", ((float)start_pckg / (float)pckg_to_send) * 100);
     size_t k = 0;
     while(start_pckg != end_pckg){
+        char tmp[20];
         //print % done
-        puts("");
-        if(!(k % 10))
-            printf("%%%f\n", ((float)start_pckg / (float)pckg_to_send) * 100);   
+        sprintf(tmp, "%%%.2f\n", ((float)start_pckg / (float)pckg_to_send) * 100);     
+        if(strcmp(tmp, progress) != 0){
+            printf("%s", progress);  
+            memset(progress, 0, strlen(progress));
+            strcpy(progress, tmp);
+        }     
         //send all packages from window that are missing
-        send_pckg(serv_addr);
+        send_pckg(serv_addr);                                   
         //recive packages
-        rcv_pckg(&descriptors);
+        rcv_pckg();
         //write prefix of recived packages
         write_data();
         k++;
     }
 }
 
-void rcv_pckg(fd_set* descriptors){
+void rcv_pckg(){
 
     struct timeval tv;
     tv.tv_sec = 0;
     tv.tv_usec = select_wait;   
-    msg pckg;
-    pckg.valid = false;
-    pckg.size = -1;
-
     //recive packages till timeval is 0
-    while(!pckg.valid && pckg.size != -2){
-        pckg = recive_package(&tv, descriptors);
-        //if package from good ip and port
-        if(pckg.valid){
-            //check is package is outdated
-            if((size_t)pckg.start / PCKG_SIZE < start_pckg)
-                continue;
-            size_t nr = (pckg.start/PCKG_SIZE) % WINDOW_SIZE;          
-            window[nr] = pckg;
-            window[nr].valid = true;
-        }
-    } 
+    while(recive_package(&tv, window, start_pckg) != -1);
 }
 void write_data(void){
     for(size_t i = start_pckg; i < end_pckg; ++i){
         if(window[i % WINDOW_SIZE].valid){
             //check for errors
-            fwrite(window[i % WINDOW_SIZE].data, sizeof(char), window[i % WINDOW_SIZE].size, file);
+
+            if(fwrite(window[i % WINDOW_SIZE].data, sizeof(char), window[i % WINDOW_SIZE].size, file) != (size_t)window[i % WINDOW_SIZE].size){
+                RET_F_ERROR(FWRITE_ERROR);
+            }
             window[i % WINDOW_SIZE].valid = false;
+            //increase window size
             start_pckg++;
+            //increase end till we reach ending package
             if(end_pckg < pckg_to_send)
-                end_pckg++;
+                end_pckg++;                 
         }
-        //send only prefix of ready packages
+        //write only prefix of ready packages:
         else
             break;
     }
