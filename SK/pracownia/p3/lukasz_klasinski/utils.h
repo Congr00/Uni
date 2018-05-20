@@ -38,7 +38,7 @@ float select_wait;
 #define SELECT_ERROR   "select error:%s\n"
 #define SOCKET_ERROR   "Socket error: %s\n"
 #define BIND_ERROR     "Bind error: %s\n"
-#define WRONG_ARGCNT   "Wrong agrument count\n"
+#define WRONG_ARGCNT   "Wrong argument count\n"
 #define WRONG_PORT     "Wrong port number\n"
 #define WRONG_FILENAME "Wrong file name\n"
 #define WRONG_FILESIZE "Wrong file size\n"
