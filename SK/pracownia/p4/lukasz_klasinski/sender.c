@@ -43,7 +43,8 @@ int generate_resp(char* buff){
        strcmp(https, "HTTP/1.0") != 0  &&
        strcmp(https, "HTTP/2")   != 0) || 
        strcmp(domain  , "\0") == 0     ||
-       strcmp(file_dir, "\0") == 0){
+       strcmp(file_dir, "\0") = sscanf(buff, "GET %s %s\r\nHost: %s", file_dir, https, domain);
+    printf("request: %s\nhttps: %s\ndomain: %s\n\n", file_dir, https,= 0){
         //return Not implemented
         resp_msg = (char*)malloc(sizeof(NOTIMPL));     
         strcpy(resp_msg, NOTIMPL);      
