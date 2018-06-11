@@ -1,22 +1,18 @@
-import psycopg2
-import json
+import psycopg2, json
 
 table_pracownicy = ("""CREATE TABLE pracownicy(\
     id         BIGSERIAL PRIMARY KEY,\
     podwladni  varchar(20)[],\
     podlega    varchar(20)[],\
-    haslo      text NOT NULL\
-    );""",)
+    haslo      text NOT NULL);""",)
 
 table_dane       = ("""CREATE TABLE dane(\
     id         BIGINT references pracownicy(id) ON DELETE CASCADE,\
     emp        varchar(20) NOT NULL UNIQUE,\
-    dane       text\
-    );""",)
+    dane       text);""",)
 
 table_prezes    = ("""CREATE TABLE prezes(\
-    id         BIGINT references pracownicy(id)\
-    );""",)
+    id         BIGINT references pracownicy(id));""",)
 
 user_app        = ('CREATE USER app;',)
 password_app    = ('ALTER USER app WITH PASSWORD \'qwerty\'',)
@@ -25,8 +21,6 @@ priv_app        = ("""GRANT ALL ON pracownicy TO app;
                       GRANT SELECT ON prezes TO app;
                       GRANT ALL ON pracownicy_id_seq TO app;""",)
 index_dane      = ('CREATE INDEX h_dane_emp_index ON dane USING hash(emp);',)
-#?
-# DELETE FROM pracownicy p WHERE p.id IN(SELECT id FROM dane WHERE emp = '2
 
 
 def update_podwladni(emp, demp):
@@ -66,6 +60,7 @@ def add_pracownik(password, data, emp, emp1=None, root=None):
             , md5(%s));""",
         (str(emp1), str(emp1), password)))
     else:
+        # its root
         res.append(('INSERT INTO pracownicy(podwladni, podlega, haslo) VALUES(ARRAY[]::varchar[], ARRAY[]::varchar[], md5(%s));',
         (password,)))        
     res.append(('INSERT INTO dane(id, emp, dane) VALUES((SELECT currval(\'pracownicy_id_seq\')), %s, %s );', 
@@ -88,7 +83,7 @@ def status_ER(debug):
 
 
 class DB:
-    hostname = 'localhost' #?
+    hostname = 'localhost' #default
     username = ''
     password = ''
     database = ''
@@ -133,6 +128,7 @@ class DB:
             return self.cur.fetchall()
         except (Exception, psycopg2.DatabaseError) as error:
             return status_ER(error)
+
     def doQueryComm(self, quarry):
         try:
             for qr in quarry:
