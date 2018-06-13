@@ -11,3 +11,5 @@
 {"remove": {"admin":0, "passwd":"asd", "emp": 2}}
 {"child": {"admin": 7, "passwd":"asd", "emp":0}}
 {"descendants": {"admin": 8, "passwd":"asd", "emp":0}}
+{"descendants": {"admin": 8, "passwd":"asd", "emp":1}}
+{"descendants": {"admin": 8, "passwd":"asd", "emp":7}}

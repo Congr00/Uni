@@ -43,6 +43,14 @@ def get_children(emp):
 def get_ancestors(emp):
     return ('SELECT podlega FROM pracownicy JOIN dane USING(id) WHERE emp = %s;', (str(emp),))
 
+def get_anc(emp):
+    if str(emp) != '0':
+        return ("""SELECT emp FROM dane JOIN pracownicy USING(id) WHERE podlega[\
+            (SELECT array_length(podlega,1)+1 FROM pracownicy JOIN dane USING(id) WHERE emp = %s)\
+            ] = %s;""", ((str(emp)),str(emp)))
+    else:
+        return ('SELECT emp FROM dane JOIN pracownicy USING(id) WHERE podlega[1] = %s;', (str(emp),))
+
 def get_pracownik(emp):
     return('SELECT * from pracownicy JOIN dane USING(id) WHERE emp = %s;', (str(emp),))
 

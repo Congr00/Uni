@@ -240,24 +240,14 @@ def descendants_(val):
     res = check_existance(emp)
     if res == None:
         return db_connect.status_ER('User with emp: ' + str(emp) + ' doesn\'t exists')  
-    # result array
-    res = []
-    # stack for recursive search
-    stack = [emp]
-    while len(stack) != 0:
-        # get last worker from stack
-        qr = db_connect.get_children(stack.pop())
-        # search for his workers
-        r = api.db.doQuery(qr)
-        if "ERROR" in r:
-            return r       
-        # add workers on stack and to result array
-        res += r[0][0]
-        stack += r[0][0]
-    # return OK status with data
-    res = db_connect.status_OK(res)
+    res = db_connect.get_anc(emp)
+    res = api.db.doQuery(res)
     api.db.close()
-    return res
+    if len(res) == 0:
+        return db_connect.status_OK([])
+    for val in range(len(res)):
+        res[val] = res[val][0]
+    return db_connect.status_OK(res)
 
 def ancestor_(val):
     admin  = val['admin']

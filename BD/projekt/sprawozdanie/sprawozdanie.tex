@@ -64,9 +64,10 @@
     Funkcje dodające/modyfikujące użytkowników będą wykonywać standardowe
     funkcje \textit{SELECT} oraz \textit{UPDATE} języka sql, ze sprawdzaniem, czy 
     dany użytkownik posiada odpowiednie prawa.\\\\       
-    Funkcje szukające pracowników, którym dana osoba podlega będą zwracać wartości zawarte w liście \textit{podlega}. 
-    Z kolei przy szukaniu podległych pracowników, rekurencyjnie zwracają wartości \textit{podwładni}.\\\\
-    Podobnie usuwanie pracownika, rekurencyjnie usuwa dane kolejnych pracowników.\\\\
+    Funkcje szukające pracowników, którym dana osoba podlega będą zwracać wartości zawarte w liście \textit{podlega}.\\\\ 
+    Znajdowanie wszystkich podległych pracowników, szuka w bazie danych wpisów z podaną wartością \textit{emp} w liście \textit{podlega} 
+    znajdującą się na miejscu równym głębokości wystąpienia szukanej osoby w drzewie. \\\\
+    Usuwanie pracownika, rekurencyjnie usuwa dane kolejnych pracowników.\\\\
     Tworzenie wpisu prezesa dodatkowo dodaje odpowiedni wpis do tabeli \textit{prezes}.
 
     \section{Wymagania}
