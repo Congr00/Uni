@@ -292,7 +292,11 @@ def read_(val):
     res = check_existance(emp)
     if res == None:
         return db_connect.status_ER('User with emp: ' + str(emp) + ' doesn\'t exists') 
-    
+    # check if is ancestor of emp1
+    if admin != emp:
+        res = check_priv(admin, emp)
+        if res != None:
+            return res    
     # get data of user emp
     res = db_connect.get_data(emp)
     res = api.db.doQuery(res)
