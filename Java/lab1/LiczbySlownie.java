@@ -2,6 +2,7 @@ public class LiczbySlownie {
 
 // URUCHOMIENIE java -Dfile.encoding=iso-8859-10 LiczbySlownie
 //                                            ^--- ???, inaczej nie dzia³a
+// KOMPILACJA   javac -encoding "ISO-8859-2" LiczbySlownie.java
 
     public static String[][] Names = {{"", "jeden", "dwa", "trzy", "cztery", "piêæ", "sze¶æ", "siedem", "osiem", "dziewiêæ"},
     {"", "dziesiêæ", "dwadzie¶cia", "trzydzie¶ci", "czterdzie¶ci", "piêædziesi±t", "sze¶ædziesi±t", "siedemdziesi±t", "osiemdziesi±t", "dziewiêædziesi±t"},
