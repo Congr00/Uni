@@ -1,0 +1,11 @@
+{"open": {"database": "student", "login": "app", "password": "qwerty"}}
+{"remove": {"admin":1, "passwd":"asd", "emp": 0}}
+{"remove": {"admin":0, "passwd":"asd", "emp": -666}}
+{"child": {"admin":0, "passwd":"asd", "emp":-666}}
+{"parent": {"admin":0, "passwd":"asd", "emp":-666}}
+{"ancestors": {"admin": 0, "passwd":"asd", "emp": -666}}
+{"descendants": {"admin": 0, "passwd":"asd", "emp":-666}}
+{"ancestor": {"admin":0, "passwd":"asd", "emp1": 0, "emp2": -666}}
+{"ancestor": {"admin":0, "passwd":"asd", "emp1": -666, "emp2": 0}}
+{"read": {"admin":0, "passwd":"asd", "emp":-666}}
+{"update": {"admin":0, "passwd":"asd", "emp":-777, "newdata":"ups"}}

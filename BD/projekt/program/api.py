@@ -1,18 +1,21 @@
+#!/usr/bin/env python
+
 import sys
+import json_parser
 
-if __name__ == "__main__":
-    main()
 
-db = db_connect()
+db = 0
+
+def parse_input():
+    for line in sys.stdin:
+        if line == '\n':
+            break
+        print(json_parser.parse(line))
 
 def main():
     parse_input()
 
-    # my code here
-
-def parse_input():
-    for line in sys.stdin:
-        parse(line)
-
+if __name__ == '__main__':
+    main()
     
     

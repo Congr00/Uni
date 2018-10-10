@@ -1,0 +1,16 @@
+{"open" : { "database" : "student", "login" : "init", "password" : "qwerty"}}
+{"root" : { "secret" : "qwerty", "newpassword" : "qwerty", "data" : "dane prezesa", "emp" : 0}}
+{"new"  : { "admin" : 0, "passwd" : "qwerty", "data" : "dane wiceprezesa", "newpasswd" : "qwerty", "emp1" : 0, "emp" : 1}}
+{"new"  : { "admin" : 1, "passwd" : "qwerty", "data" : "dane wiceprezesa", "newpasswd" : "qwerty2", "emp1" : 1, "emp" : 2}}
+{"ancestors" : {"admin" : 1, "passwd" : "qwerty", "emp" : "2"}}
+{"new"  : { "admin" : 1, "passwd" : "qwerty", "data" : "dane lolowe", "newpasswd" : "qwerty3", "emp1" : 1, "emp" : 3}}
+{"ancestor" : {"admin" : 1, "passwd" : "qwerty", "emp1" : "2", "emp2" : "0"}}
+{"child" : {"admin" : 1, "passwd"  : "qwerty", "emp" : 2}}
+{"parent" : {"admin" : 1, "passwd" : "qwerty", "emp" : 3}}
+{"update" : {"admin" : 0, "passwd" : "qwerty", "emp" : 0, "newdata" : "prezes is bad"}}
+{"read" : {"admin" : 1, "passwd" : "qwerty", "emp" : 0}}
+{"descendants" : {"admin" : 1, "passwd" : "qwerty", "emp" : 0}}
+{"new"  : { "admin" : 1, "passwd" : "qwerty", "data" : "dane wiceprezesa", "newpasswd" : "qwerty2", "emp1" : 1, "emp" : 4}}
+{"new"  : { "admin" : 1, "passwd" : "qwerty", "data" : "dane wiceprezesa", "newpasswd" : "qwerty2", "emp1" : 1, "emp" : 6}}
+{"new"  : { "admin" : 1, "passwd" : "qwerty", "data" : "dane wiceprezesa", "newpasswd" : "qwerty2", "emp1" : 1, "emp" : 11}}
+{"remove" : {"admin" : 1, "passwd" : "qwerty", "emp" : 3}}
