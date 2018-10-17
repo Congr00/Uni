@@ -8,7 +8,7 @@
 #define LED_PORT PORTD
 
 #define DELAY_NEXT 10
-#define DELAY_PREV 25
+#define DELAY_PREV 15
 #define DELAY_SEQ  100
 
 const uint8_t leds[8] = {PD0, PD1, PD2, PD3, PD4, PD5, PD6, PD7};
