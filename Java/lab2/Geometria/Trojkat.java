@@ -2,8 +2,7 @@ package Geometria;
 
 public class Trojkat
 {
-    private Punkt x, y, z;
-    {
+    private Punkt x, y, z;{
         x = new Punkt(0,0);
         y = new Punkt(0,2);
         z = new Punkt(1,1);
@@ -34,8 +33,7 @@ public class Trojkat
         y.Odbij(p);
         z.Odbij(p);
     }    
-    public String toString ()
-    {
-        return "Trojkat"+x.toString()+", "+y.toString()+", "+z.toString();
+    public String toString (){
+        return "Trojkat "+x.toString()+", "+y.toString()+", "+z.toString();
     }    
 }

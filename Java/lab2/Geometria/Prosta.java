@@ -21,7 +21,7 @@ public class Prosta{
     }
     public static Punkt Przeciecie(Prosta a, Prosta b){
         if(Rownolegle(a, b))
-            throw new IllegalArgumentException("Proste nie maja wspolnego punktu");
+            throw new IllegalArgumentException("Proste nie moga miec wspolnego punktu");
         // metoda wyznacznikow
         double W, Wx, Wy;
         W = a.a * b.b - b.a * a.b;

@@ -4,38 +4,29 @@ import static java.lang.Math.*;
 
 public class Punkt
 {
-    // pola prywatne
-    private double x, y;
-    // instancyjny blok inicjalizacyjny
-    {
+    private double x, y;{
         x = 0;
         y = 0;
     }
-    public Punkt (double x, double y)
-    {
+    public Punkt (double x, double y){
         this.x = x;
         this.y = y; 
     }
-    public Punkt ()
-    {
+    public Punkt (){
         this(0,0);
     }
-    public void Przesun (Wektor v)
-    {
+    public void Przesun (Wektor v){
         x += v.x;
         y += v.y;
     }
-    public static double length (Punkt a, Punkt b)
-    {
+    public static double length (Punkt a, Punkt b){
         double dx = b.x-a.x, dy = b.y-a.y;
         return sqrt(dx*dx+dy*dy);
     }
-    public String toString ()
-    {
+    public String toString (){
         return "Punkt("+x+", "+y+")";
     }
-    public static boolean Porownaj(Punkt a, Punkt b)
-    {
+    public static boolean Porownaj(Punkt a, Punkt b){
         if(a.x == b.x && a.y == b.y)
             return true;
         return false;

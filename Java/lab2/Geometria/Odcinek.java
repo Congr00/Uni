@@ -27,6 +27,6 @@ public class Odcinek
     }
     public String toString ()
     {
-        return "Odcinek"+x.toString()+", "+y.toString();
+        return "Odcinek "+x.toString()+", "+y.toString();
     }    
 }
