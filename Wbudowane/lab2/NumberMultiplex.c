@@ -7,7 +7,7 @@
 #define LED_DDR DDRD
 #define LED_PORT PORTD
 
-#define CTR_PIN   PINC
+#define CTR_DDR  DDRC
 #define CTR_PORT  PORTB
 #define CTR_LEFT  PC0
 #define CTR_RIGHT PC1
@@ -15,8 +15,11 @@
 const uint8_t leds[8] = {PD0, PD1, PD2, PD3, PD4, PD5, PD6, PD7};
 const uint8_t numbers[10] = {0x40, 0xF9, 0x24, 0x30, 0x99, 0x12, 0x2, 0x58, 0x0, 0x10};
 int main() {
+    
   UCSR0B &= ~_BV(RXEN0) & ~_BV(TXEN0);
   LED_DDR = 0xff;
+  CTR_DDR |= _BV(PC0) | _BV(PC1)
+
   CTR_PORT = 0;
 
   while (1) {
