@@ -9,3 +9,4 @@
 *.tar*
 *.class
 *.ipynb_checkpoints
+*.npz

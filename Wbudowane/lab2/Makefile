@@ -1,13 +1,13 @@
 
-PRG            = Cylon
-OBJ            = Cylon.o
+PRG            = GrayCode
+OBJ            = GrayCode.o
 PROGRAMMER     = arduino
 PORT           = /dev/ttyUSB0
 MCU_TARGET     = atmega328p 
 AVRDUDE_TARGET = atmega328p
 OPTIMIZE       = -O3
 DEFS           =
-LIBS           = 
+LIBS           =
 BAUDRATE       = 57600
 
 HZ          = 16000000
@@ -19,7 +19,7 @@ CC             = avr-gcc
 # Override is only needed by avr-lib build system.
 
 override CFLAGS        = -g -std=c99 -DF_CPU=$(HZ) -Wall $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS)
-override LDFLAGS       = -Wl,-Map,$(PRG).map,-u, -Wl,-u,vfscanf -lscanf_flt -Wl,-u,vfprintf -lprintf_flt
+override LDFLAGS       = -Wl,-Map,$(PRG).map
 
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump

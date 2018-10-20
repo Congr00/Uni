@@ -6,6 +6,7 @@
 #define LED PD4
 #define LED_DDR DDRD
 #define LED_PORT PORTD
+
 const uint8_t leds[8] = {PD0, PD1, PD2, PD3, PD4, PD5, PD6, PD7};
 const uint8_t numbers[10] = {0x40, 0xF9, 0x24, 0x30, 0x99, 0x12, 0x2, 0x58, 0x0, 0x10};
 int main() {

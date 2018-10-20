@@ -6,15 +6,21 @@ public class Tester{
         Punkt p1 = new Punkt(0,2);
         System.out.println(p1.toString());
         // przesuwanie o wektor
-        Wektor v = Wektor.W(2, 2);
+        Wektor v = new Wektor(2, 2);
         p1.Przesun(v);
-        p1.Przesun(Wektor.W(-5, -8));
+        p1.Przesun(new Wektor(-5, -8));
         System.out.println(p1.toString());
         p1.Obroc(new Punkt(0,0), -90);
         System.out.println("obrocony: " + p1.toString());
+        p1.Obroc(new Punkt(0,0), -90);
+        System.out.println("obrocony: " + p1.toString());
+        p1.Obroc(new Punkt(0,0), -90);
+        System.out.println("obrocony: " + p1.toString());   
+        p1.Obroc(new Punkt(0,0), -90);
+        System.out.println("obrocony: " + p1.toString());                        
         Punkt p2 = new Punkt(2,2);
         // ukosna prosta przez 0
-        p2.Odbij(Prosta.P(-1, -1, 0));
+        p2.Odbij(new Prosta(-1, -1, 0));
         System.out.println("Odbity punkt (2,2): " + p2.toString());
         try{
         Odcinek o1 = new Odcinek(new Punkt(0, 0), new Punkt(0,0));
@@ -32,15 +38,15 @@ public class Tester{
         System.out.println("Przed przesunieciem: " + t1.toString());
         t1.Przesun(v);
         System.out.println("Po przesunieciu: " + t1.toString());
-        Prosta p = Prosta.P(0,1,0);
-        Prosta pp = Prosta.P(0,1,2);
-        Prosta ppp = Prosta.P(1,0,0);
+        Prosta p = new Prosta(0,1,0);
+        Prosta pp = new Prosta(0,1,2);
+        Prosta ppp = new Prosta(1,0,0);
         System.out.println(Prosta.toString(p));
-        System.out.println("Prosta po przesunieciu: " + Prosta.toString(Prosta.Przesun(p, Wektor.W(0, 2))));
+        System.out.println("Prosta po przesunieciu: " + Prosta.toString(Prosta.Przesun(p,new Wektor(0, 2))));
         System.out.println("Rownolegle :" + Prosta.Rownolegle(p, pp));
         System.out.println("Rownolegle :" + Prosta.Rownolegle(p, ppp)); 
         System.out.println("Prostopadle :" + Prosta.Prostopadle(p, pp));
         System.out.println("Prostopadle :" + Prosta.Prostopadle(p, ppp));    
-        System.out.println("Wspolny pkt: " + Prosta.Przeciecie(Prosta.P(-1, -1, 0),  Prosta.P(-1, 1, 0)));            
+        System.out.println("Wspolny pkt: " + Prosta.Przeciecie(new Prosta(-1, -1, 0), new Prosta(-1, 1, 0)));            
     }
 }
