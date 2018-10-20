@@ -20,7 +20,7 @@ int main() {
   CTR_PORT &= ~_BV(PC0) & ~_BV(PC1)
 
   while (1) {
-      for(uint8_t i = 0; i < 5 i++){
+      for(uint8_t i = 0; i < 6 i++){
           for(uint8_t j = 0; j < 10; j++){
               //1 sec delay
               for(uint8_t t = 0; t < 50; t++){
