@@ -17,7 +17,7 @@ const uint8_t numbers[10] = {0x40, 0xF9, 0x24, 0x30, 0x99, 0x12, 0x2, 0x58, 0x0,
 int main() {
   UCSR0B &= ~_BV(RXEN0) & ~_BV(TXEN0);
   LED_DDR = 0xff;
-  CTR_PORT &= ~_BV(PC0) & ~_BV(PC1)
+  CTR_PORT = 0;
 
   while (1) {
       for(uint8_t i = 0; i < 6 i++){
@@ -25,10 +25,10 @@ int main() {
               //1 sec delay
               for(uint8_t t = 0; t < 50; t++){
                   LED_PORT = numbers[i];
-                  CTR_PORT &= _BV(PC0);
+                  CTR_PORT = _BV(PC0);             
                   _delay_ms(10);
                   LED_PORT = numbers[j];
-                  CTR_PORT &= _BV(PC1);
+                  CTR_PORT = _BV(PC1);                  
                   _delay_ms(10);
               }
           }
