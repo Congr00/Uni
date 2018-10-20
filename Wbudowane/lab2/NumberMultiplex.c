@@ -4,11 +4,11 @@
 #include <inttypes.h>
 
 #define LED PD4
-#define LED_DDR DDRD
+#define LED_DDR  DDRD
 #define LED_PORT PORTD
 
-#define CTR_DDR  DDRC
-#define CTR_PORT  PORTB
+#define CTR_DDR   DDRC
+#define CTR_PORT  PORTC
 #define CTR_LEFT  PC0
 #define CTR_RIGHT PC1
 
@@ -18,20 +18,20 @@ int main() {
     
   UCSR0B &= ~_BV(RXEN0) & ~_BV(TXEN0);
   LED_DDR = 0xff;
-  CTR_DDR |= _BV(PC0) | _BV(PC1)
+  CTR_DDR |= _BV(PC0) | _BV(PC1);
 
   CTR_PORT = 0;
 
   while (1) {
-      for(uint8_t i = 0; i < 6 i++){
+      for(uint8_t i = 0; i < 6; i++){
           for(uint8_t j = 0; j < 10; j++){
               //1 sec delay
               for(uint8_t t = 0; t < 50; t++){
                   LED_PORT = numbers[i];
-                  CTR_PORT = _BV(PC0);             
+                  CTR_PORT = _BV(CTR_LEFT);             
                   _delay_ms(10);
                   LED_PORT = numbers[j];
-                  CTR_PORT = _BV(PC1);                  
+                  CTR_PORT = _BV(CTR_RIGHT);                  
                   _delay_ms(10);
               }
           }

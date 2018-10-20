@@ -25,7 +25,7 @@ int main() {
   BTN_PORT |= _BV(BTN_PREV);
   BTN_PORT |= _BV(BTN_NEXT);
   BTN_PORT |= _BV(BTN_RST);    
-  LED_DDR  = 0xFF;
+  LED_DDR  = 0xff;
 
   uint8_t code = 0;
   LED_PORT = code;
