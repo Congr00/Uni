@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+DIR=`dirname "$BASH_SOURCE"`
+TMPFILE=`mktemp`
+IN="$1"
+
+$DIR/convpresentation <$1>$TMPFILE
+pandoc -t beamer --pdf-engine xelatex $TMPFILE -o presentation.pdf

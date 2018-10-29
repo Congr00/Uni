@@ -9,7 +9,7 @@ public class ZbiorNaTablicy extends Zbior{
      * @param size maksymakla ilosc elementow
      */
     public ZbiorNaTablicy(int size){
-        if(size < 0)
+        if(size < 2)
             throw new IllegalArgumentException("Wielkosc tablicy nie moze byc mniejsza niz 0!");
         this.data = new Para[size];
         this.size = size;

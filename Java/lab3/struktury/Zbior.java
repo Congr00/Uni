@@ -6,7 +6,7 @@ package struktury;
 public abstract class Zbior{    
     protected Para[] data;
     protected int    size;
-    protected int     ptr = 0;
+    protected int    ptr = 0;
 
     /**
      * metoda zwraca wartosc pary przechowywanej w zbiorze
@@ -14,13 +14,13 @@ public abstract class Zbior{
      * @return znaleziona para
      * @throws Exception jesli dany klucz nie istnieje w zbiorze
      */    
-    public abstract Para   szukaj(String k) throws Exception;
+    public abstract Para szukaj(String k) throws Exception;
     /**
      * metoda wstawia podana pare do bazy
      * @param p para do wstawienia
      * @throws Exception jesli zabraknie miejsca w zbiorze
      */    
-    public abstract void   wstaw (Para p)   throws Exception;
+    public abstract void wstaw (Para p)   throws Exception;
     /**
      * metoda zwraca wartosc pary przechowywanej w zbiorze
      * @param k klucz szukanej pary
@@ -33,14 +33,14 @@ public abstract class Zbior{
      * @param p para do dodania lub zaktualizowania
      * @throws Exception gdy skonczy sie miejsce w zbiorze
      */
-    public abstract void   ustaw (Para p)   throws Exception;
+    public abstract void ustaw (Para p)   throws Exception;
     /**
      * metoda usuwa wszystkie elementy ze zbioru
      */
-    public abstract void   czysc ();
+    public abstract void czysc ();
     /**
      * metoda mowi ile aktualnie jest elementow w zbiorze
      * @return ilosc elementow w zbiorze
      */
-    public abstract int    ile();
+    public abstract int ile();
 }

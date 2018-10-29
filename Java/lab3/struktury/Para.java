@@ -34,12 +34,11 @@ public class Para{
     @Override public String toString(){
         return this.klucz + " " + String.valueOf(wartosc);
     }
-    /** Metoda sprawdzajaca czy podane pary maja takie same klucze
-     *  @param p1 pierwsza para do porownania
-     *  @param p2 druga para do porownania
+    /** Metoda sprawdzajaca czy podana para ma ten sam klucz
+     *  @param p para do sprawdzenia
      *  @return zwraca wartosc logiczna, true gdy pary sa rowne, false w przeciwnym wypadku
-     */
-    public boolean equals(Para p1, Para p2){
-        return p1.klucz == p2.klucz;
-    }
+     */    
+    public boolean equals(Para p){
+        return this.klucz == p.klucz;
+    }    
 }

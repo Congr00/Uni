@@ -8,9 +8,9 @@
 #define LED_DDR DDRB
 #define LED_PORT PORTB
 
-#define BTN PD4
-#define BTN_PIN PIND
-#define BTN_PORT PORTD
+#define BTN PB0
+#define BTN_PIN PINB
+#define BTN_PORT PORTB
 
 #define FALSE 0
 #define TRUE  1
@@ -29,7 +29,7 @@ int main() {
   for(int8_t i = 0; i < MEM_SIZE; i++)
     led_mem[i] = FALSE;
 
-  while (1) {
+  while (TRUE) {
     if (BTN_PIN & _BV(BTN)){
         led_mem[ptr_mem % 100] = FALSE;
     }

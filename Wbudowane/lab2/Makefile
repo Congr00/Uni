@@ -1,6 +1,6 @@
 
-PRG            = GrayCode
-OBJ            = GrayCode.o
+PRG            = NumberMultiplex
+OBJ            = NumberMultiplex.o
 PROGRAMMER     = arduino
 PORT           = /dev/ttyUSB0
 MCU_TARGET     = atmega328p 

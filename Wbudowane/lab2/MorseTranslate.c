@@ -14,9 +14,9 @@
 #define LED_DDR DDRB
 #define LED_PORT PORTB
 
-#define BTN PD4
-#define BTN_PIN PIND
-#define BTN_PORT PORTD
+#define BTN PB0
+#define BTN_PIN PINB
+#define BTN_PORT PORTB
 
 #define BAUD 9600                          // baudrate
 #define UBRR_VALUE ((F_CPU)/16/(BAUD)-1)   // zgodnie ze wzorem
@@ -115,7 +115,7 @@ int main() {
                 input[i] = 0;
             else
                 input[i] = 1;
-            // wylaczana diode jesli byla zapalona
+            // wylaczamy diode jesli byla zapalona
             LED_PORT &= ~_BV(LED);                
         }
         uint16_t wfb = wait_for_boi(1);
