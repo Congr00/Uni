@@ -26,6 +26,7 @@ uint16_t ptr_mem = 0;
 int main() {
   BTN_PORT |= _BV(BTN);
   LED_DDR |= _BV(LED);
+  
   for(int8_t i = 0; i < MEM_SIZE; i++)
     led_mem[i] = FALSE;
 

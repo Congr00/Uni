@@ -37,7 +37,7 @@ int uart_receive(FILE *stream)
 
 #define CTR_DDR   DDRC
 #define CTR_PORT  PORTC
-#define CTR_LEFT  PC0
+#define CTR       PC0
 
 void adc_init()
 {
@@ -59,7 +59,7 @@ FILE uart_file;
 #define R    220
 
 // temp 24C
-#define T0 297.15
+#define T0 293.15
 // resistance at 24C
 #define R0 2078
 // temp 7C
@@ -76,8 +76,9 @@ int main(){
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
 
-    CTR_DDR |= _BV(PC0);    
-
+    CTR_DDR  &= ~_BV(CTR); // set to input
+    CTR_PORT &= ~_BV(CTR); // turn off pull up transistor
+  
     adc_init();
     ADCSRA |= _BV(ADSC); // wykonaj konwersję
     while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik
@@ -97,7 +98,7 @@ int main(){
         float r = R0 * pow(e, (-B / T0));
         float tempK = B / (log(RT / r));
         float tempC = tempK - 273.15;
-        printf("ADC : %"SCNd16", RT : %f, tempC : %f\r\n", v, RT, tempC);           
+        printf("ADC : %"SCNd16", RT : %f, tempC : %f, Vout: %f\r\n", v, RT, tempC, Vout);           
         _delay_ms(1000);
     }    
 }

@@ -44,6 +44,9 @@ int uart_receive(FILE *stream)
 #define CTR_PORT  PORTC
 #define CTR_LEFT  PC0
 
+#define DIV 1024 / 12
+#define MAX 4096
+
 void adc_init()
 {
   ADMUX   |= _BV(REFS0); // referencja AVcc, wejście ADC0
@@ -54,23 +57,13 @@ void adc_init()
 }
 
 void led_bright(uint16_t delay){
-
-//for(uint16_t i = 0; i < 10; ++i){
-    delay *= 10;
-        Delay_us(10240 - delay);
-        LED_PORT |= _BV(LED);
-        Delay_us(delay);
-        LED_PORT &= ~_BV(LED);    
- //   }    
-}
-
-uint8_t find_sig_bit(uint16_t var){
-    uint16_t ref = 0x200;
-    for(uint8_t i = 10, j = 0; i > 0; i--, j++){
-        if(var & (ref >> j))
-            return i;
-    }
-    return 0;
+  // 10ms loop
+  for(uint8_t i = 0; i < 10; ++i){
+      LED_PORT |= _BV(LED);
+      Delay_us(delay);
+      LED_PORT &= ~_BV(LED);      
+      Delay_us(MAX - delay);    
+  }
 }
 
 void Delay_us(int n) {
@@ -91,10 +84,9 @@ int main(){
     stdin = stdout = stderr = &uart_file;
 
     LED_DDR  |=  _BV(LED);  
-    CTR_PORT |=  _BV(PC0); 
+    CTR_PORT |= _BV(CTR_LEFT); 
 
-    uint16_t ref = 1;
-    adc_init();
+    uint16_t ref = MAX;c,
     ADCSRA |= _BV(ADSC); // wykonaj konwersję
     while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik
     while(1){
@@ -103,11 +95,8 @@ int main(){
         while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik
         ADCSRA |= _BV(ADIF); // wyczyść bit ADIF (pisząc 1!)    
         uint16_t v = ADC; // weź zmierzoną wartość (0..1023)
-        printf("ADC : %"SCNd16"\r\n", v);   
-        uint8_t pow = find_sig_bit(v);
-
-
-        
-        led_bright(ref << pow);
+        uint16_t bright = v / (DIV);
+        //printf("ADC : %"SCNd16"\r\n", v);    
+        led_bright(ref >> bright);
     }    
 }
