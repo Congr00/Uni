@@ -98,7 +98,7 @@ Ile to będzie kosztowało
 → Tester 60zł/h
 
 Koszt zamortyzowany: (50*2 + 70*2 + 120 + 130*2) * 
-5 * 8 * 30 * 12 + (2 * 60 * 8 * 30 * 3) = 8mln zł
+5 * 8 * 4 * 12 + (2 * 60 * 8 * 4 * 3) ~ 1mln zł
 
 Co należy zrobić
 
@@ -106,8 +106,6 @@ Co należy zrobić
 → Projekt architektury bazy danych
 → Bazową, abstrakcyjną implementacje GUI
 → Stworzenie testów a następnie implementacje poszczególnych funkcjonalności aplikacji jako osobne moduły
-#    ∷ Face/object recognition
-#    ∷ ??
 → Połączenie 'backendu z frontendem'
 → Betatesty pod względem użytkowania oprogramowania w zamkniętej grupie użytkowników
 → Ostateczne szlify i poprawki (zawsze są jakieś..)

@@ -7,9 +7,9 @@ import java.lang.Math.*;
  */
 public class Stala extends Wyrazenie{
       
-    private static final double e  = Math.E;  
-    private static final double fi = 1.62;   
-    private static final double pi = Math.PI;
+    public static final double e  = Math.E;  
+    public static final double fi = 1.618;   
+    public static final double pi = Math.PI;
 
     private Liczba val;
 
@@ -42,7 +42,8 @@ public class Stala extends Wyrazenie{
     }
     @Override
     public String toString(){
-        return "s";
+        return this.val.toString();
     }
+    
 
 }

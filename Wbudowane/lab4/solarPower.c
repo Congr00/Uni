@@ -52,7 +52,7 @@ void adc_init()
   ADMUX   |= _BV(REFS0); // referencja AVcc, wejście ADC0
   DIDR0   = _BV(ADC0D); // wyłącz wejście cyfrowe na ADC0
   // częstotliwość zegara ADC 125 kHz (16 MHz / 128)
-  ADCSRA  = _BV(ADPS1) | _BV(ADPS0); // preskaler 8
+  ADCSRA  |= _BV(ADPS1); // preskaler 8
   ADCSRA |= _BV(ADEN); // włącz ADC
 }
 
@@ -83,14 +83,17 @@ int main(){
     fdev_setup_stream(&uart_file, uart_transmit, uart_receive, _FDEV_SETUP_RW);
     stdin = stdout = stderr = &uart_file;
 
-    LED_DDR  |=  _BV(LED);  
+    LED_DDR  |=  _BV(LED);    
     CTR_PORT |= _BV(CTR_LEFT); 
 
-    uint16_t ref = MAX;c,
+    adc_init();
+
+    uint16_t ref = MAX;    
     ADCSRA |= _BV(ADSC); // wykonaj konwersję
-    while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik
+    while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik 
     while(1){
-        LED_PORT &= ~_BV(LED);//wylacz led na czas pomiaru             
+
+        //LED_PORT &= ~_BV(LED);//wylacz led na czas pomiaru             
         ADCSRA |= _BV(ADSC); // wykonaj konwersję        
         while (!(ADCSRA & _BV(ADIF))); // czekaj na wynik
         ADCSRA |= _BV(ADIF); // wyczyść bit ADIF (pisząc 1!)    

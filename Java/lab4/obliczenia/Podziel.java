@@ -3,16 +3,14 @@ package obliczenia;
 /**
  * Klasa reprezentujaca wyrazenie dzielenia
  */
-public class Podziel extends Wyrazenie{
-    private Wyrazenie w1, w2;
+public class Podziel extends op_dwu{
     /**
      * Publiczny kontruktor wyrazenia
      * @param w1 Pierwsze wyrazenie
      * @param w2 Wyrazenie przez ktore nastepuje dzielenie
      */
     public Podziel(Wyrazenie w1, Wyrazenie w2){
-        this.w1 = w1;
-        this.w2 = w2;
+        super(w1, w2);
     }
     /**
      * Metoda obliczenia dla dzielenia

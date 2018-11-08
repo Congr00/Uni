@@ -28,9 +28,9 @@ header-includes: |
 for (i, slide) in enumerate( slides ):
     lines = slide.splitlines()
 
-    # print( r'\begin{center}' )
     print( r'\vfill' )
-    print( r'\begin{adjustbox}{min width=\linewidth}' )
+    print( r'\begin{center}' )
+    # print( r'\begin{adjustbox}{min width=\linewidth}' )
 
     for line in lines:
         for (rule, repl) in RULES:
@@ -40,8 +40,8 @@ for (i, slide) in enumerate( slides ):
 
         print( line )
 
-    print( r'\end{adjustbox}' )
-    # print( r'\end{center}' )
+    # print( r'\end{adjustbox}' )
+    print( r'\end{center}' )
 
     if i != len( slides ) - 1:
         print( '\n# {.plain}\n' )

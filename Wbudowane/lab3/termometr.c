@@ -50,22 +50,22 @@ void adc_init()
 FILE uart_file;
 
 #define e 2.72
-// B = ln(T0/T1) / (1/T0 - 1/T1)
-#define B 520.41
+// B = ln(R0/R1) / (1/T0 - 1/T1)
+#define B 6543.83
 
 // input is 5V
 #define Vref 5
 // resistor 
 #define R    220
 
-// temp 24C
-#define T0 293.15
-// resistance at 24C
-#define R0 2078
-// temp 7C
-#define T1 280.15
-// resistance at 7C
-#define R1 2311
+// temp 22C
+#define T0 295.15
+// resistance at 22C
+#define R0 4900
+// temp 12C
+#define T1 285.15
+// resistance at 12C
+#define R1 9166
 
 
 
@@ -77,7 +77,7 @@ int main(){
     stdin = stdout = stderr = &uart_file;
 
     CTR_DDR  &= ~_BV(CTR); // set to input
-    CTR_PORT &= ~_BV(CTR); // turn off pull up transistor
+    CTR_PORT &= ~_BV(CTR); // turn off pull up resistor
   
     adc_init();
     ADCSRA |= _BV(ADSC); // wykonaj konwersję

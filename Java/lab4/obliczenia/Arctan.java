@@ -5,14 +5,13 @@ import java.lang.Math;
 /**
  * Klasa reprezentujaca funkcje arctan
  */
-public class Arctan extends Wyrazenie{
-    private Wyrazenie w1;
+public class Arctan extends op_jedno{
     /**
      * Publiczny kontruktor 
      * @param w1 Wyrazenie ktore jest agrumentem dla funckji arctan
      */
     public Arctan(Wyrazenie w1){
-        this.w1 = w1;
+        super(w1);
     }
     @Override
     public double oblicz(){

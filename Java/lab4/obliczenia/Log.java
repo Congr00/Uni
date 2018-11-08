@@ -26,7 +26,7 @@ public class Log extends Wyrazenie{
         double w1 = this.w1.oblicz();
         double w2 = this.w2.oblicz();
         // sprawdz warunki na LOG (nieujemne itp)
-        if(w1 < 1)
+        if(w1 < 0 || w1 == 1)
             throw new IllegalArgumentException("Podstawa logarytmu nie moze byc ujemna");
         if(w2 < 0)
             throw new IllegalArgumentException("Argument logarytmu nie moze byc ujemny");

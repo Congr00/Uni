@@ -1,16 +1,16 @@
 package obliczenia;
 
+
 /**
  * Klasa reprezentujaca Odwrotnosci podanego wyrazenia
  */
-public class Odwroc extends Wyrazenie{
-    private Wyrazenie w1;
+public class Odwroc extends op_jedno{
     /**
      * Publiczny konstruktor wyrazenia
      * @param w1 wyrazenie ktorego odwrotnosc jest wynikiem
      */
     public Odwroc(Wyrazenie w1){
-        this.w1 = w1;
+        super(w1);
     }
     @Override
     public double oblicz(){

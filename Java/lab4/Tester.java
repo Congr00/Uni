@@ -7,6 +7,7 @@ public class Tester{
 
         Zmienna x = new Zmienna("x");
         x.Set(new Liczba(2.0));
+        
         Wyrazenie wyr2 = new Dodaj(
             new Liczba(5), 
             new Pomnoz(
@@ -40,6 +41,20 @@ public class Tester{
                 new Log(new Liczba(2), new Zmienna("y"))
             )
         );  
-        System.out.println("Wyrazenie: " + wyr4.toString() + "\nWynik: " + wyr4.oblicz());          
+        System.out.println("Wyrazenie: " + wyr4.toString() + "\nWynik: " + wyr4.oblicz()); 
+        wyr4 = new Dodaj(
+            new Poteguj(
+                new Liczba(2),
+                new Liczba(5)
+            ),
+            new Pomnoz(
+                new Zmienna("z"),
+                new Log(new Liczba(2), new Zmienna("y"))
+            )
+        );
+        try{System.out.println("Wyrazenie: " + wyr4.toString() + "\nWynik: " + wyr4.oblicz());}
+        catch(IllegalArgumentException ex){
+            System.out.println(ex.toString());
+        }            
     }
 }

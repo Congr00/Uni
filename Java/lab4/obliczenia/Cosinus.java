@@ -5,14 +5,13 @@ import static java.lang.Math.*;
 /**
  * Klasa reprezentujaca funkcje cos
  */
-public class Cosinus extends Wyrazenie{
-    private Wyrazenie w1;
+public class Cosinus extends op_jedno{
     /**
      * Publiczny konstruktor wyrazenia
      * @param w1 argument dla funkcji cosinus
      */
     public Cosinus(Wyrazenie w1){
-        this.w1 = w1;
+        super(w1);
     }
     @Override
     public double oblicz(){

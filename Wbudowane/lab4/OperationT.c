@@ -81,7 +81,7 @@ uint16_t t1[3], t2[3];
     printf("+: %"SCNd16"; *: %"SCNd16"; /: %"SCNd16"\r\n", t2[0] - t1[0], t2[1] - t1[1], t2[2] - t1[2]);
 
 
-int main()
+int main()  
 {
   // zainicjalizuj UART
   uart_init();

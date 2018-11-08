@@ -34,7 +34,7 @@ public class Zmienna extends Wyrazenie{
             res = vars.czytaj(this.name);
         }
         catch(UnknownError err){
-            throw new IllegalArgumentException("Podana zmienna" + this.name + "nie istnieje w dziedzinie");
+            throw new IllegalArgumentException("Podana zmienna '" + this.name + "' nie istnieje w dziedzinie");
         }   
         return res;
     }

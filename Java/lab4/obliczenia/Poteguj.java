@@ -2,19 +2,18 @@ package obliczenia;
 
 import java.lang.Math.*;
 
+
 /**
  * Klasa reprezentujaca potegowanie podanych wyrazen
  */
-public class Poteguj extends Wyrazenie{
-    private Wyrazenie w1, w2;
+public class Poteguj extends op_dwu{
     /**
      * Publiczny kontruktor budujacy wyrazenie
      * @param w1 pierwsze wyrazenie do wymnozenia
      * @param w2 drugie wyrazenie do wymnozenia
      */
     public Poteguj(Wyrazenie w1, Wyrazenie w2){
-        this.w1 = w1;
-        this.w2 = w2;
+        super(w1, w2);
     }
     @Override    
     public double oblicz(){

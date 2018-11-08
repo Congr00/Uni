@@ -13,3 +13,9 @@
 Java/lab*/dokumentacja
 .stfolder
 *.zip
+*.csv
+*.o
+*.map
+*.elf
+*.hex
+*.stversions

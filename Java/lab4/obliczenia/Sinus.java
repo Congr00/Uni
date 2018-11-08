@@ -5,14 +5,13 @@ import java.lang.Math;
 /**
  * Klasa reprezentujaca funkcje sin
  */
-public class Sinus extends Wyrazenie{
-    private Wyrazenie w1;
+public class Sinus extends op_jedno{
     /**
      * Publiczny konstruktor wyrazenia
      * @param w1 Wartosc przekazana funkcji sinus
      */
     public Sinus(Wyrazenie w1){
-        this.w1 = w1;
+        super(w1);
     }
     @Override    
     public double oblicz(){
