@@ -55,7 +55,7 @@ void timer1_init()
   // COM1B = 01   -- toggle on compare match
   // WGM1  = 1100 -- CTC top=ICR1
   // CS1   = 001  -- prescaler 1
-  // częstotliwość 16e6/(2*1*(1+15624)) = 512 Hz
+  // częstotliwość 16e6/(2*1*(1+15624)) = 512 kHz
 
   TCCR1A = _BV(COM1A0);
   TCCR1B = _BV(WGM12) | _BV(WGM13) | _BV(CS10);

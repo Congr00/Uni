@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <util/delay.h>
 
+
 #define BAUD 9600                          // baudrate
 #define UBRR_VALUE ((F_CPU)/16/(BAUD)-1)   // zgodnie ze wzorem
 

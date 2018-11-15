@@ -16,7 +16,7 @@
 #define TRUE  1
 
 #define DELAY    20
-#define MEM_SIZE 2000 / DELAY
+#define MEM_SIZE (2000 / DELAY)
 
 int8_t led_mem[MEM_SIZE];
 

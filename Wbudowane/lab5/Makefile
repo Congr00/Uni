@@ -1,6 +1,6 @@
 
-PRG            = helloword
-OBJ            = helloword.o
+PRG            = main
+OBJ            = main.o
 PROGRAMMER     = arduino
 PORT           = /dev/ttyUSB0
 MCU_TARGET     = atmega328p 
@@ -19,7 +19,7 @@ CC             = avr-gcc
 # Override is only needed by avr-lib build system.
 
 override CFLAGS        = -g -std=c99 -DF_CPU=$(HZ) -Wall $(OPTIMIZE) -mmcu=$(MCU_TARGET) $(DEFS)
-override LDFLAGS       = -Wl,-Map,$(PRG).map
+override LDFLAGS       =  -Wl,-Map,$(PRG).map,-u, -Wl,-u,vfscanf -lscanf_flt -Wl,-u,vfprintf -lprintf_flt
 
 OBJCOPY        = avr-objcopy
 OBJDUMP        = avr-objdump
@@ -31,7 +31,7 @@ $(PRG).elf: $(OBJ)
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 clean:
-	rm -rf *.o $(PRG).elf *.eps *.png *.pdf *.bak *.hex *.bin *.srec
+	rm -rf *.o $(PRG).elf *.eps *.png *.bak *.hex *.bin *.srec
 	rm -rf *.lst *.map $(EXTRA_CLEAN_FILES)
 
 lst:  $(PRG).lst
