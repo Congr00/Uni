@@ -48,7 +48,7 @@ FILE uart_file;
 #define BTN_PORT  PORTD
 
 // input is 5V
-#define Vref 5
+#define Vref 4.8
 // resistor 
 #define R    220
 
@@ -57,7 +57,7 @@ volatile static uint16_t v = 0;
 void adc_init()
 {
   ADMUX   |= _BV(REFS0); // referencja AVcc, wejście ADC0
-  DIDR0   = _BV(ADC0D); // wyłącz wejście cyfrowe na ADC0
+  //DIDR0   = _BV(ADC0D); // wyłącz wejście cyfrowe na ADC0
   ADCSRA  = _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0); // preskaler 128
   ADCSRA |= _BV(ADEN) | _BV(ADIF) | _BV(ADIE); // włącz ADC i przerwania
 }
@@ -81,7 +81,6 @@ ISR(INT0_vect) {
 }
 
 ISR(ADC_vect) {
-    ADCSRA |= _BV(ADIF); // wyczyść bit ADIF (pisząc 1!)    
     v = ADC; // weź zmierzoną wartość (0..1023)    
 }
 

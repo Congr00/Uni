@@ -1,6 +1,6 @@
 
-PRG            = main
-OBJ            = main.o
+PRG            = clock
+OBJ            = clock.o
 PROGRAMMER     = arduino
 PORT           = /dev/ttyUSB0
 MCU_TARGET     = atmega328p 
