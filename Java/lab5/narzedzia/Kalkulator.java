@@ -1,4 +1,5 @@
 package narzedzia;
+
 import java.io.BufferedWriter;
 import java.text.DateFormat;
 import java.util.Scanner;

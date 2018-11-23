@@ -2,6 +2,7 @@ package narzedzia;
 
 /**
  * Klasa reprezentujaca wyjatek wystepujacy przy wykryciu zlych argumentow dla logarytmu
+ *
  */
 public class ONP_ZlyLog extends WyjatekONP{ 
     private static final long serialVersionUID = 1024;    
