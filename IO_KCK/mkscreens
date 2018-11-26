@@ -14,9 +14,11 @@ let num=num+1
 mkdir screens
 cd screens
 
-sleep 3
+zenity --info --text "Press OK when presentation is fully loaded"
 
 for i in `seq -w 00 $num`; do
+    # notify-send "$i/$num"
+
     DISPLAY=:22 import -window root -quality 100 screen$i.jpg
     DISPLAY=:22 xdotool key space
     sleep 0.5
