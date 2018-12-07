@@ -21,17 +21,22 @@ Następnie wybiera katalog z plikami, które chce dodać do biblioteki oraz opcj
 2) Użytkownik robi zdjęcia, które są automatycznie zapisywane oraz odpowiednio otagowane przez program. 
 Przy następnym uruchomieniu wszystkie zdjęcia zostaną zsynchronizowane z jego urządzeniami.
 
-3) Użytkownik chciałby wgrać zdjęcia na portal społecznościowy, więc najpierw zaznacza interesujące go zdjęcia/albumy/tagi/etc., klika na
-PPM jeden z zaznaczonych obiektów i z menu kontekstowego wybiera "Wgraj na portal społecznościowy". Po wybraniu interesującego portalu,
+3) Użytkownik chciałby wgrać zdjęcia na portal społecznościowy, więc najpierw zaznacza interesujące go zdjęcia/albumy/tagi/etc., klika PPM jeden z zaznaczonych obiektów i z menu kontekstowego wybiera "Wgraj na portal społecznościowy". Po wybraniu interesującego portalu,
 loguje się do niego i potwierdza wysłanie zdjęć. Jego konto zostało zapisane i w przyszłości nie będzie musiał się już logować.
 
 ## Dodawanie i wyszukiwanie ludzi po wizerunkach (twarzach)
 
 Użytkownik uruchamia program, po czym klika na kategorie ludzie. W tym momencie ma dwie rzeczy do wyboru:
 
-1) kliknąć podkategorie "Nierozpoznane", gdzie będzie mógł przypisać danej twarzy właściciela. Po kliknięciu na nierozpoznaną twarz pojawi się nowe okno, w którym użytkownik będzie mógł wybrać istniejącą już osobę lub stworzyć nową (wypełniając pola z personaliami)
+1) kliknąć podkategorie "Nierozpoznane", gdzie będzie mógł przypisać do danej twarzy właściciela. Po kliknięciu na nierozpoznaną twarz pojawi się nowe okno, w którym użytkownik będzie mógł wybrać istniejącą już osobę lub stworzyć nową (wypełniając pola z personaliami).
 
-2) wyszukać podkategorie wpisując imię i/lub nazwisko bądź ręcznie przejść przez listę osób, które są opisane przez imię i nazwisko oraz miniaturkę twarzy. Po kliknięciu na daną osobę, wyświetlą się wszystkie zdjęcia na której ona występuje oraz ewentualne zdjęcia na których możliwe że występuje ale wymagają potwierdzenia.
+2) wyszukać podkategorie wpisując imię i/lub nazwisko bądź, ręcznie przejść przez listę osób, które są opisane przez imię i nazwisko oraz miniaturkę twarzy. Po kliknięciu na daną osobę, wyświetlają się wszystkie zdjęcia, na której ona występuje oraz ewentualne zdjęcia na których występuje, ale wymagają potwierdzenia.
+
+## Przeglądanie albumów/tagów
+
+1) Użytkownik chcąc wyszukać konkretny album/tag, uruchamia program, po czym korzystając z menu po lewej stronie aplikacji wybiera album/tag spośród listy najczęściej przeglądanych, po czym wyświetlają się skojarzone z nimi zdjęcia.
+
+3) Alternatywnie użytkownik wpisuje prefiks danej nazwy albumu/taga, który na bieżąco odświeża listę.
 
 ## Duplikaty
 
@@ -50,7 +55,7 @@ na ekranie/klawiaturze bądź za pomocą gestów (na sprytelach).
 
 4) Wieloplatformowość - aplikacja powinna mieć swoje odpowiedniki na wszystkie najważniejsze platformy, aby użytkownik miał możliwość dostępu do aplikacji ze wszystkich urządzeń.
 
-5) Możliwość prostej edycji zdjęć takiej jak color gradeing, skalowanie, konwersja do innych formatów, czyszczenia danych EXIF, filtry itp.
+5) Możliwość prostej edycji zdjęć takiej jak color grading, skalowanie, konwersja do innych formatów, czyszczenia danych EXIF, filtry itp.
 
 6) Automatyczne tagowanie zdjęć ze względu na osoby, przedmioty, miejsca itp.
 

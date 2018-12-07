@@ -5,19 +5,27 @@ import java.awt.event.*;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
-
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 import javax.sound.sampled.LineEvent.Type;
 
 public class MojeOkno extends Frame
 {
-    private Color kolor = Color.BLACK;
+    private static final long serialVersionUID = 1234;
 
-    private  int windowWidth;
-    private  int windowHeight;
-    private  int playerX;
-    private  int playerY;
+    private int windowWidth;
+    private int windowHeight;
+    private int playerX;
+    private int playerY;
+    private Labirynt lab;
+    private Image img = null;
+    private MyCanvas plotno;
+    private boolean win;
+
+    private int exitX,  exitY;
+    private int startX, startY;
 
     private static final int SCALE = 40;
     private static final int SCALE_P = 34;
@@ -25,6 +33,91 @@ public class MojeOkno extends Frame
     private static final Color HALL_COLOR = Color.GRAY;
     private static final Color ENTRANCE_COLOR = Color.GREEN;
     private static final Color EXIT_COLOR = Color.RED;
+    private static final Color FONT_COLOR = Color.BLUE;
+    
+    private static final String FONT    = "TimesRoman";
+    private static final String WIN_MSG = "GRATULACJE WYGRALES!!!";
+
+    /**
+     * Wczytaj zdjecie
+     */
+    {
+        try { img = ImageIO.read(new File("labirynt/player.png")); }
+        catch (IOException e) { System.out.println(e.toString()); }
+    }
+
+    /**
+     * Subklasa po ktorej rysujemy
+     */
+    private class MyCanvas extends Canvas{
+
+        private  int labX,labY;
+        private static final long serialVersionUID = 1234; 
+        private static final int WALL_THICK = SCALE * 1/8;
+
+        /**
+         * Kontruktor plutna
+         * @param x  szerokosc plutna
+         * @param y  dlugosc plutna
+         * @param lx poczatek rysowania X
+         * @param ly poczatek rysowania Y
+         */
+        public MyCanvas (int x, int y, int lx, int ly) {
+            setBackground (Color.darkGray);
+            setSize(x, y);
+            this.labX = lx;
+            this.labY = ly;            
+        }
+        /**
+         * Rysuje cale plotno
+         */
+        public void paint(Graphics g) {
+            super.paint(g);
+            drawLab(g);
+        }
+        private void drawWinMsg(Graphics g){
+            if(playerX == 1 && playerY == 1){
+                g.fillRect(250, 520, 1000, 300);
+                g.setFont(new Font(FONT, Font.PLAIN, 70));    
+                g.setColor(FONT_COLOR);        
+                FontMetrics fm = g.getFontMetrics();
+                g.drawString(WIN_MSG, 300, 700);
+            }
+        }    
+        private void drawWall(Graphics g, int i, int j){
+            if(!lab.northWall(i-1, j-1))
+                g.fillRect(i*SCALE, j*SCALE, SCALE, WALL_THICK);
+            if(!lab.southWall(i-1, j-1))
+                g.fillRect(i*SCALE, (j+1)*SCALE - WALL_THICK, SCALE, WALL_THICK);
+            if(!lab.westWall(i-1, j-1))
+                g.fillRect(i*SCALE, j*SCALE - WALL_THICK, WALL_THICK, SCALE+WALL_THICK*2);
+            if(!lab.eastWall(i-1, j-1))
+                g.fillRect((i+1) * SCALE - WALL_THICK, j*SCALE - WALL_THICK, WALL_THICK, SCALE+WALL_THICK*2);
+            if(j == labX)
+                g.fillRect(i*SCALE, (j+1)*SCALE, SCALE, WALL_THICK);
+            if(j == 1)
+                g.fillRect(i*SCALE, SCALE-WALL_THICK, SCALE, WALL_THICK);
+            if(i == labY)
+                g.fillRect((i+1)*SCALE, j*SCALE - WALL_THICK, WALL_THICK, SCALE + WALL_THICK*2);
+            if(i == 1)
+                g.fillRect(SCALE - WALL_THICK, j*SCALE - WALL_THICK, WALL_THICK, SCALE + WALL_THICK*2);  
+        }
+        private void drawLab(Graphics g){          
+            g.setColor(ENTRANCE_COLOR);
+            g.fillRect(labX*SCALE, labY*SCALE, SCALE, SCALE);
+            g.setColor(EXIT_COLOR);
+            g.fillRect(SCALE, SCALE, SCALE, SCALE);
+
+            g.setColor(WALL_COLOR);  
+
+            for(int i = 1; i < labX+1; ++i)
+                for(int j = 1; j < labY+1; ++j)         
+                    drawWall(g, i,j);
+            
+            g.drawImage(img, playerX*SCALE + (SCALE-SCALE_P)/2, playerY*SCALE + (SCALE-SCALE_P)/2, SCALE_P, SCALE_P, this);                         
+            drawWinMsg(g);
+        }        
+    }
 
     private WindowListener frameList = new WindowAdapter()
     {
@@ -34,124 +127,88 @@ public class MojeOkno extends Frame
             MojeOkno.this.dispose();
         }
     };
-    private MouseListener mouseList = new MouseAdapter()
-    {
-        @Override
-        public void mouseClicked(MouseEvent ev)
-        {
-            //lab.singleStep();
-            plotno.repaint();
-        }
-    };
     private KeyListener keyList = new KeyAdapter()
     {
         @Override
         public void keyPressed (KeyEvent ev)
         {
-            Labirynt.Wall[][] map = lab.getMap();
             switch (ev.getKeyCode())
             {
-            case KeyEvent.VK_R: // klawisz 'R'
-                playerX = lab.w;
-                playerY = lab.h;
-                lab.reset();
-                lab.generateStart();
-                lab.generate();
+            case KeyEvent.VK_R:
+                repaintP();
                 break;
             case KeyEvent.VK_UP:
-                if(map[playerX-1][playerY-1].walls[Labirynt.Wall.NORTH])
+                if(lab.northWall(playerX-1,playerY-1))
                     playerY--;
                 break;
             case KeyEvent.VK_DOWN:
-                if(map[playerX-1][playerY-1].walls[Labirynt.Wall.SOUTH])            
+                if(lab.southWall(playerX-1,playerY-1))     
                     playerY++;
                 break;
             case KeyEvent.VK_LEFT:
-                if(map[playerX-1][playerY-1].walls[Labirynt.Wall.WEST])
+                if(lab.westWall(playerX-1,playerY-1))
                     playerX--;
                 break;
             case KeyEvent.VK_RIGHT:
-                if(map[playerX-1][playerY-1].walls[Labirynt.Wall.EAST])            
+                if(lab.eastWall(playerX-1,playerY-1))          
                     playerX++;
                 break;                
-            default: // inne klawisze
+            default:
                 break;
             }
             if(playerX == 1 && playerY == 1)
-                System.out.println("GRATULACJE DOTARLES DO WYJSCIA!!!");
-            plotno.repaint();            
+                win = true;
+            plotno.repaint();      
         }
     };
-    private Labirynt lab;
-
-    private Image img = null;
-    {
-        try { img = ImageIO.read(new File("labirynt/player.png")); }
-        catch (IOException e) { System.out.println(e.toString()); }
+    private class LabTimer extends TimerTask {
+        public void run() {
+            if(!lab.finished()){
+                lab.singleStep();
+                plotno.repaint();
+            }
+        }
     }
-    private class MyCanvas extends Canvas{
-        private  int labX,labY;
-        public MyCanvas (int x, int y, int lx, int ly) {
-            setBackground (Color.darkGray);
-            setSize(x, y);
-            this.labX = lx;
-            this.labY = ly;
-         }        
-         public void paint(Graphics g) {
-            super.paint(g);
-            drawLab(g);
-        }         
-        private void drawLab(Graphics g){
-            final int WALL_THICK = SCALE * 1/8;
-            lab.generate();            
-            Labirynt.Wall [][] map = lab.getMap();      
-            g.setColor(ENTRANCE_COLOR);
-            g.fillRect(labX*SCALE, labY*SCALE, SCALE, SCALE);
 
-            g.setColor(EXIT_COLOR);
-            g.fillRect(SCALE, SCALE, SCALE, SCALE);
+    private void repaintP(){
+        this.playerX = startX;
+        this.playerY = startY;
 
-            g.setColor(WALL_COLOR);             
-            for(int i = 1; i < labX+1; ++i){
-                for(int j = 1; j < labY+1; ++j){
-                    Labirynt.Wall w = map[i-1][j-1];                    
-                    if(!w.north())
-                        g.fillRect(i*SCALE, j*SCALE, SCALE, WALL_THICK);
-                    if(!w.south())
-                        g.fillRect(i*SCALE, (j+1)*SCALE - WALL_THICK, SCALE, WALL_THICK);
-                    if(!w.west())
-                        g.fillRect(i*SCALE, j*SCALE - WALL_THICK, WALL_THICK, SCALE+WALL_THICK*2);
-                    if(!w.east())
-                        g.fillRect((i+1) * SCALE - WALL_THICK, j*SCALE - WALL_THICK, WALL_THICK, SCALE+WALL_THICK*2);
-                    
-                    if(j == labX)
-                        g.fillRect(i*SCALE, (j+1)*SCALE, SCALE, WALL_THICK);
-                    if(j == 1)
-                        g.fillRect(i*SCALE, SCALE-WALL_THICK, SCALE, WALL_THICK);
-                    if(i == labY)
-                        g.fillRect((i+1)*SCALE, j*SCALE - WALL_THICK, WALL_THICK, SCALE + WALL_THICK*2);
-                    if(i == 1)
-                        g.fillRect(SCALE - WALL_THICK, j*SCALE - WALL_THICK, WALL_THICK, SCALE + WALL_THICK*2);    
-                }
-            }       
-            g.drawImage(img, playerX*SCALE + (SCALE-SCALE_P)/2, playerY*SCALE + (SCALE-SCALE_P)/2, SCALE_P, SCALE_P, this);                         
-        }        
+        win = false;
+        Timer timer = new Timer(true);
+        LabTimer tsk = new LabTimer();
+        lab.reset();
+        lab.generateStart();
+        /*timer.schedule(tsk, 0, 5);
+        while(!lab.finished());
+        tsk.cancel();
+        timer.cancel();*/
+        lab.generate();
+        plotno.repaint();       
     }
-    private MyCanvas plotno;
 
-
+    /**
+     * Klasa okna labiryntu
+     * @param labX szerokosc okna
+     * @param labY dlugosc okna
+     */
     public MojeOkno(int labX, int labY)
     {
         super("Labirynt");
-
-        lab = new Labirynt(labX, labY);
-        lab.generateStart();
 
         this.windowWidth =  (labX + 2) * SCALE + 10;
         this.windowHeight = (labY + 2) * SCALE + 13;
 
         this.playerX = labX;
         this.playerY = labY;
+
+        this.startX = labX;
+        this.startY = labY;
+        this.exitX = 1;
+        this.exitY = 1;
+        this.win = false;
+
+        lab = new Labirynt(labX, labY, startX-1, startY-1, exitX-1, exitY-1);     
 
         // set window size
         setSize(windowWidth, windowHeight);
@@ -163,10 +220,11 @@ public class MojeOkno extends Frame
         addWindowListener(frameList);
 
         plotno.addKeyListener(keyList);
-        plotno.addMouseListener(mouseList);
         plotno.setFocusable(true);
         plotno.requestFocus();
  
         setVisible(true);
+
+        repaintP();
     }
 }
