@@ -1,0 +1,35 @@
+-Threats of cryptocurrency market
+    - Value of cryptocurrency
+    - Operational risks
+    - Regulatory risks
+    - Cyber risks
+    - Market risks
+    - Risks for business
+-Future threats
+    - Energy consumption
+    - Scalability
+    - Node distribution
+    - Quantum computing
+    - Bubble
+- Cryptocurrency in crime
+    - Medium of exchange
+    - Ransomware
+    - Cryptojacking
+    - Thieft
+- Frauds & scams
+    - ICOS
+    - Ponzi schemes
+    - Bot pump-n-dump
+- Mining strategies
+    - Temporary block withholding
+    - Majority miner
+    - Maintaining exchange rate
+    - Goldfinger attacks
+    - Feather-forking
+- Anonymity & privacy
+    - Deanonymization
+    - Improving anonymity
+- Security layers of crypto
+    - Coins and tokens
+    - Exchanges
+    - Wallets

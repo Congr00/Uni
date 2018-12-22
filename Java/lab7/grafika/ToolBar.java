@@ -28,7 +28,6 @@ import java.awt.Color;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
-import jdk.internal.org.objectweb.asm.commons.SerialVersionUIDAdder;
 
 import javax.imageio.*;
 import java.awt.Image;

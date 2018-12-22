@@ -22,6 +22,8 @@ import java.awt.event.ActionListener;
 
 public class Tester{
     public static void main(String[] args) {
+   
+        System.setProperty("sun.java2d.opengl", "true");           
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable() {

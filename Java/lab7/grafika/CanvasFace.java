@@ -46,8 +46,8 @@ public class CanvasFace extends JPanel{
     }
     private List<Pair> coords = new ArrayList<Pair> ();
 
-    public void setScrollX(int x){this.scrollX = x;}
-    public void setScrollY(int y){this.scrollY = y;}
+    //public void setScrollX(int x){this.scrollX = x;}
+    //public void setScrollY(int y){this.scrollY = y;}
 
     public BufferedImage exportImage(){
         BufferedImage img = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
