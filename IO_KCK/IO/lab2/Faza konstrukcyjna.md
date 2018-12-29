@@ -66,6 +66,9 @@ papersize: a4paper
 
 # Plan zarządzania ryzykiem
 
+<!-- copy paste z lab1 + ryzyko z testowania?
+-->
+
 # Plan wykonania produktu
 
 <!-- musi zawierać
@@ -74,3 +77,7 @@ papersize: a4paper
 -->
 
 # Ocena zgodności
+
+<!--
+Ofc wszystko zgodne z planem 420/10
+-->

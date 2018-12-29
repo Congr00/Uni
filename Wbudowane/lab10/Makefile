@@ -1,6 +1,6 @@
 
-PRG            = engine_rev
-OBJ            = engine_rev.o
+PRG            = servo
+OBJ            = servo.o
 PROGRAMMER     = arduino
 PORT           = /dev/ttyUSB0
 MCU_TARGET     = atmega328p 

@@ -49,7 +49,7 @@ void adc_init()
 void timer1_init()
 {
   // ustaw tryb licznika
-  // COM1A = 11   -- inverting mode
+  // COM1A = 10   -- non-inverting mode
   // WGM1  = 1110 -- fast PWM top=ICR1
   // CS1   = 011  -- prescaler 1024
   // ICR1  = 311
