@@ -48,13 +48,13 @@ void adc_init()
 
 void timer1_init()
 {
-  // ustaw tryb licznika
+
   // COM1A = 11   -- inverting mode
   // WGM1  = 1110 -- fast PWM top=ICR1
   // CS1   = 011  -- prescaler 64
-  // ICR1  = 15624
+  // ICR1  = 512
   // częstotliwość 16e6/(64*(1+255)) = 976Hz
-  // wzór: datasheet 20.12.3 str. 164
+
   TCCR1A = _BV(COM1A1) | _BV(WGM10) | _BV(COM1B1);
   TCCR1B = _BV(WGM12) | _BV(CS11) | _BV(CS10);
   // ustaw pin OC2 (PB3) jako wyjście
@@ -90,11 +90,12 @@ void engine_kicker(uint8_t left){
       set_left(255/2);
   else
     set_right(255/2);
-  _delay_ms(1);
+  _delay_us(50);
 }
 
 ISR(ADC_vect) {
   uint16_t v = ADC / 2;
+
   if((v < 10 || (v < 255 && v > 245)) && SPEED_LEFT > 10)
       engine_kicker(1);
   if((v > 502 || (v > 255 && v < 265)) && SPEED_RIGHT > 10)

@@ -39,7 +39,7 @@ int uart_receive(FILE *stream)
 // inicjalizacja ADC
 void adc_init()
 {
-  ADMUX   |= _BV(REFS0) | _BV(REFS1); // referencja Vref 1.1V
+  ADMUX   |= _BV(REFS0) | _BV(REFS1); // Vref 1.1V
   DIDR0   = _BV(ADC0D); // wyłącz wejście cyfrowe na ADC0
   ADCSRA  =  _BV(ADPS1) | _BV(ADPS0) | _BV(ADPS2); // preskaler 128
   ADCSRA |= _BV(ADEN) | _BV(ADIE) | _BV(ADATE); // włącz ADC przerwania i autotrigger
@@ -48,12 +48,11 @@ void adc_init()
 
 void timer1_init()
 {
-  // ustaw tryb licznika
   // COM1A = 10   -- non-inverting mode
   // WGM1  = 1110 -- fast PWM top=ICR1
   // CS1   = 011  -- prescaler 1024
   // ICR1  = 311
-  // częstotliwość 16e6/(1024*(1+311)) = 50Hz ~ 20ms => 1ms <=> OCR1A++15 => ORC1A++1 = 1/15ms => we have 15 possible states
+  // częstotliwość 16e6/(1024*(1+311)) = 50Hz ~ 20ms => 1ms <=> OCR1A++15 => ORC1A++1 = 1/15ms => 15 states (0-1MS)
   
   TCCR1A = _BV(COM1A1) | _BV(WGM11);
   TCCR1B = _BV(WGM12) | _BV(CS12) | _BV(CS10) | _BV(WGM13);

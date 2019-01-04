@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>WyboryApp :: Start</title>
+
+        <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/fix.css"/>        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+
+
+<!-- Dropdown Structure -->
+<ul id="dropdown1" class="dropdown-content">
+  <li><a href="index.html">Start</a></li>
+  <li class="divider"></li>
+  <li><a href="auth.html">Głosuj</a></li>
+  <li class="divider"></li>
+  <li><a href="arch.html">Archiwum</a></li> 
+</ul>
+<nav>
+  <div class="nav-wrapper">
+    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul class="left">
+      <!-- Dropdown Trigger -->
+      <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Kandydaci<i class="material-icons right">arrow_drop_down</i></a></li>
+    </ul>
+  </div>
+</nav>
+
+
+  <ul id="slide-out" class="sidenav">
+    <li><a class="waves-effect" href="#!"><i class="material-icons">account_circle</i>Konto</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">accessibility</i>Dostęp</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">assignment_ind</i>Informacje</a></li>
+    <li><a class="waves-effect" href="#!"><i class="material-icons">alarm</i>Powiadomienia</a></li>    
+    <li><a class="waves-effect" href="#!"><i class="material-icons">error</i>Zgłoś błąd</a></li>       
+    <li><a class="waves-effect" href="#!"><i class="material-icons">settings</i>Ustawienia</a></li>            
+  </ul>
+
+
+
+<div class="container">
+    <div class="row red-text center"><h5>UWAGA: Rozpoczęło się <a href="auth.html"><u><b>GŁOSOWANIE!</b></u><a>    </h5></div>
+    <hr>
+    <div class="row about">
+        <img class="col s6 offset-s3" src="img/profile.png" />
+    </div>
+    <div class="row about" style="margin-top:-2vh;">
+        <div class="col s6 offset-s3">
+            <h4>Pan numer N</h4>
+        </div>
+    </div>
+    <div class="row">
+    <p style="text-align: justify;">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.        
+    </p>
+    </div>
+</div>
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>        
+        <script type="text/javascript">
+            M.AutoInit();         
+        </script>
+        <script type="text/javascript" src="js/run.js"></script>        
+    </body>
+</html>

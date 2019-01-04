@@ -1,0 +1,79 @@
+.select-wrapper {
+    padding-top: 7px;
+    margin-left: 10px;    
+}
+a{
+    color: #F44336;
+}
+hr{
+    background-color: black;
+    border-color: black;
+}
+
+.start{
+    margin-top:20vh;
+}
+.start a{
+    color:white !important;
+    background-color: #F44336 !important;
+}
+
+.wybr{
+    text-align:center;
+}
+.wybr a{
+    width:80%;
+    margin:auto;
+    margin-top:3vh;
+    background-color: #F44336;
+}
+
+.ch1{
+    width:53.5vw;
+}
+.ch2{
+    width:46.5vw;
+}
+.ch3{
+    width:50vw;
+}
+.btn_add a{
+    margin-top:3vh;
+}
+.kand a{
+    width: 100%;
+    text-align: left;
+    background-color:white;
+    color: #F44336 !important;
+}
+.kand2 img{
+    width: 8vh;
+    border:1px solid #021a40;
+}
+.about img{
+    width:41vw;
+    border:1px solid #021a40;    
+}
+.about{
+    margin-top:5vh;
+}
+.about h4{
+    text-align: center;
+}
+.nkand2 img{
+    width: 7vh;
+    border:1px solid #021a40;    
+}
+.nkand2  {
+    margin-top:2vh;
+}
+.nkand2 a{
+    background-color: #F44336;
+}
+.nkand2 button{
+    background-color: #F44336;
+}
+.marg a{
+    margin-top:2vh;
+    background-color: #F44336;
+}
