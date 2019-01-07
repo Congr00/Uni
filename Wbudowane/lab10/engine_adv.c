@@ -39,7 +39,7 @@ int uart_receive(FILE *stream)
 // inicjalizacja ADC
 void adc_init()
 {
-  ADMUX   |= _BV(REFS0) | _BV(REFS1); // referencja Vref 1.1V
+  ADMUX   |= _BV(REFS0); // referencja Vref 1.1V
   DIDR0   = _BV(ADC0D) | _BV(ADC1D); // wyłącz wejście cyfrowe na ADC0 i ADC1
 
   ADCSRA  =  _BV(ADPS1) | _BV(ADPS2); // preskaler 64
@@ -101,7 +101,7 @@ volatile uint16_t cnt_top = 0,cnt_bot = 0, print = 0;
 volatile uint32_t volt_sum_bot = 0;
 
 void calc_voltage(int top){
-    float res = (float)(1.1 * 1024.0) / (float)adc_voltage();
+    float res = ((float)adc_voltage() * 5000.0f) / 1024.0f;
     if(top)
         volt_sum_top += (uint16_t)res;
     else
@@ -117,19 +117,21 @@ void update_speed(){
 }
 
 // at bottom
-ISR(TIMER1_OVF_vect){
-    update_speed();    
+ISR(TIMER1_OVF_vect){   
     calc_voltage(0);
+    _delay_us(10);
+    update_speed();         
 }
 // at top
 ISR(TIMER1_CAPT_vect){
+    
     calc_voltage(1);
     if(cnt_top++ == TOP_SUM){
-        printf("ENGINE VOLTAGE BOT: %"SCNd32"mV TOP: %"SCNd32"mV\r\n", (uint32_t)(((float)volt_sum_bot / (float)TOP_SUM)*1000.0)  
-        ,(uint32_t)(((float)volt_sum_top / (float)TOP_SUM)*1000.0));  
+        printf("ENGINE VOLTAGE BOT: %"SCNd32"mV TOP: %"SCNd32"mV\r\n", (uint32_t)(((float)volt_sum_bot / (float)TOP_SUM))  
+        ,(uint32_t)(((float)volt_sum_top / (float)TOP_SUM)));  
         volt_sum_top = 0;
-        cnt_top = 0;
         volt_sum_bot = 0;
+        cnt_top = 0;        
     }
 }
 

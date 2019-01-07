@@ -100,6 +100,7 @@ ISR(ADC_vect) {
       engine_kicker(1);
   if((v > 502 || (v > 255 && v < 265)) && SPEED_RIGHT > 10)
       engine_kicker(0);
+      
   if(v < 255)
       set_left(255 - v);
   else if(v > 255)

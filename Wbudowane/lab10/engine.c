@@ -52,7 +52,7 @@ void timer1_init()
   // COM1A = 11   -- inverting mode
   // WGM1  = 1110 -- fast PWM top=ICR1
   // CS1   = 011  -- prescaler 64
-  // ICR1  = 15624
+  // top = 0xff
   // częstotliwość 16e6/(64*(1+255)) = 976Hz
   // wzór: datasheet 20.12.3 str. 164
   TCCR1A = _BV(COM1A1) | _BV(COM1A0) | _BV(WGM10);
@@ -70,7 +70,7 @@ volatile uint16_t c = 0;
 
 void engine_kicker(){
   SPEED = 255/2;
-  _delay_ms(1);
+  _delay_us(10);
 }
 
 ISR(ADC_vect) {
