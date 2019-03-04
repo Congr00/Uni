@@ -2,21 +2,13 @@
 
 function printf(tab)    
 
-  local function to_string(item)
-    if type(item) == 'nil' then
-      return 'nil'
-    else
-      return tostring(item)
-    end
-  end
-
   local function rec_printf(tab)
     local str = ''
     for i=1, table.maxn(tab) do
         if type(tab[i]) == 'table' then
           str = str..'{'..rec_printf(tab[i])..'}' 
         else
-          str = str..to_string(tab[i])
+          str = str..tostring(tab[i])
         end
         if i ~= #tab then
           str = str..', '
@@ -31,7 +23,7 @@ function printf(tab)
   if type(tab) == 'table' then
     str = '{'..rec_printf(tab)..'}'
   else
-    str = to_string(tab)
+    str = tostring(tab)
   end
   print(str)
 end

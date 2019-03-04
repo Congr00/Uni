@@ -1,15 +1,6 @@
 #!/usr/bin/env lua
 
 function printf(tab)    
-
-  local function to_string(item)
-    if type(item) == 'nil' then
-      return 'nil'
-    else
-      return tostring(item)
-    end
-  end
-
   local function rec_printf(tab)
     local str = ''
 
@@ -17,7 +8,7 @@ function printf(tab)
         if type(tab[i]) == 'table' then
           str = str..'{'..rec_printf(tab[i])..'}' 
         else
-          str = str..to_string(tab[i])
+          str = str..tostring(tab[i])
         end
         if i ~= #tab then
           str = str..', '
@@ -32,14 +23,13 @@ function printf(tab)
   if type(tab) == 'table' then
     str = '{'..rec_printf(tab)..'}'
   else
-    str = to_string(tab)
+    str = tostring(tab)
   end
   print(str)
 end
 
 function map(array, fun)
   result = {}
-  print(array)
   for i=1, #array do
     table.insert(result, fun(array[i]))
   end
@@ -59,14 +49,13 @@ function sqrt_map(value)
 end
 
 tests = {
- -- [{1,2,3}] = increment,
- -- [{'1','2','3'}] = app_fajny,
- -- [{2,3,4,5,6,7}] = sqrt_map,
---[{}] = sqrt_map,
-  [{{1,2,3},{4,5,6},{7,8,9}}] = map(_,sqrt_map)
+  [{1,2,3}] = increment,
+  [{'1','2','3'}] = app_fajny,
+  [{2,3,4,5,6,7}] = sqrt_map,
+  [{}] = sqrt_map,
+  --[{{1,2,3},{4,5,6},{7,8,9}}] = map(_,sqrt_map)
 }
 
 for k, v in pairs(tests) do
   printf(map(k,v))
-  print('\n')
 end
