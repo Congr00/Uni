@@ -29,7 +29,7 @@ function printf(tab)
 end
 
 function map(array, fun)
-  result = {}
+  local result = {}
   for i=1, #array do
     table.insert(result, fun(array[i]))
   end
@@ -49,13 +49,13 @@ function sqrt_map(value)
 end
 
 tests = {
-  [{1,2,3}] = increment,
-  [{'1','2','3'}] = app_fajny,
-  [{2,3,4,5,6,7}] = sqrt_map,
-  [{}] = sqrt_map,
-  --[{{1,2,3},{4,5,6},{7,8,9}}] = map(_,sqrt_map)
+  {{1,2,3}, increment},
+  {{'1','2','3'}, app_fajny},
+  {{2,3,4,5,6,7}, sqrt_map},
+  {{}, sqrt_map},
+  {{{1,2,3},{4,5,6},{7,8,9}}, function(v) return map(v,sqrt_map) end}
 }
 
-for k, v in pairs(tests) do
-  printf(map(k,v))
+for _, t in ipairs(tests) do
+  printf(map(t[1],t[2]))
 end

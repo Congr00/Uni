@@ -12,9 +12,7 @@ function printf(tab)
         end
         if i ~= #tab then
           str = str..', '
-        elseif i < #tab then
-          str = str..' '
-        end    
+        end
     end
     return str
   end
@@ -29,19 +27,20 @@ function printf(tab)
 end
 
 tests = {
-  [{'ala', 'ma', 127, 'kotów'}] = "{'ala', 'ma', 127, 'kotów'}",
-  [{'to są', {}, {2, 'tablice'}, 'zagnieżdżone?', {true}}] = "{'to są', {}, {2, 'tablice'}, 'zagnieżdżone?', {true}}",
-  --[nil] = "nil",
-  [true] = "true",
-  [1999.9991] = "1999.9991",
-  [{1999.9991, 1999.9991, {nil}, {true}}] = "{1999.9991, 1999.9991, {nil}, {true}}",
-  [{{{{{{{{}}}}}}}}] = "{{{{{{{{}}}}}}}}",
-  [{{{{{{{{nil},nil, 2}}}}}}}] = "{{{{{{{{nil},nil, 2}}}}}}}",
-  [{{'jeden'}, {'dwa', {'trzy', 'cztery', {'pięć', {'sześć', {'siedem', {nil,nil,nil,nil}}}}}}}] = "{{'jeden'}, {'dwa', {'trzy', 'cztery', {'pięć', {'sześć', {'siedem', {nil,nil,nil,nil}}}}}}}"
+  {{'ala', 'ma', 127, 'kotów'}, "{'ala', 'ma', 127, 'kotów'}"},
+  {{'to są', {}, {2, 'tablice'}, 'zagnieżdżone?', {true}}, "{'to są', {}, {2, 'tablice'}, 'zagnieżdżone?', {true}}"},
+  {nil, "nil"},
+  {true, "true"},
+  {1999.9991, "1999.9991"},
+  {{1999.9991, 1999.9991, {nil, 2.0}, {true}}, "{1999.9991, 1999.9991, {nil,2.0}, {true}}"},
+  {{{{{{{{{}}}}}}}}, "{{{{{{{{}}}}}}}}"},
+  {{{{{{{{{nil},nil, 2}}}}}}}, "{{{{{{{{nil},nil, 2}}}}}}}"},
+  {{{'jeden'}, {'dwa', {'trzy', 'cztery', {'pięć', {'sześć', {'siedem', {nil,nil,nil,nil, 2}}}}}}}, "{{'jeden'}, {'dwa', {'trzy', 'cztery', {'pięć', {'sześć', {'siedem', {nil,nil,nil,nil, 2}}}}}}}"},
+  {{{1,2,3}, {3,4,5}, {5,6,7}}, "{{1,2,3}, {3,4,5}, {5,6,7}}"}
 }
 
-for k, v in pairs(tests) do
-  print('string of test:\n'..v..'\nprintf:')
-  printf(k)
+for _, t in ipairs(tests) do
+  print('string of test:\n'..t[2]..'\nprintf:')
+  printf(t[1])
   print('\n')
 end
