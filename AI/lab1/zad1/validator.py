@@ -55,6 +55,7 @@ zad1:
       out: 8
     - inp: black g8 h1 c4
       out: 10
+    - inp: black a1 a6 f7
 zad2:
   defaults:
     timeout: 60

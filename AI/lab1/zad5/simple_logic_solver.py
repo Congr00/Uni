@@ -81,7 +81,7 @@ def solver(vX, vY, X, Y):
             elif max(x_opt != 0):
                x = np.random.choice(np.argwhere(x_opt != 0).T[0])
             else: continue
-            # chance to not optimise over columnt
+            # chance to not optimise over column
             if random.random() < 0.1:
                board[x, random.randint(0, Y-1)] ^= 1
                continue

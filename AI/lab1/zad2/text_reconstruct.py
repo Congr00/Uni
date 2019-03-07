@@ -42,21 +42,22 @@ def load_file(fin, fout, fw):
 
 
 def reconstruct(raw, dic, longest):
-    current_len = 0
+    current_len = []
     dyn = []
     word = ''
-    for i in range(0, len(raw)):
-        current_len = 0
-        word = ''    
-        for j in range(0, longest):          
-            if i+j >= len(raw):
-                break        
-            word += raw[i+j]
-            current_len += 1
-            if len(word)+1 in dic:
-                if word in dic[len(word)+1]:
-                        dyn.append((current_len, current_len*current_len, [current_len]))
-        break
+    i = 0
+    current_len = 0
+    word = ''    
+    for j in range(0, longest):          
+        if i+j >= len(raw):
+            break        
+        word += raw[i+j]
+        current_len += 1
+        if len(word)+1 in dic:
+            if word in dic[len(word)+1]:
+                    dyn.append((current_len, current_len*current_len, [current_len]))
+
+    
     end = []
     longest = 0
     for _ in range(1, len(raw)):
@@ -66,7 +67,7 @@ def reconstruct(raw, dic, longest):
             word = ''
             for i in range(0, len(raw)):
                 if i+c_len >= len(raw):
-                    end.append((c_len, squared, spaces))
+                    end.append((squared, spaces))
                     break
                 word += raw[c_len+i]
                 current_len += 1
@@ -80,11 +81,11 @@ def reconstruct(raw, dic, longest):
                         dyn_.append((c_len+current_len, r, spaces+[current_len]))       
         if len(dyn_) == 0:
             break                        
-        dyn = dyn_        
+        dyn = dyn_
         del dyn_
     longest = 0
     space = None
-    for _, squared, spaces in end:
+    for squared, spaces in end:
         if squared > longest:
             space = spaces
             longest = squared

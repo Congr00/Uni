@@ -277,9 +277,6 @@ class board_ai:
          while True:
             moves, state, history = buffer.popleft()
             self.load_state(state)
-            if len(history) == 10:
-               print('hus')
-               return
 
             if len(moves) == 2:
                old_state = self.game_sate()
