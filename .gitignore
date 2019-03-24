@@ -24,3 +24,8 @@ Java/lab*/dokumentacja
 ilsvrc_subsample
 *.gz
 AI/lab*/zad*/*.txt
+.benchmark_result
+__pycache__
+*.pyc
+*_in.txt
+*_out.txt

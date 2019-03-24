@@ -17,7 +17,7 @@ function printf(tab)
     return str
   end
   
-  local str = '' 
+  local str = ''
   if type(tab) == 'table' then
     str = '{'..rec_printf(tab)..'}'
   else
