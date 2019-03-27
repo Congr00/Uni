@@ -1,6 +1,5 @@
 import sys
 import os
-#from treelib import Tree, Node
 import heapq
 from lib.tree import Tree
 from lib.node import Node

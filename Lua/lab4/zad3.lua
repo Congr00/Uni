@@ -1,10 +1,13 @@
 #!/usr/bin/env lua
-require("lib")
+
+package.path = '../lib/?.lua;'..package.path
+lib = require"lib"
+
 
 function unpath(path)
     local res = {}
     local sep = package.config:sub(1,1)
-    local name, ext = path:match(sep..'?([^'..sep..']-)%.?(%w-)$') 
+    local name, ext = path:match(sep..'?([^'..sep..']-)%.?(%w-)$')
 
     for folder in path:gmatch('([^'..sep..']-)'..sep) do
         res[#res+1] = folder
@@ -24,6 +27,6 @@ paths = {'~/hidden - name/Teaching/2016 _Lua/[ Lab ]/Lecture._+230104.pdf',
 
 for _,path in ipairs(paths) do
     print(path)
-    printf(unpath(path))
+    lib.printf(unpath(path))
     print('')
 end
