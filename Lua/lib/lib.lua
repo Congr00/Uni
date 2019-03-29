@@ -59,4 +59,20 @@ utf8.normalize = function(string)
     return result
 end
 
+function lib.zip(...)
+  local args = {...}
+  return function(state)
+      local res = {}
+      for _, arr in ipairs(state) do
+          if arr[1] == nil then
+              return nil 
+          end
+          res[#res+1] = arr[1]      
+          table.remove(arr, 1)
+      end
+      return table.unpack(res)
+  end , args
+end
+
 return lib
+
