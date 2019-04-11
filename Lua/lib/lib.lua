@@ -74,5 +74,42 @@ function lib.zip(...)
   end , args
 end
 
+function lib.gcd(a,b)
+	if b ~= 0 then
+		return lib.gcd(b, a % b)
+	else
+		return math.abs(a)
+	end
+end
+
+function lib.lcm( m, n )
+  return ( m ~= 0 and n ~= 0 ) and m * n / lib.gcd( m, n ) or 0
+end
+
+function lib.table_to_string(tbl)
+  local result = "{"
+  for k, v in pairs(tbl) do
+      -- Check the key type (ignore any numerical keys - assume its an array)
+      if type(k) == "string" then
+          result = result.."[\""..k.."\"]".."="
+      end
+
+      -- Check the value type
+      if type(v) == "table" then
+          result = result..table_to_string(v)
+      elseif type(v) == "boolean" then
+          result = result..tostring(v)
+      else
+          result = result.."\""..v.."\""
+      end
+      result = result..","
+  end
+  -- Remove leading commas from the result
+  if result ~= "" then
+      result = result:sub(1, result:len()-1)
+  end
+  return result.."}"
+end
+
 return lib
 

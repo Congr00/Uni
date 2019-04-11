@@ -4,7 +4,11 @@ package.path = '../lib/?.lua;'..package.path
 lib = require"lib"
 
 function chain(...)
-    local args = {...}
+    local args = {}
+    for n, k in ipairs({...}) do
+        args[n] = {}
+        for _, l in ipairs(k) do table.insert(args[n], l) end
+    end
     return function(state)
         while true do
             if state[1] == nil then
@@ -21,9 +25,13 @@ function chain(...)
     end, args
 end
 
-for x in chain({'a', 'b', 'c'}, {40, 50}, {}, {6, 7}, {}) do
+y = {'a', 'b', 'c'}
+
+for x in chain(y, {40, 50}, {}, {6, 7}, {}) do
     print(x)
 end
+
+lib.printf(y)
 
 for _ in chain() do
     print(_)

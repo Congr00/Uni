@@ -32,13 +32,13 @@ def load_file(fin, fout):
 
 def heuristic(board):
     max = 0
-    board.calc_dists()
+    #board.calc_dists()
     for pos in board.player:
         r = board.player[pos]   
         if r > max:
             max = r
-    
-    return int(max*0.9)
+
+    return int(max*10)
 
 def bfs_len(board, pos):
 
@@ -288,10 +288,20 @@ def sokoban_bfs(board):
                 n = tree[id]
                 board.load_state(n.data[0])
                 h2 = board.get_priority()
-                if heu > h2:
+                if heu >= h2:
                     continue
-                tree.remove_node(id)
 
+                par = tree.parent(id)
+                tree.remove_node(id)
+                tree.add_node(create_node(id, (board.save_state(), moves[i])), par)
+                heapq.heappush(heap, mapper(id, board.get_priority() + k+1))
+                if board.check_condition() == True:
+                    return (tree, id, board, _root)                                         
+
+                continue
+
+            if not tree.contains(node.identifier):
+                continue
             tree.add_node(create_node(id, (board.save_state(), moves[i])), node.identifier)
             heapq.heappush(heap, mapper(id, board.get_priority() + k+1))
                     

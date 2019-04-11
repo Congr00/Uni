@@ -4,7 +4,14 @@ package.path = '../lib/?.lua;'..package.path
 lib = require"lib"
 
 function zip(...)
-    local args = {...}
+    local args = {}
+    for n, k in ipairs({...}) do
+        args[n] = {}
+        for _, l in ipairs(k) do            
+            table.insert(args[n], l)
+        end
+    end    
+    
     return function(state)
         local res = {}
         for _, arr in ipairs(state) do
