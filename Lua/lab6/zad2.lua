@@ -1,6 +1,7 @@
 #!/usr/bin/env lua
 
-package.path = '../lib/?.lua;'..package.path
+package.path = '/home/lukas/Documents/Uni/Lua/lib/?.lua;'..package.path
+
 lib = require"lib"
 
 Frac = {}
