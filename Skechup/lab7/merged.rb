@@ -4,11 +4,36 @@ def palindrome?(string)
     string == string.reverse
 end
 
+def count_words(string)
+    res = {}
+    string.downcase.split().each do |word|
+        word = word.gsub(/[^\wżźćńółęąśŻŹĆĄŚĘŁÓŃ]/, "")
+        if word != "" 
+            res[word] == nil ? res[word] = 1 : res[word] += 1
+        end
+    end
+    res
+end
+
+def same32?(list)
+    hash = {"a"=>0, "b"=>0,  "c"=>0}
+    for val in list do hash[val] += 1 end
+    a = hash["a"]
+    b = hash["b"]
+    c = hash["c"]
+    if a == 3 || b == 3 || c == 3 
+        if a == 2 || b == 2 || c == 2
+            return true
+        end
+    end 
+    false
+end
+
 def assert(expr)
     raise "Wrong test case" unless expr
 end
 
-$testCases = {
+$testCases1 = {
      "A man, a plan, a canal -- Panama" =>  true,
      "Madam, I'm Adam!" => true,
      "Abracadabra" => false,
@@ -45,11 +70,31 @@ $testCases = {
      "O, ty z Katowic, Iwo? Tak, Zyto.%%$@#@!.....    " => true
 }
 
-def tests()
-    $testCases.each do |pal, res|  
-        assert(palindrome?(pal) == res) 
+
+$testCases2 = {
+    "A man, a plan, a canal -- Panama" => {"a"=>3, "man"=>1, "plan"=>1, "canal"=>1, "panama"=>1},
+    "Madam, I'm Adam!" => {"madam"=>1, "im" =>1, "adam"=>1},
+    "Abracadabra" => {"abracadabra" => 1},
+    "" => {},
+    "To nie jest palindrom ....." => {"to" => 1, "nie" =>1, "jest"=>1, "palindrom"=>1}, 
+    "dużo razy a jest w tym zdaniu a ponieważ a jest aarne, to a można powtażać a razy" => {"dużo"=>1, "razy"=>2, "a"=>5, "jest"=>2, "w"=>1, "tym"=>1, "zdaniu"=>1, "ponieważ"=>1, "aarne"=>1, "to"=>1, "można"=>1, "powtażać"=>1}
+}
+
+$testCases3 = {
+    ["a", "a", "a", "b", "b"] => true,
+    ["a", "b", "c", "b", "c"] => false,
+    ["a", "a", "a", "a", "a"] => false,
+    ["a", "c", "a", "c", "b", "c", "b"] => true,
+    ["a", "b", "a", "a", "c"] => false
+}
+
+def tests(tcase, fun, tag)
+    tcase.each do |pal, res|  
+        assert(fun.call(pal) == res) 
     end
-    p "Tests OK"
+    p "Tests " + tag + " OK"    
 end
 
-tests()
+tests($testCases1, method(:palindrome?), "ex1")
+tests($testCases2, method(:count_words), "ex2")
+tests($testCases3, method(:same32?), "ex3")

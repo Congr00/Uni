@@ -111,5 +111,23 @@ function lib.table_to_string(tbl)
   return result.."}"
 end
 
+function lib.subtab(tab, start, stop)
+  return table.pack(table.unpack(tab, start, stop))
+end
+
+function string:array()
+  res = {}
+  for i=1, #self do table.insert( res, self:sub(i,i) ) end
+  return res
+end
+
+function string:fromArray()
+  res = ""
+  for i=1, #self do
+    res = res .. self[i]
+  end
+  return res
+end
+
 return lib
 
