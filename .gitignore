@@ -29,4 +29,6 @@ __pycache__
 *.pyc
 *_in.txt
 *_out.txt
+*_input.txt
+*_output.txt
 /.stversions
