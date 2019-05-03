@@ -18,14 +18,7 @@ end
 -- returns node where search ended, sequence that is left and char that seq has in common with node sequence
 function Trie.searchRec(node, seq, cnt)
   
-    -- block default value
-    --if node.preSeq == {1,2} then
-     --   lib.printf(node.preSeq)
-     --   lib.printf(seq)
-    --print(cnt, #seq, 'lel')          
-    --end
     if cnt == nil then cnt = 1 end
-    -- kcolb
     if #seq == 0 then return node, seq, cnt end
 
     if node.preSeq[cnt] == seq[1] then          
@@ -41,9 +34,6 @@ end
 
 function Trie.recInsert(node, seq, root)
     local node, rseq, cnt = Trie.searchRec(node, seq)
-    --lib.printf(node.preSeq)
-    --lib.printf(rseq)
-    --print(cnt, #rseq)
     -- insert at root
     if rseq == seq then
         node.child[rseq[1]] = Trie.newNode(rseq, true)
@@ -157,35 +147,37 @@ end
 
 function Trie:merge(right) 
     self.s = self.s + right.s
-    return Trie.mergeRec(self.root, right.root, self) 
+    Trie.mergeRec(self.root, right.root, self) 
+    return self
 end
 function Trie.mergeRec(left, right, root)
     if right == nil then return end      
-    for k in pairs(right.child) do       
+    for k in pairs(right.child) do               
         node, rseq, cnt = Trie.searchRec(left, right.child[k].preSeq)       
-        if rseq == right.child[k].preSeq then
+        if rseq == right.child[k].preSeq then            
             node.child[rseq[1]] = right.child[k]
         -- insert word while keeping other
-        elseif #node.preSeq == cnt-1 and #rseq ~= 0 then 
+        elseif #node.preSeq == cnt-1 and #rseq ~= 0 then          
+            right.child[k].preSeq = rseq
             node.child[rseq[1]] = right.child[k]
         --insert word that is prefix of existing node
         elseif #rseq == 0 and #node.preSeq == cnt-1 then
             node.ending = true
-            root.s = root.s - 1
+            root.s = root.s - 1            
             Trie.mergeRec(node, right.child[k])
         
         elseif #rseq == 0 then 
             local oldChild = node.child
             local newPre = lib.subtab(node.preSeq, 1, cnt-1)
             local newPost = lib.subtab(node.preSeq, cnt, #node.preSeq)
-            node.child = {}
+            node.child = {}            
             node.child[newPost[1]] = Trie.newNode(newPost, true)
             node.child[newPost[1]].child = oldChild
             node.preSeq = newPre
-            node.ending = right.child[k].ending
+            node.ending = right.child[k].ending                
             Trie.mergeRec(node, right.child[k], root)
         --insert word while splitting node
-        elseif node.preSeq[cnt] ~= rseq[1] then
+        elseif node.preSeq[cnt] ~= rseq[1] then       
             local oldChild = node.child
             local newPre = lib.subtab(node.preSeq, 1, cnt-1)
             local newPost = lib.subtab(node.preSeq, cnt, #node.preSeq)
@@ -213,7 +205,6 @@ print(r:string())
 print(r:find(('toasters'):array()))
 
 
----[[
 local t = Trie.new ()
 local r = Trie.new { {1 ,2 ,3 ,4 ,5} , {1 ,2 ,6 ,6 ,6 } }
 print ( t : size () , r : size ()) --> 0 2
@@ -223,24 +214,29 @@ print ( r : find {1 ,2 ,3 ,4 ,5}) --> true
 t : add {'a','bb','ccc'}
 t:add {1 ,2 ,3}
 print (#t , t : capacity ()) --> 2 3
-print(t:string(), r:string())
 
 
+print('printing contents:\n ', t:string(), r:string())
 
----[[
-print(#t, #r)
+
+--print(#t, #r)
 t : merge ( r )
-t:add({1,2,6,7,7})
+
+print('printing contents:\n ', t:string(), r:string())
+
+
+--t:add({1,2,6,7,7})
 t:add({'a', 'bb', 'ccc'})
-print (# t ) --> 4
---[[
+
+print (# t) --> 4
+
 print ( t : find {1 ,2 ,3}) --> false
 print(t:find({1,2,3,4,5}))
 print(t:find({1,2,6,6,6}))
 print(t:find({1,2}))
 print(t:find({1,2,6,7}))
---]]
-print(t:string())
---print (( r + Trie.new {1 ,2 ,6 ,7 ,7 , 'a'}): capacity ()) --> 7
 
---]]
+print(t:string())
+print(r:string())
+print (( r + Trie.new {{1 ,2 ,6 ,7 ,7 , 'a'}}):capacity()) --> 7
+

@@ -1,4 +1,4 @@
-import math, random
+
 import sys, getopt
 import numpy as np
 import os
@@ -31,20 +31,27 @@ def load_file(fin, fout):
    fout = open(fout, 'w')   
    for i in board:
       for j in i:
-         if j == 0:
+         if j == 0 or j == -1:
             fout.write('.')
          else:
             fout.write('#')
       fout.write('\n')
    
    fout.close()
-   f.close()  
+   f.close()
+
+def count(it):
+    cnt = 0
+    for _ in it: cnt += 1
+
+    return cnt
 
 def and_product(states):
-    res = states[0]
-    for i in range(1, len(states)):
+    res = list(map(lambda x: -1 if x == 0 else x,next(states)))
+    for state in states:
         for k in range(0, len(res)):
-            if states[i][k] == 1 and res[k] == 1: res[k] = 1
+            if state[k] == 1 and res[k] == 1: res[k] = 1
+            elif state[k] == 0 and res[k] == -1: res[k] = -1
             else: res[k] = 0
     return res
 
@@ -52,24 +59,28 @@ def draw_state(starting, state, val):
     res = starting.copy()
     for i in range(len(state)):
         for j in range(0, val[i]):
+            if res[state[i]+j] == -1: return []
             res[state[i]+j] = 1
     return res
         
 def ok_state(line, valX):
+    if len(line) == 0: return False
     i = 0
     for i in range(len(line)):
         if line[i] == 1:
             break
-    for val in valX:
+    for v in range(len(valX)):
         cnt = 0      
         for b in line[i:]:
             if b == 1: cnt += 1
             else: break
+        if cnt != valX[v]: return False
+        if v == len(valX)-1: break                
         for i in range(i + cnt+1,len(line)):
             if line[i] == 1:
-                break
-
-        if cnt != val: return False
+                break                
+    for i in range(i + cnt+1,len(line)):
+        if line[i] == 1: return False         
     return True
 
 def possible_move(starts, valX, size):
@@ -85,9 +96,7 @@ def possible_states(line, valX):
     for i in range(1, len(valX)):
         starts.append(starts[i-1] + 1 + valX[i-1])      
     i = len(starts)-1
-    # move last blocks first
     while(i >= 0): 
-        #print(starts, valX, line)
         pm = possible_move(starts, valX, len(line))       
         if i == 0 and not pm:
             break
@@ -102,100 +111,47 @@ def possible_states(line, valX):
 
     return states
 
-        
-
-# [#.###]
-# [#.##.]
-# [#..##]
-# [.#.##]
-
 def solver(valX, valY, X, Y):
     board = np.zeros([X,Y], dtype=int)
-    t = 0
     s = board.sum()
-    #'''
+    pStatesX, pStatesY = [], []
+    for i in range(X):
+        pStatesX.append(possible_states(board[i, :], valX[i]))
+    for i in range(Y):
+        pStatesY.append(possible_states(board[:, i], valY[i]))
+
     while(True):
-        statesX = []
-        statesY = []
+        statesX, statesY = [], []
         
         for i in range(X):
-            statesX.append(and_product(list(filter(
+            statesX.append(and_product(filter(
                 lambda y: ok_state(y, valX[i]),
                 map(
                     lambda x: draw_state(board[i,:], x, valX[i]),
-                    possible_states(board[i,:], valX[i])
+                    pStatesX[i]
                 )
-            ))))
-             
+            )))
         for i in range(Y):
-            statesY.append(and_product(list(filter(
-                lambda y: ok_state(y, valY[i]),
+            statesY.append(and_product(filter(
+                lambda y:  ok_state(y, valY[i]),
                 map(
                     lambda x: draw_state(board[:,i], x, valY[i]),
-                    possible_states(board[:,i], valY[i])
+                    pStatesY[i]
                 )
-            ))))
-        #print(statesY, '\n', statesX)
-        for i in range(X):
-            for k in range(X):
-                if statesX[i][k] == 1: board[i,k] = 1
+            )))
 
-        for i in range(Y):
+        for i in range(X):
             for k in range(Y):
-                if statesY[i][k] == 1: board[k][i] = 1
-        ns = board.sum()
+                if statesX[i][k] == 1: board[i,k] = 1
+                elif statesX[i][k] == -1 : board[i,k] = -1
+        for i in range(Y):
+            for k in range(X):
+                if statesY[i][k] == 1: board[k,i] = 1
+                elif statesY[i][k] == -1 : board[k,i] = -1                    
+        ns = np.abs(board).sum()
         if ns == s: break
         s = ns
-        '''
-        j = 1
-        
-        st = possible_states(board[j,:], valX[j])
-        tmp = []
-        print(board, "\n")
-        for s in st:
-            print(s, board[j,:])
-            d = draw_state(board[j,:], s, valX[j]) 
-            print(d)
-            if ok_state(d, valX[j]):
-                tmp.append(d)
-                print('OK')
-
-        print('?', valX[j])
-        print(and_product(tmp))
-        print(statesX[j])
-        break
-        #
-        #
-        #
-        #TODO odrzucic stan jako niepoprawny jesli po wstawieniu go na boarda warunki nie sa spelnione(valX/Y)
-        #
-        #
-        #
-        '''
-        '''
-        st = possible_states(np.zeros(Y), valY[j])
-        tmp = []
-    
-        for s in st: 
-            tmp.append(draw_state(np.zeros(Y), s, valY[j]))
-            #print(draw_state(np.zeros(Y, dtype=int), s, valY[j]))
-        print('?', valY[j])
-        print(and_product(tmp))#
-        '''        
     return board
-'''
-    k = 0
-    states = possible_states(np.zeros(X), valX[k])
-
-    draw_states = []
-    for state in states: 
-        #print(state)
-        #print(draw_state(np.zeros(X, dtype=int), state, valX[k]))
-        drawn = draw_state(np.zeros(X, dtype=int), state, valX[k])
-        if ok_state(drawn, valX[k]): draw_states.append(drawn)
-    print("res : ", draw_states)
-    print(and_product(draw_states))
-'''
 
 
 

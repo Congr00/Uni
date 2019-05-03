@@ -24,7 +24,7 @@ static void stackDump (lua_State *L)
             case LUA_TSTRING  : val_str = lua_tostring(L, i);                  break;
             case LUA_TNUMBER  : val_str = std::to_string(lua_tonumber(L, i));  break;
             case LUA_TBOOLEAN : val_str = std::to_string(lua_toboolean(L, i)); break;
-            default           : val_str = "unknown";                           break;
+            default           : val_str = std::to_string(t);                    break;
         }
         std::cout << format_string(val_str) << " " << i << std::endl;
     }

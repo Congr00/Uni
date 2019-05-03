@@ -72,7 +72,8 @@ $testCases1 = {
 
 
 $testCases2 = {
-    "A man, a plan, a canal -- Panama" => {"a"=>3, "man"=>1, "plan"=>1, "canal"=>1, "panama"=>1},
+  'A man, a plan, a canal -- Panama' =>
+  { 'a' => 3, 'man' => 1, 'plan' => 1, 'canal' => 1, 'panama' => 1 },
     "Madam, I'm Adam!" => {"madam"=>1, "im" =>1, "adam"=>1},
     "Abracadabra" => {"abracadabra" => 1},
     "" => {},

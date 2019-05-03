@@ -728,7 +728,7 @@ zad2:
 """
 zad4:
   defaults:
-    timeout: 2 # second
+    timeout: 5 # second
     input_file: zad_input.txt
     output_file: zad_output.txt
   validator: prolog_validator
