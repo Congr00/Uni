@@ -115,7 +115,6 @@ def possible_states(line, valX):
             starts[j] += 1
 
     return states
-#np.array(list(filter(lambda x: (x.tolist() not in y), np.argwhere(x == 1))))
 
 def finished(board, valX, valY):
     for l in range(0, board.shape[0]):
@@ -221,8 +220,6 @@ def solver(valX, valY, X, Y):
             stateTracker.append((board.copy(), prevShoots.copy()))
             board[r[0], r[1]] = 1
             wrong = False
-
-
 
     return board
 
