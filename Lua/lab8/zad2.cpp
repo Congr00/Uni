@@ -82,7 +82,7 @@ std::pair<int, int> make_move(lua_State *L, const char* symbol){
     lua_getglobal(L, "AI");
     // check if its function
     lua_pushstring(L, symbol);
-    lua_newtable(L);     
+    lua_newtable(L);
     for(int i = 0; i < 3; ++i){
         lua_pushinteger(L, i+1);         
         lua_newtable(L);       
@@ -151,6 +151,7 @@ int main(int argc, char** argv){
 
     load_ai(AI1, argv[1]);
     load_ai(AI2, argv[2]);
+
     if(argc != 4)
         print_board();
 
@@ -159,7 +160,7 @@ int main(int argc, char** argv){
     int scores[2] = {0, 0};
 
     for(int i = 0; i < count; ++i){
-        // who.shuffle()
+
         who[0] = rand() & 1; who[1] = !who[0];
         int cond = 0;
 
@@ -171,6 +172,10 @@ int main(int argc, char** argv){
             }
 
             auto res = make_move(players[who[0]], "O");
+            if(board[res.second][res.first] != ' '){
+                std::cout << "AI made wrong move!\n";
+                return EXIT_FAILURE; 
+            }
             board[res.second][res.first] = 'O';
             if(argc != 4){
                 std::cout<< "first ai moved:\n";
@@ -180,6 +185,10 @@ int main(int argc, char** argv){
             if(cond != -1) break;
 
             res = make_move(players[who[1]], "X");
+            if(board[res.second][res.first] != ' '){
+                std::cout << "AI made wrong move!\n";
+                return EXIT_FAILURE; 
+            }
             board[res.second][res.first] = 'X';
 
             if(argc != 4){
@@ -190,14 +199,11 @@ int main(int argc, char** argv){
             if(cond != -1) break;        
         }
 
-        //if(cond == 1)      ai1_s++;
-        //else if(cond == 2) ai2_s++;
-
         if(cond == 1) scores[who[0]] ++;
         else if(cond == 2) scores[who[1]] ++;
         clear_board();
     }
-    //count = ai1_s + ai2_s;
+
     count = scores[0] + scores[1];
     if(argc == 4)
         std::cout << "AI1 win: " << scores[0] * 100 / count  << "% AI2 win: " << scores[1] * 100 / count << "%\n";  

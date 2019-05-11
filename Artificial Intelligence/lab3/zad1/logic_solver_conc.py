@@ -120,6 +120,7 @@ def solver(valX, valY, X, Y):
     for i in range(Y):
         pStatesY.append(possible_states(board[:, i], valY[i]))
 
+
     while(True):
         statesX, statesY = [], []
         

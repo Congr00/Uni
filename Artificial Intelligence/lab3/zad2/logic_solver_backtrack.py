@@ -1,6 +1,7 @@
 
 import sys, getopt
 import numpy as np
+import copy
 import os
 
 import random
@@ -50,7 +51,8 @@ def count(it):
 
 def and_product(states):
 
-    ln = next(states, [])
+    #ln = next(states, [])
+    ln = next(iter(states), [])
     if len(ln) == 0: return []
     res = list(map(lambda x: -1 if x == 0 else x, ln))
     for state in states:
@@ -61,7 +63,8 @@ def and_product(states):
     return res
 
 def draw_state(starting, state, val):
-    res = starting.copy()
+    #res = starting.copy()
+    res = copy.copy(starting)
     for i in range(len(state)):
         for j in range(0, val[i]):
             if res[state[i]+j] == -1: return []
@@ -106,7 +109,8 @@ def possible_states(line, valX):
         if i == 0 and not pm:
             break
         if pm: 
-            states.append(starts.copy())
+            #states.append(starts.copy())
+            states.append(copy.copy(starts))
             i = len(starts)-1
         else: 
             i -= 1
@@ -130,18 +134,42 @@ def finished(board, valX, valY):
         if lineY.sum() != np.array(valY[l]).sum(): return False    
     return True
 
+def progress(board, valX):
+    xsum = 0
+    valsum = 0
+    for l in range(0, board.shape[0]):
+        lineX = board[l,:]
+        lineX = np.array(list(map(lambda x: 0 if x == -1 else x, lineX)))
+        xsum += lineX.sum() 
+        valsum += np.array(valX[l]).sum()
+    return xsum * 100 / valsum
+
+def progress__(board, valX):
+    xsum = 0
+    valsum = 0
+    for l in range(0, board.shape[0]):
+        lineX = board[l,:]
+        lineX = np.array(list(map(lambda x: 0 if x == -1 else x, lineX)))
+        xsum += lineX.sum() 
+        valsum += np.array(valX[l]).sum()
+    return xsum , valsum   
+
+def d_app(l, x):
+    l.append(tuple(x+[-1]))
+    l.append(tuple(x+[1]))
+
 
 def solver(valX, valY, X, Y):
+    # przerobic na deterministyczne!!!
     stateTracker = []
     board = np.zeros([X,Y], dtype=int)
-
     pStatesX, pStatesY = [], []
     for i in range(X):
         pStatesX.append(possible_states(board[i, :], valX[i]))
     for i in range(Y):
         pStatesY.append(possible_states(board[:, i], valY[i]))
     
-    stateTracker.append((board, []))
+    stateTracker.append((board, set()))
 
     while(True):
         
@@ -157,7 +185,7 @@ def solver(valX, valY, X, Y):
                         pStatesX[i]
                     )
                 ))
-                if len(res) == 0: 
+                if len(res) == 0:
                     wrong = True
                     break
                 
@@ -176,7 +204,7 @@ def solver(valX, valY, X, Y):
                 
                 statesY.append(res)
             
-            if wrong == True: break
+            if wrong != False: break
             
             for i in range(X):
                 for k in range(Y):
@@ -191,34 +219,50 @@ def solver(valX, valY, X, Y):
             if ns == s: break
             s = ns
 
-        print("step: ", s, "states: ", len(stateTracker))
+        print('finished: {:0.2f} % {}'.format(progress(board, valX), len(stateTracker)))
 
         if finished(board, valX, valY) : break
+
         # we are stuck so save state and make random shoot
-        #TODO?: random -1 or 1
         if wrong == False:
-            r = list(filter(lambda x: x.tolist(), np.argwhere((board != -1) & (board != 1))))            
-            r = r[random.randint(0, len(r)-1)]
-            if len(stateTracker) == 0:
-                stateTracker.append((board.copy(), [list(r.tolist())]))
-            else:                
-                _, prev = stateTracker[-1]
-                prev.append(list(r.tolist()))
-                stateTracker.append((board.copy(), prev.copy()))
-            board[r[0], r[1]] = 1
+            #prev = stateTracker[-1][1].copy()           
+            #prev = copy.copy(stateTracker[-1][1])
+            prev = set()
+            l = []      
+            r = (np.argwhere((board != -1) & (board != 1))).tolist()
+            for val in r: d_app(l, val)
+            l = list(filter(lambda x: x not in prev, l))
+            if len(l) == 0: # special case
+                wrong = True
+            else: 
+                l = l[random.randint(0, len(l)-1)]                                  
+                prev.add(l)
+                #stateTracker.append((board.copy(), prev.copy()))
+                stateTracker.append((copy.copy(board), copy.copy(prev)))
+                board[l[0], l[1]] = l[2]
 
         # Backtrack time cuz something went wrong
-        while(wrong):
-            print('backtracking...')
+        while(wrong != False):
             board, prevShoots = stateTracker.pop()
             
-            r = list(filter(lambda x: x.tolist() not in prevShoots, np.argwhere((board != -1) & (board != 1))))
-            if len(r) == 0:
+            l = []      
+            r = (np.argwhere((board != -1) & (board != 1))).tolist()
+            for val in r: d_app(l, val)
+            l = list(filter(lambda x: x not in prevShoots, l))      
+            sum1, sum2 = progress__(board, valX)
+            print('backtracking...',sum1, sum2)                     
+            if len(l) < len(r)-1: continue
+            #if (sum2 - sum1) > 10:
+            #    if len(l) < (sum2 - sum1) / 5 * 4:
+            #        continue
+            if len(l) == 0:
                 continue
-            r = r[random.randint(0, len(r)-1)]
-            prevShoots.append(r.tolist())
-            stateTracker.append((board.copy(), prevShoots.copy()))
-            board[r[0], r[1]] = 1
+            
+            l = l[random.randint(0, len(l)-1)]            
+            prevShoots.add(l)
+            #stateTracker.append((board.copy(), prevShoots.copy()))
+            stateTracker.append((copy.copy(board), copy.copy(prevShoots)))            
+            board[l[0], l[1]] = l[2]
             wrong = False
 
     return board

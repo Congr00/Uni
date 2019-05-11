@@ -26,7 +26,7 @@ static void stackDump (lua_State *L)
             case LUA_TBOOLEAN : val_str = std::to_string(lua_toboolean(L, i)); break;
             default           : val_str = std::to_string(t);                    break;
         }
-        std::cout << format_string(val_str) << " " << i << std::endl;
+        std::cout << format_string(val_str) << " " << format_string(lua_typename(L, t)) << " " << i << std::endl;
     }
     std::cout << "EoS<===" << std::endl;
 }

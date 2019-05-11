@@ -66,7 +66,7 @@ bool find_global(lua_State* L, const char *gname){
 }
 
 void find_all(lua_State* L){
-    lua_pushglobaltable (L);
+    lua_pushglobaltable(L);
     lua_pushnil(L);
      while (lua_next(L, -2) != 0) {
        std::string key = lua_tostring(L, -2);
@@ -110,7 +110,5 @@ int main(int argc, char** argv){
 
         board.clear();
     }
-
-
     return EXIT_SUCCESS;
 }
