@@ -1,7 +1,6 @@
 #include <lua.hpp> 
 #include <vector>
 
-
 #include <iostream>
 #include <string>
 
@@ -14,8 +13,7 @@ std::string format_string(std::string res){
     return res.append(std::string(diff, ' '));
 } 
 
-static void stackDump (lua_State *L) 
-{
+static void stackDump (lua_State *L) {
     std::cout << "===>BoS" << std::endl;
     int top = lua_gettop(L);
     for(int i = 1; i <= top; i++){
@@ -34,8 +32,7 @@ static void stackDump (lua_State *L)
 }
 
 
-void error (lua_State *L, const char *fmt, ...) 
-{
+void error (lua_State *L, const char *fmt, ...){
   va_list argp;
   va_start(argp, fmt);
   vfprintf(stderr, fmt, argp);
@@ -69,7 +66,7 @@ static int filter(lua_State *L){
         lua_pushnil(L);
         lua_copy(L, 1, -1); // copy function to call it
 
-        lua_pushinteger(L, i);     
+        lua_pushinteger(L, i);
         lua_gettable(L, -4); // get ith value from input table
         if (lua_isnil(L, -1)){
             lua_pop(L, 2);
@@ -145,14 +142,11 @@ static int merge(lua_State *L){
     for(int i = 2; i <= top; i++){
         if(! lua_istable(L, i))
             error(L, "argument isnt seqence!");           
-     /* table is in the stack at index 't' */
         lua_pushnil(L);  /* first key */
         while (lua_next(L, i) != 0) {
-            /* uses 'key' (at index -2) and 'value' (at index -1) */
 
             // check if key exists in stack[1]
             // if doesnt insert it!
-            //copy key from -2
             lua_pushnil(L);
             lua_copy(L, -3, -1);
             lua_gettable(L, 1);

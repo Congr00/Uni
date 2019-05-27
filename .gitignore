@@ -32,3 +32,4 @@ __pycache__
 *_input.txt
 *_output.txt
 /.stversions
+*.so
