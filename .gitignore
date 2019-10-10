@@ -6,6 +6,7 @@
 *.toc
 *.test
 /.vscode
+debug/
 *.tar*
 *.class
 *.ipynb_checkpoints
@@ -33,4 +34,5 @@ __pycache__
 *_output.txt
 /.stversions
 *.so
+*.ml~
 policy_for*.txt
