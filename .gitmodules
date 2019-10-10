@@ -1,3 +1,6 @@
 [submodule "AISD/pracownia/AISD2018-TESTY"]
 	path = AISD/pracownia/AISD2018-TESTY
 	url = https://github.com/mbronek7/AISD2018-TESTY.git
+[submodule "Lua/LuaProject"]
+	path = Lua/LuaProject
+	url = https://github.com/Congr00/LuaProject
