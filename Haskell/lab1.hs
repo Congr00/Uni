@@ -114,6 +114,7 @@ without n (x:xs)
 det :: Show a => Num a => Matrix a -> a
 det m1
     | (length . fromMatrix $ m1) == 1 = head . head . fromMatrix $ m1
+    | not $ uncurry (==) $ getDim m1 = error ("Matrix is not a Square!")
     | otherwise = sum $ map (uncurry (*) . (det . fst &&& snd)) $ zip minors $ map (uncurry (*)) $ zip x (cycle [1, -1])
         where minors = map Matrix $ transpose $ map (map (uncurry without) . zip [0..(length x) - 1] . repeat) xs
               a = fromMatrix m1
@@ -143,27 +144,84 @@ base = 1 + (floor . sqrt . fromInteger . toInteger $ (maxBound :: Word))
 -- 4294967296
 --
 -- zad6
-instance Num Natural where
-    Natural x1 + Natural x2 = x1
-    x1 * x2 = x1
-    abs = id
-    signum (Natural x) = if head x /= 0 then 1 else 0
-    fromInteger x = Natural [fromInteger x] -- zoabczyc czy wieksze od base
-    negate = id
--- >>> (Natural [1]) + (Natural [base])
--- 4294967297
+remainder_shift :: Natural -> Natural
+remainder_shift (Natural n) = Natural $ normalize $ reverse $ shift (reverse n) 0
+    where
+        shift :: [Word] -> Word -> [Word]
+        shift [] 0 = []
+        shift [] rem = [rem]
+        shift (h:t) rem = if nv >= base then (nv-rest*base):shift t rest
+                          else nv:shift t 0
+            where
+                nv = h + rem
+                rest = nv `div` base
+
+normalize :: [Word] -> [Word]
+normalize [n] = [n]
+normalize (0:t) = normalize t
+normalize n = n
+
+denormalize :: [Word] -> Int -> [Word]
+denormalize x n = if xlength > n then x else denormalize' x (n-xlength)
+    where
+        xlength = length x
+        denormalize' [] 0 = []
+        denormalize' (h:t) 0 = h:denormalize' t 0
+        denormalize' y n = 0:denormalize' y (n-1)
+-- >>> remainder_shift (Natural [0,0,9*base+1])
+-- 9#1
 --
--- zad7
+-- >>> denormalize (fromNatural (Natural [1])) 2
+-- [0,1]
+--
+substract :: [Word] -> [Word] -> [Word]
+substract n1 n2 = reverse $ substract' (reverse n1) (reverse n2) 0
+    where
+        substract' [] [] _ = []
+        substract' (h:t) [] rem = (h-rem):substract' t [] 0
+        substract' (h1:t1) (h2:t2) rem = (nv-rem):substract' t1 t2 nrem
+            where
+                nv = if h1 >= h2 then h1 - h2 else h1+base-h2
+                nrem = if h1 < h2 then 1 else 0
+instance Num Natural where
+    Natural x1 + Natural x2 = remainder_shift $ Natural $ zipWith (+) (denormalize x1 mx) (denormalize x2 mx)
+        where
+            mx = max (length x1) (length x2)
+    x1 - x2 = if x1 < x2 then error "cannot go under 0 in Natural numbers"
+              else remainder_shift $ Natural $ substract (fromNatural x1) (fromNatural x2)
+    Natural x1 * Natural x2 = remainder_shift $ foldl (\acc (x,y) -> (remainder_shift . Natural $ map (*y) (x2 ++ replicate x 0)) + acc) (Natural [0]) (zip [0..] $ reverse x1)
+    abs = id
+    signum (Natural x) = if head (normalize x) /= 0 then 1 else 0
+    fromInteger x = Natural $ map fromInteger $ find x
+                        where
+                            find :: Integer -> [Integer]
+                            find i = if i < ibase then [i]
+                                     else (i `div` ibase):find (i `mod` ibase) 
+                            ibase = toInteger base
+-- >>>(Natural [base-1]) * (Natural [base-1])
+-- 4294967294#1
+--
+-- >>> Natural [1,1,1] - Natural [2]
+-- 1#0#4294967295
+--
+-- >>> Natural [1,1,1] < Natural [2]
+-- False
+--
+-- >>> Natural [base-1,base-1,base-1] * Natural [base-1, base-1,base-1] + Natural [base-1, base-1,base-1]
+-- 4294967295|4294967295|4294967295|0|0|0
+--
+-- >>> fromInteger (toInt (Natural [100,1]))
+-- 429496729601
+--
+--zad 7
 instance Eq Natural where
     x1 == x2 = all id $ zipWith (==) (fromNatural x1) (fromNatural x2)
 instance Ord Natural where
-    (Natural x1) `compare` (Natural x2) = x1 `compare` x2 
--- >>> (Natural [2,1,4]) > Natural [2,1,4]
--- False
---
--- zad8
-instance Integral Natural where
+    (Natural x1) `compare` (Natural x2) = (denormalize x1 mx) `compare` (denormalize x2 mx)
+            where
+            mx = max (length x1) (length x2)
 -- zad9
 instance Show Natural where
-    show n = concatMap (show) (fromNatural n)
+    show (Natural n) = tail $ concatMap ( ('|':) . show) n
 
+toInt (Natural n) = foldl (\acc (pow, x) -> acc + x * ((toInteger base) ^ pow)) 0 $ zip [0..] $ reverse (map toInteger n)
