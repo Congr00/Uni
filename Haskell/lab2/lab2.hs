@@ -167,14 +167,48 @@ tree23 = (Node2 (Node2 Empty23 2 Empty23) 5 (Node3 (Node2 Empty23 6 Empty23) 7 E
 data InsResult a = BalancedIns (Tree23 a) | Grown (Tree23 a) a (Tree23 a)
 
 ins :: Ord a => a -> Tree23 a -> InsResult a
-ins x Empty23 = BalancedIns (Node2 Empty23 x Empty23)
-ins x (Node2 l n r)
+ins x Empty23 = Grown Empty23 x Empty23
+ins x t@(Node2 l n r)
     | n == x = BalancedIns t
     | x < n  = BalancedIns (insert23 x l)
-    | n < x  = BalancedIns (insert23 x r)
-ins x (Node2 l n1 m n2 r)
-    |
+    | x > n  = BalancedIns (insert23 x r)
+ins x t@(Node3 l n1 m n2 r)
+    | n1 == x || n2 == x = BalancedIns t
+    | x < n1 = case l of 
+                Empty23 -> Grown (Node2 Empty23 x Empty23) n1 (Node2 Empty23 n2 r)
+                _       -> BalancedIns (insert23 x l)
+    | n1 < x && x < n2 = case m of
+                          Empty23 -> Grown (Node2 l n1 Empty23) x (Node2 Empty23 n2 r)
+                          _       -> BalancedIns (insert23 x m)
+    | n2 < x = case r of
+                Empty23 -> Grown (Node2 l n1 Empty23) n2 (Node2 Empty23 x Empty23)
 
 insert23 :: Ord a => a -> Tree23 a -> Tree23 a
-insert23 x Empty23 = Node2 Empty23 x Empty23
-
+insert23 x t@(Node2 Empty23 n Empty23)
+    | n == x = t
+    | n < x  = Node3 Empty23 n Empty23 x Empty23
+    | x < n  = Node3 Empty23 x Empty23 n Empty23
+insert23 x t@(Node2 l n r)
+    | n == x = t
+    -- rot right node2
+    | x < n = case ins x l of
+                (BalancedIns tree) -> Node2 tree n r
+                (Grown l' x' r')   -> Node3 l' n r' x' r
+    -- rot left node2
+    | x > n = case ins x r of
+                (BalancedIns tree) -> Node2 l n r
+                (Grown l' x' r')   -> Node3 l n l' x' r'
+insert23 x t@(Node3 l n1 m n2 r)
+    | n1 == x || n2 == x = t
+    -- rot right node3
+    | x < n1 = case ins x l of
+                (BalancedIns tree) -> Node3 tree n1 m n2 r
+                (Grown l' x' r')   -> Node2 (Node2 l' x' r') n1 (Node2 m n2 r)
+    -- rot middle
+    | n1 < x && x < n2 = case ins x m of
+                (BalancedIns tree) -> Node3 tree n1 m n2 r
+                (Grown l' x' r')   -> Node2 (Node2 l n1 l') x' (Node2 r' n2 r)
+    -- rot left node3
+    | n2 < x = case ins x m of
+                (BalancedIns tree) -> Node3 tree n1 m n2 r
+                (Grown l' x' r')   -> Node2 (Node2 l n1 m) n2 (Node2 l' x' r')
