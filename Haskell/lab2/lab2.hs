@@ -170,8 +170,8 @@ ins :: Ord a => a -> Tree23 a -> InsResult a
 ins x Empty23 = Grown Empty23 x Empty23
 ins x t@(Node2 l n r)
     | n == x = BalancedIns t
-    | x < n  = BalancedIns (insert23 x l)
-    | x > n  = BalancedIns (insert23 x r)
+    | x < n  = BalancedIns (Node3 l x Empty23 n r)
+    | x > n  = BalancedIns (Node3 l n Empty23 x r)
 ins x t@(Node3 l n1 m n2 r)
     | n1 == x || n2 == x = BalancedIns t
     | x < n1 = case l of 
@@ -196,7 +196,7 @@ insert23 x t@(Node2 l n r)
                 (Grown l' x' r')   -> Node3 l' n r' x' r
     -- rot left node2
     | x > n = case ins x r of
-                (BalancedIns tree) -> Node2 l n r
+                (BalancedIns tree) -> Node2 l n tree
                 (Grown l' x' r')   -> Node3 l n l' x' r'
 insert23 x t@(Node3 l n1 m n2 r)
     | n1 == x || n2 == x = t
