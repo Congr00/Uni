@@ -32,17 +32,18 @@ ipermF (x:xs) = concatMap insert (ipermF xs) where
 
 insertC :: a -> [a] -> [[a]]
 insertC x [] = [[x]]
-insertC x (h:t) = [x:(h:t) | y <- map (h:) (insertC x t)]
+insertC x ys@(h:t) = [x:ys] ++ [ y | y <- map (h:) (insertC x t)]
 
 -- >>> insertC 1 [2,3]
--- [[1,2,3]]
+-- [[1,2,3],[2,1,3],[2,3,1]]
 --
 
 ipermC :: Ord a => [a] -> [[a]]
 ipermC []= [[]]
 ipermC (h:t) = [ x | x <- (concatMap (insertC h) (ipermC t))]
+
 -- >>> ipermC [1,2,3]
--- [[1,1,1]]
+-- [[1,2,3],[2,1,3],[2,3,1],[1,3,2],[3,1,2],[3,2,1]]
 --
 
 spermF :: [a] -> [[a]]
@@ -55,8 +56,7 @@ spermC :: Ord a => [a] -> [[a]]
 spermC []= [[]]
 spermC l = [a:x | a <- l, x <- (spermC $ delete a l)]
 -- >>> spermC [1,2,3]
--- <interactive>:756:2: error:
---     Variable not in scope: spermC :: [Integer] -> t
+-- [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
 --
 
 qsortF :: Ord a => [a] -> [a]
@@ -66,10 +66,10 @@ qsortF (x:xs) = qsortF (filter (<= x) xs) ++ [x] ++ qsortF (filter (> x) xs)
 qsortC :: Ord a => [a] -> [a]
 qsortC [] = []
 qsortC [a] = [a]
-qsortC l = [ x | let (h:t) = l, x <- (qsortC (filter (<= h) t) ++ [h] ++ qsortC (filter (> h) t))]
+qsortC (h:t) = [ x | x <- (qsortC [f | f <- t , f <= h] ++ [h] ++ qsortC ([f | f <- t, f > h]))]
 
--- >>> qsortC [-1,4,63,5,6,3,0]
--- [-1,0,3,4,5,6,63]
+-- >>> qsortC [-1,4,63,5,6,3,0,-2,0]
+-- [-2,-1,0,0,3,4,5,6,63]
 --
 
 (<+>) :: Ord a => [a] -> [a] -> [a]
@@ -164,51 +164,74 @@ tree23 = (Node2 (Node2 Empty23 2 Empty23) 5 (Node3 (Node2 Empty23 6 Empty23) 7 E
 -- Just 7
 --
 
+-- zad 8
+
 data InsResult a = BalancedIns (Tree23 a) | Grown (Tree23 a) a (Tree23 a)
 
 ins :: Ord a => a -> Tree23 a -> InsResult a
 ins x Empty23 = Grown Empty23 x Empty23
+ins x t@(Node2 Empty23 n Empty23)
+    | n == x = BalancedIns t
+    | n < x  = BalancedIns (Node3 Empty23 n Empty23 x Empty23)
+    | n > x  = BalancedIns (Node3 Empty23 x Empty23 n Empty23)
 ins x t@(Node2 l n r)
     | n == x = BalancedIns t
-    | x < n  = BalancedIns (Node3 l x Empty23 n r)
-    | x > n  = BalancedIns (Node3 l n Empty23 x r)
+    | x < n  = BalancedIns $ case ins x l of
+                    -- rot right node2
+                    BalancedIns t' -> Node2 t' n r
+                    Grown l' x' r' -> Node3 l' x' r' n r
+    | x > n  = BalancedIns $ case ins x r of
+                    -- rot left node2
+                    BalancedIns t' -> Node2 l n t'
+                    Grown l' x' r' -> Node3 l n l' x' r'
 ins x t@(Node3 l n1 m n2 r)
     | n1 == x || n2 == x = BalancedIns t
-    | x < n1 = case l of 
-                Empty23 -> Grown (Node2 Empty23 x Empty23) n1 (Node2 Empty23 n2 r)
-                _       -> BalancedIns (insert23 x l)
+    | x < n1 = case l of
+                Empty23 -> Grown (Node2 Empty23 x Empty23) n1 (Node2 m n2 r)
+                _       -> case ins x l of
+                    -- rot right node3
+                    BalancedIns t' -> BalancedIns(Node3 t' n1 m n2 r)
+                    Grown l' x' r' -> Grown (Node2 l' x' r') n1 (Node2 m n2 r)
     | n1 < x && x < n2 = case m of
                           Empty23 -> Grown (Node2 l n1 Empty23) x (Node2 Empty23 n2 r)
-                          _       -> BalancedIns (insert23 x m)
+                          _       -> case ins x m of
+                              -- rot middle node3
+                                BalancedIns t' -> BalancedIns(Node3 t' n1 m n2 r)
+                                Grown l' x' r' -> Grown (Node2 l n1 l') x' (Node2 r' n2 r)
     | n2 < x = case r of
-                Empty23 -> Grown (Node2 l n1 Empty23) n2 (Node2 Empty23 x Empty23)
+                Empty23 -> Grown (Node2 l n1 m) n2 (Node2 Empty23 x Empty23)
+                _       -> case ins x r of
+                    -- rot left node3
+                    BalancedIns t' -> BalancedIns(Node3 t' n1 m n2 r)
+                    Grown l' x' r' -> Grown (Node2 l n1 m) n2 (Node2 l' x' r')
+
 
 insert23 :: Ord a => a -> Tree23 a -> Tree23 a
-insert23 x t@(Node2 Empty23 n Empty23)
-    | n == x = t
-    | n < x  = Node3 Empty23 n Empty23 x Empty23
-    | x < n  = Node3 Empty23 x Empty23 n Empty23
-insert23 x t@(Node2 l n r)
-    | n == x = t
-    -- rot right node2
-    | x < n = case ins x l of
-                (BalancedIns tree) -> Node2 tree n r
-                (Grown l' x' r')   -> Node3 l' n r' x' r
-    -- rot left node2
-    | x > n = case ins x r of
-                (BalancedIns tree) -> Node2 l n tree
-                (Grown l' x' r')   -> Node3 l n l' x' r'
-insert23 x t@(Node3 l n1 m n2 r)
-    | n1 == x || n2 == x = t
-    -- rot right node3
-    | x < n1 = case ins x l of
-                (BalancedIns tree) -> Node3 tree n1 m n2 r
-                (Grown l' x' r')   -> Node2 (Node2 l' x' r') n1 (Node2 m n2 r)
-    -- rot middle
-    | n1 < x && x < n2 = case ins x m of
-                (BalancedIns tree) -> Node3 tree n1 m n2 r
-                (Grown l' x' r')   -> Node2 (Node2 l n1 l') x' (Node2 r' n2 r)
-    -- rot left node3
-    | n2 < x = case ins x m of
-                (BalancedIns tree) -> Node3 tree n1 m n2 r
-                (Grown l' x' r')   -> Node2 (Node2 l n1 m) n2 (Node2 l' x' r')
+insert23 x t = case ins x t of
+        BalancedIns t -> t
+        Grown l n r -> Node2 l n r
+
+-- zad 10
+
+data Tree234 a = N2 (Tree234 a) a (Tree234 a)
+    | N3 (Tree234 a) a (Tree234 a) a (Tree234 a)
+    | N4 (Tree234 a) a (Tree234 a) a (Tree234 a) a (Tree234 a)
+    | E234 deriving Show
+
+data RBTree a = Black (RBTree a) a (RBTree a)
+    | Red (RBTree a) a (RBTree a)
+    | RBTEmpty deriving Show
+
+from234 :: Tree234 a -> RBTree a
+from234 E234 = RBTEmpty
+from234 (N2 l n r) = Black (from234 l) n (from234 r) 
+from234 (N3 l n1 m n2 r) = Black (from234 l) n1 (Red (from234 m) n2 (from234 r))
+from234 (N4 l n1 m1 n2 m2 n3 r) = Black (Red (from234 l) n1 (from234 m1)) n2 (Red (from234 m2) n3 (from234 r))
+
+to234 :: RBTree a -> Tree234 a
+to234 RBTEmpty = E234
+to234 (Black RBTEmpty n RBTEmpty) = N2 E234 n E234
+to234 (Black RBTEmpty n (Red l n2 r)) = N3 E234 n (to234 l) n2 (to234 r)
+to234 (Black (Red l n2 r) n RBTEmpty) = N3 (to234 l) n2 (to234 r) n E234
+to234 (Black (Red l n1 m1) n2 (Red m2 n3 r)) = N4 (to234 l) n1 (to234 m1) n2 (to234 m2) n3 (to234 r)
+to234 _ = E234
