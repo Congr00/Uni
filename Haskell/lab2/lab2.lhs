@@ -62,6 +62,19 @@ ex 1
 > qsortC [a] = [a]
 > qsortC (h:t) = [ x | x <- (qsortC [f | f <- t , f <= h] ++ [h] ++ qsortC ([f | f <- t, f > h]))]
 
+-- 
+ex 3
+--
+
+> data Combinator = S | K | Combinator :$ Combinator
+> infixl :$
+
+> instance Show Combinator where
+>     show S = "S"
+>     show K = "K"
+>     show (l :$ r@(_ :$ _)) = show l ++ "(" ++ show r ++ ")"
+>     show (l :$ r) = show l ++ show r
+
 --
 ex 5
 --

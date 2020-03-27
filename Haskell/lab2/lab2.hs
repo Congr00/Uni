@@ -84,6 +84,12 @@ xs'@(x:xs) <+> ys'@(y:ys)
 data Combinator = S | K | Combinator :$ Combinator
 infixl :$
 
+instance Show Combinator where
+    show S = "S"
+    show K = "K"
+    show (l :$ r@(_ :$ _)) = show l ++ "(" ++ show r ++ ")"
+    show (l :$ r) = show l ++ show r
+
 -- zad 5
 data BST a = NodeBST (BST a) a (BST a) | EmptyBST deriving Show
 
@@ -112,8 +118,8 @@ tree = (NodeBST (NodeBST (NodeBST EmptyBST 1 EmptyBST) 3 (NodeBST (NodeBST Empty
 -- zad 6
 deleteMaxBST :: Ord a => BST a -> (BST a , a)
 deleteMaxBST EmptyBST = error "Empty tree"
-deleteMaxBST (NodeBST l n EmptyBST) = (l, n)
-deleteMaxBST (NodeBST l n r) = (NodeBST l n newR, res)
+`deleteMaxBST (NodeBST l n EmptyBST) = (l, n)
+deleteMaxBST (NodeBST l n r) = (NodeBST l n newR, res)`
     where
         (newR, res) = deleteMaxBST r
 
@@ -146,7 +152,7 @@ data Tree23 a = Node2 (Tree23 a) a (Tree23 a)
               | Empty23 deriving Show
 
 search23 :: Ord a => a -> Tree23 a -> Maybe a
-search23 x Empty23 = Nothing
+search23 _ Empty23 = Nothing
 search23 x (Node2 l n r)
     | n == x = Just(n)
     | n < x  = search23 x r
