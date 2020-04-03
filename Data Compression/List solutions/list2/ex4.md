@@ -17,7 +17,7 @@ Pokaż, że kod Shannona jest kodem prefiksowym, ale nie jest optymalnym kodem p
 Przypomnijmy najpierw konstrukcję kodów Shannona:
 
 *  $p_1 \geq \dots \geq p_n$ - posortowane prawdopodobieństwa symboli $s_1 \dots s_n$
-*  $F_i = p_1 + p_2 + \dots + p_i$
+*  $F_i = p_1 + p_2 + \dots + p_{i-1}$
 *  $l_i = \lceil log(1/p_i)\rceil$ - liczba bitów liczby $F_i$ ('po przecinku'), które użyte zostaną do reprezentacji symbolu $s_i$
 
 ### D-d tego, że kody Shannona są prefiksowe

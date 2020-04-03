@@ -1,3 +1,8 @@
+Łukasz Klasiński
+Haskell Course
+List 03
+27-03-2020
+
 > {-# LANGUAGE ViewPatterns #-}
 > {-# LANGUAGE FlexibleInstances #-}
 > {-# LANGUAGE UndecidableInstances #-}
