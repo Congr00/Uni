@@ -54,7 +54,7 @@ queens n = filter (\x -> ok (+) x == n && ok (-) x == n) $ permutations [0..n-1]
 -- [[1,3,0,2,4],[2,0,3,1,4],[2,4,1,3,0],[3,1,4,2,0],[1,4,2,0,3],[0,2,4,1,3],[3,0,2,4,1],[4,2,0,3,1],[0,3,1,4,2],[4,1,3,0,2]]
 --
 
--- zad 4
+-- zad 3
 
 data BinTree = BinTree :/\: BinTree | BinTreeLeaf deriving Show
 

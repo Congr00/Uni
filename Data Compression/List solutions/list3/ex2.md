@@ -24,21 +24,7 @@ Weźmy następujące dane:
 | $c$      | 0.25   |
 | $d$      | 0.25   |
 
-Wtedy dla $n = 3$ otrzymamy następujące kodowanie:
-
-| $\Sigma$ |   $p$  |   kod   |
-|----------|:------:|:-------:|
-| $b$      | 0.25   |000      |
-| $c$      | 0.25   |001      |
-| $d$      | 0.25   |010      |
-| $aa$     | 0.0625 |011      |
-| $ab$     | 0.0625 |100      |
-| $ac$     | 0.0625 |101      |
-| $ad$     | 0.0625 |110      |
-
-Dla tego $n$ średnia długość kodu wynosi $1.25$.
-
-Weźmy teraz $n=4$. Otrzymamy:
+Wtedy dla $n = 4$ otrzymamy następujące kodowanie:
 
 | $\Sigma$ |   $p$  |   kod   |
 |----------|:------:|:-------:|
@@ -59,4 +45,43 @@ Weźmy teraz $n=4$. Otrzymamy:
 | $dc$     | 0.0625 |1110     |
 | $dd$     | 0.0625 |1111     |
 
-Oraz średnią długość = $2.0$. Widać zatem, że dla danych ze zbliżonymi p-p śr długość niekoniecznie się zmniejsza.
+Oraz średnią długość = $4 / 2.0 = 2.0$
+
+Zwiększmy $n$ o 1. Dostajemy następujące prawdopodobieństwa:
+
+| $\Sigma$ |   $p$    |
+|----------|:--------:|
+| $bb$     | 0.0625   |
+| $bc$     | 0.0625   |
+| $bd$     | 0.0625   |
+| $ca$     | 0.0625   |
+| $cb$     | 0.0625   |
+| $cc$     | 0.0625   |
+| $cd$     | 0.0625   |
+| $da$     | 0.0625   |
+| $db$     | 0.0625   |
+| $dc$     | 0.0625   |
+| $dd$     | 0.0625   |
+|$aaa$     | 0.015625 |
+|$aab$     | 0.015625 | 
+|$aac$     | 0.015625 | 
+|$aad$     | 0.015625 |
+|$aba$     | 0.015625 |
+|$abb$     | 0.015625 | 
+|$abc$     | 0.015625 |
+|$abd$     | 0.015625 |
+|$aca$     | 0.015625 |
+|$acb$     | 0.015625 |
+|$acc$     | 0.015625 |
+|$acd$     | 0.015625 |
+|$ada$     | 0.015625 |
+|$adb$     | 0.015625 |
+|$adc$     | 0.015625 |
+|$add$     | 0.015625 |
+|$baa$     | 0.015625 |
+|$bab$     | 0.015625 |
+|$bac$     | 0.015625 |
+|$bad$     | 0.015625 |
+
+
+Oraz średnią długość = $5 / 2.3125 = 2.(162)$. Widać zatem, że dla danych ze zbliżonymi p-p śr długość niekoniecznie się zmniejsza.
