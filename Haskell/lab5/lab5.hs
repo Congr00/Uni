@@ -1,10 +1,19 @@
-{-# LANGUAGE BangPatterns #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-|
+...
+Copyright   : (c) Łukasz Klasiński lista 5 Haskell
+...
+-}
 
+{-# LANGUAGE FlexibleInstances, UndecidableInstances, IncoherentInstances, MonoLocalBinds #-}
+
+
+module Lista_5 where
+    
 import Control.Monad
 import Control.Applicative
 
--- zad1
+
+-- | zad1
 
 class NFData a where
   rnf :: a -> ()
@@ -19,6 +28,7 @@ instance {-# OVERLAPS #-} NFData a => NFData [a] where
 instance {-# OVERLAPS #-} (NFData a, NFData b) => NFData (a, b) where
   rnf (a, b) = rnf a `seq` rnf b `seq` ()
 
+-- | i tak dalej...
 instance {-# OVERLAPS #-} (NFData a, NFData b, NFData c) => NFData (a, b, c) where
   rnf (a, b, c) = rnf a `seq` rnf b `seq` rnf c `seq` ()
 
@@ -29,14 +39,35 @@ deepseq a b = rnf a `seq` b
 f $!! x = x `deepseq` f x
 
 
--- zad 2
+-- | zad 2
 
 subseqM :: MonadPlus m => [a] -> m [a]
 subseqM [] = return []
 subseqM (x:xs) = do   yss <- subseqM xs
                       return yss `mplus` return (x:yss)
 
--- zad 6
+insertM :: MonadPlus m => a -> [a] -> m [a]
+insertM x [] = return [x]
+insertM x ys'@(y:ys) = return (x:ys') `mplus` fmap (y:) (insertM x ys)
+
+ipermM :: MonadPlus m => [a] -> m [a]
+ipermM [] = return mzero
+ipermM (x:xs) = do  perms <- ipermM xs
+                    new   <- insertM x perms
+                    return new
+
+selectM :: MonadPlus m => [a] -> m (a, [a])
+selectM [y] = return (y, [])
+selectM (y:ys) = return (y, ys) `mplus` fmap (\(z,zs) -> (z,y:zs)) (selectM ys)
+
+spermM :: MonadPlus m => [a] -> m [a]
+spermM [] = return mzero
+spermM xs = do   (y,ys) <- selectM xs
+                 perms  <- spermM ys
+                 res    <- fmap (y:) $ return perms
+                 return res
+
+-- | zad 6
 
 data List t a = Cons a (t a) | Nil deriving Show
 
@@ -55,9 +86,7 @@ data CList a = CList a :++: CList a | CSingle a | CNil deriving Show
 
 instance ListView CList where
     nil = CNil
-    cons x (CNil)        = CSingle x
-    cons x r@(CSingle _) = r :++: CSingle x 
-    cons x (r :++: l)    = r :++: cons x l
+    cons x r = CSingle x :++: r
     viewList (CNil)      = Nil
     viewList (CSingle x) = Cons x (CNil)
     viewList (l :++: r)  = case l of
@@ -71,7 +100,7 @@ instance Functor CList where
 
 instance Applicative CList where
     pure = CSingle
-    fl <*> ml = foldl (flip cons) CNil [f x | f <- (toList fl), x <- (toList ml)]
+    fl <*> ml = foldr cons CNil [f x | f <- (toList fl), x <- (toList ml)]
 
 instance Monad CList where
     (>>=) CNil _        = CNil
@@ -94,7 +123,7 @@ instance Traversable CList where
     traverse f (CSingle x) = pure <$> f x
     traverse f (l :++: r)  = pure <$> traverse f l <*> traverse f r
 
--- zad 7
+-- | zad 7
 
 newtype DList a = DList { fromDList :: [a] -> [a] }
 
@@ -112,9 +141,10 @@ dappend l r = DList (fromDList l . fromDList r)
 instance Functor DList where
     fmap f = foldr (cons . f) nil
 
+
 instance Applicative DList where
     pure x = DList (\e -> x:e)
-    fl <*> ml = foldl (flip cons) nil [f x | f <- (toList fl), x <- (toList ml)]
+    fl <*> ml = foldr cons nil [f x | f <- (toList fl), x <- (toList ml)]
 
 instance Monad DList where
     x >>= f = foldl dappend nil $ toList $ fmap f x
