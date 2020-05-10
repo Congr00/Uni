@@ -30,18 +30,18 @@ void dfsn(int* in, int* out, int* index, int* length, int* tree, int v, int nr){
         nr++;
         int cv = pop();
         if(cv == 0)
-            return;          
+            return;
         else if(cv < 0){
             nr--;
             out[cv*(-1)-1] = nr;
             continue;
         }
-        in[cv-1] = nr;            
+        in[cv-1] = nr;
         if(length[cv-1] == 0){
-            out[cv-1] = nr;   
+            out[cv-1] = nr;
             continue;
-        }               
-        push(-cv);     
+        }
+        push(-cv);
         for(int i = 0; i < length[cv-1]; ++i){
             push(tree[index[cv-1]+i]);
         }
@@ -77,20 +77,14 @@ int main(){
         in[out[i-1]-1]++;
     }
     queue = (int*)malloc(sizeof(int)*n*2);
-    dfsn(in, out, index, length, treep, 1, -1);       
+    dfsn(in, out, index, length, treep, 1, -1);
     for(int i = 0; i < q; i++){
         scanf("%d %d", &q1, &q2);
         if((in[q2-1] >= in[q1-1]) && (in[q2-1] <= out[q1-1])){
             printf("TAK\n");
         }
         else
-            printf("NIE\n");        
-    } 
-    /*for(int i = 0; i < n; i++){
-        printf("nr: %d, index: %d, ln: %d, in: %d\n", i+1, index[i], length[i], in[i]);
+            printf("NIE\n");
     }
-    for(int i = 0; i < n; i++)
-        printf("treep[%d]: %d\n", i, treep[i]);
-*/
     return 0;
 }   

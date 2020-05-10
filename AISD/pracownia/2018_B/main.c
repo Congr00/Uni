@@ -129,10 +129,7 @@ int main(){
         inde[i].i = -1;
          
     qsort(tunnels, t, sizeof(coords)*2, comp);
-   /* for(i = 0; i < t; ++i){
-        printf("(%lu, %lu, id:%ld) -> (%lu, %lu, id:%ld)\n", tunnels[i].a1.a1, tunnels[i].a1.a2, tunnels[i].a1.i, 
-        tunnels[i].a2.a1, tunnels[i].a2.a2, tunnels[i].a2.i);
-    }*/     
+
     coords t1 = tunnels[0].a1;
     unsigned long t2 = 0;
     tunnels[0].a1.i = t2;

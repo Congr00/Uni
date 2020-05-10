@@ -51,9 +51,7 @@ int main(){
         else
             break;
     }
-//    for(unsigned long i = 0; i < n; ++i){
-//        printf("STACJA NR:%lu, val:%ld, dist:%lu, cost:%lu\n", i, stat[i].val, stat[i].dist, stat[i].cost);
-//    }
+
     if(stat[0].val == -1){
         printf("NIE");
         return 0;
