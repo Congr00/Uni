@@ -16,6 +16,8 @@ słów.
 Takie słowo:
 $$
 \Sigma = {a_1, a_2, a_3, \ldots, a_n}
+$$
+$$
 w = a_1 a_1 a_1 a_1 : a_1 a_2 a_1 a_2 : a_1 a_3 a_1 a_3 \ldots a_2 a_2 a_2 a_2 : a_2 a_1 a_2 a_1 \ldots
 $$
 Dlaczego mamy dokładnie $n/4$ produkcji? Budujemy słowo tak, że doklejamy po 2 unikatowe pary, które wcześniej nie występowały w prefiksie słowa, dzięki czemu tworzymy nową produkcję. Zatem na każde 4 symbole przypada dokładnie jedna produkcja. Po wyczerpaniu wszystkich możliwych kombinacji par zostajemy z produkcją:

@@ -11,7 +11,7 @@ geometry: vmargin=1.5cm
 ## Zadanie 1
 Pokaż, że optymalna gramatyka dla słowa
 $$
-w_k = a^{k(k+1)/2}(ba^{k})^{(k+1)^2}$
+w_k = a^{k(k+1)/2}(ba^{k})^{(k+1)^2}
 $$
 ma wielkość $O(log k)$, a kodowanie LZ78 daje w wyniku kod o rozmiarze (liczbie elementów) $\Omega(k^2)$
 # Rozwiązanie
@@ -56,7 +56,7 @@ $$
 (k+1)^2 = k^2 + 2k + 1
 $$
 Zatem wystarczy znaleźć produkcje dające kolejne długości tej sumy. Jedynkę mamy za darmo bo $(ba^k)^1 = bA_K$
-$(ba^k)^{2k} = 2 \times prod (ba^k)^{k}$ natomiast $k^2 = k*k = k \times prod (ba^k)^k$
+$(ba^k)^{2k} = 2 \times prod (ba^k)^{k}$ natomiast $k^2 = k\cdot k = k \times prod (ba^k)^k$
 Wystarczy zatem zrobić produkcję, które aplikuje elementy $k$ razy oraz produkcję $(ba^k)^k$
 Najpierw $(ba^k)^k$ - podobnie jak wcześniej korzystamy z rozkładu k i robimy produkcję
 $$
@@ -85,10 +85,10 @@ Wystarczy teraz zlepić całość w
 $$
 S \rightarrow A_{\frac{K+1}{2}}
 $$
-Jaką mamy wielkość gramatyki - 4 * O(logk) = O(logk)
+Jaką mamy wielkość gramatyki - $4 \cdot O(logk) = O(logk)$
 
 Dlaczego to jest optymalna wielkość gramatyki? Wiemy z wykładu, że gramatyka konstruowana przez algorytm LZ77 jest większa od optymalnej gramatyki o jakąś stałą $\leq log n$ gdzie $n = |w|$. 
-Algorytm na początku dopasuje długi ciąg złożony z samych $a$ i zapisze to jako jedna krotka. Następnie zmachuje $ba^k$ jednokrotnie, następnie dwukrotnie, czterokrotnie - łącznie $log(k+1)^2 = 2log(k+1)$ razy ostatecznie mamy zatem kod długości $2log(k+1) * log(|w|) = O(log k) * log(|w|)$. Zatem $O(log k)$ musi być optimum (na mocy tw. z wykładu).
+Algorytm na początku dopasuje długi ciąg złożony z samych $a$ i zapisze to jako jedna krotka. Następnie zmachuje $ba^k$ jednokrotnie, następnie dwukrotnie, czterokrotnie - łącznie $log(k+1)^2 = 2log(k+1)$ razy ostatecznie mamy zatem kod długości $2log(k+1) \cdot log(|w|) = O(log k) \cdot log(|w|)$. Zatem $O(log k)$ musi być optimum (na mocy tw. z wykładu).
 
 Jak wygląda kodowanie LZ78 - zakładamy nieograniczony słownik. Wpierw zobaczmy $L$. Na początku wstawi do pustego słownika $a$ i wypluje $(0, a)$. W następnym kroku zmatchuje $a$ i doda do słownika $aa$ (wypluje (1, a)). I tak dalej - łącznie zamieni $a^1$ na krotkę, $a^2$ na krotkę $\ldots$ $a^k$ na krotkę, ponieważ $\sum_1^k = k(k+1)/2$.
 
