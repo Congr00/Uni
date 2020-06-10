@@ -14,6 +14,7 @@ $$
 w_k = a^{k(k+1)/2}(ba^{k})^{(k+1)^2}
 $$
 ma wielkość $O(log k)$, a kodowanie LZ78 daje w wyniku kod o rozmiarze (liczbie elementów) $\Omega(k^2)$
+
 # Rozwiązanie
 
 Zobaczmy najpierw jak wygląda konstrukcja gramatyki dla $w_k$, która ma wielkość $O(log_k)$.
@@ -83,13 +84,13 @@ $$
 
 Wystarczy teraz zlepić całość w
 $$
-S \rightarrow A_{\frac{K+1}{2}}
+S \rightarrow LR
 $$
 Jaką mamy wielkość gramatyki - $4 \cdot O(logk) = O(logk)$
 
 Dlaczego to jest optymalna wielkość gramatyki? Wiemy z wykładu, że gramatyka konstruowana przez algorytm LZ77 jest większa od optymalnej gramatyki o jakąś stałą $\leq log n$ gdzie $n = |w|$. 
-Algorytm na początku dopasuje długi ciąg złożony z samych $a$ i zapisze to jako jedna krotka. Następnie zmachuje $ba^k$ jednokrotnie, następnie dwukrotnie, czterokrotnie - łącznie $log(k+1)^2 = 2log(k+1)$ razy ostatecznie mamy zatem kod długości $2log(k+1) \cdot log(|w|) = O(log k) \cdot log(|w|)$. Zatem $O(log k)$ musi być optimum (na mocy tw. z wykładu).
+Algorytm na początku dopasuje długi ciąg złożony z samych $a$ i zapisze to jako jedną krotka. Następnie zmachuje $ba^k$ jednokrotnie, następnie dwukrotnie, czterokrotnie - łącznie $log(k+1)^2 = 2log(k+1)$ razy ostatecznie mamy zatem kod długości $2log(k+1) \cdot log(|w|) = O(log k) \cdot log(|w|)$. Zatem $O(log k)$ musi być optimum (na mocy tw. z wykładu).
 
 Jak wygląda kodowanie LZ78 - zakładamy nieograniczony słownik. Wpierw zobaczmy $L$. Na początku wstawi do pustego słownika $a$ i wypluje $(0, a)$. W następnym kroku zmatchuje $a$ i doda do słownika $aa$ (wypluje (1, a)). I tak dalej - łącznie zamieni $a^1$ na krotkę, $a^2$ na krotkę $\ldots$ $a^k$ na krotkę, ponieważ $\sum_1^k = k(k+1)/2$.
 
-Prawa część będzie wyglądać następująco - algorytm zobaczy $b$ na początku wyrazu, zatem nie znajdzie tego w słowniku i doda to jako nową krotkę. Następnie zobaczy że $a^k$ jest w słowniku i doda do słownika $a^kb$. W kolejnej iteracji dodamy $a^kba$. Potem $a^{k-1}b$. Ogólnie otrzymamy w słowniku wszystkie możliwe kombinacje $a^iba^j$, gdzie $i,j = 0..k$. Zatem ustawiamy $i,j$ na $k^2$ sposobów. Zatem na wyjściu otrzymamy co najmniej $O(k^2)$ krotek. Ostatecznie mamy $O(k) + O(k^2) \geq \Omega(k^2)$
+Prawa część będzie wyglądać następująco - algorytm zobaczy $b$ na początku wyrazu, zatem nie znajdzie tego w słowniku i doda to jako nową krotkę. Następnie zobaczy że $a^k$ jest w słowniku i doda do słownika $a^kb$. W kolejnej iteracji dodamy $a^kba$. Potem $a^{k-1}b$. Ogólnie otrzymamy w słowniku wszystkie możliwe kombinacje $a^iba^j$, gdzie $i,j = 0..k$. Zatem ustawiamy $i,j$ na $k^2$ sposobów. Na wyjściu dostaniemy więc co najmniej $O(k^2)$ krotek. Ostatecznie mamy $O(k) + O(k^2) \geq \Omega(k^2)$
