@@ -96,7 +96,6 @@ instance (Monad m) => Category (Kleisli m) where
   ident = Kleisli pure
   comp (Kleisli f) (Kleisli g) = Kleisli (\k -> g k >>= f)
 
-
 -- ex 6 kek
 
 -- monoidal categories

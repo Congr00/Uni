@@ -1,17 +1,19 @@
+use lipsum::lipsum;
 use std::collections::HashMap;
 use std::collections::VecDeque;
 
 pub const DICT_SIZE: usize = 3; // at least 2
-pub const INPUT_SIZE: usize = 2; // at least 2
+pub const INPUT_SIZE: usize = 3; // at least 2
 pub const MAX_MATCH: usize = 1;
+
 #[derive(Debug)]
-pub struct DictBuffor {
+pub struct DictBuffer {
     frame: Vec<char>,
     indexes: HashMap<String, VecDeque<usize>>,
     start: Wrapper,
 }
 
-impl DictBuffor {
+impl DictBuffer {
     pub fn new(size: usize) -> Self {
         Self {
             frame: vec![' '; size],
@@ -25,24 +27,29 @@ impl DictBuffor {
             self.frame[self.start.get()] = c;
             self.start.update();
         }
-        self.add_new_indexses(input);
+        let rmv = if input.len() > self.frame.len() {
+            input.len() - self.frame.len()
+        } else {
+            0
+        };
+        self.add_new_indexses(&input.chars().skip(rmv).collect::<String>());
     }
     fn lookup(&self, word: &Vec<char>, index: &Wrapper, last: usize) -> Triplet {
         for i in 1..=MAX_MATCH {
             let match_str: String = index.range(i).into_iter().map(|ind| word[ind]).collect();
-            println!("{:?}", self.indexes);
-            let (len, id) = match self.indexes.get(&match_str) {
-                Some(ind) => match ind
-                    .into_iter()
-                    .map(|&i| (self.longest_match(i, word, index, last), i))
-                    .max()
-                {
-                    Some(val) => val,
-                    None => (0, 0),
-                },
-                None => (0, 0),
-            };
+            let (len, id) = self
+                .indexes
+                .get(&match_str)
+                .and_then(|ind| {
+                    ind.into_iter()
+                        .map(|&i| (self.longest_match(i, word, index, last), i))
+                        .max()
+                })
+                .unwrap_or_else(|| (0, 0));
             if len != 0 {
+                if len >= word.len() {
+                    return Triplet::last(id, len);
+                }
                 return match word.get(index.from_add(len)) {
                     Some(c) => Triplet::new(id, len, *c),
                     None => Triplet::last(id, len),
@@ -54,14 +61,9 @@ impl DictBuffor {
     fn longest_match(&self, start: usize, word: &Vec<char>, ind: &Wrapper, last: usize) -> usize {
         let mut length: usize = 0;
         let mut ptr = Wrapper::from(start, self.frame.len());
-        let index = ind;
-        println!(
-            "word: {:?}, {:?}, {:?}, last: {}, start: {}",
-            word, index, self.frame, last, start
-        );
-        for i in index.range(word.len()) {
+        for i in ind.range(word.len()) {
             let c = word[i];
-            if self.frame[ptr.get()] == c && i != last {
+            if self.frame[ptr.get()] == c && length < last {
                 length += 1;
             } else {
                 break;
@@ -124,21 +126,16 @@ impl Wrapper {
         }
     }
     fn from_sub(self, i: usize) -> usize {
+        let i = i % self.size;
         if self.index < i {
-            let diff = (i - self.index) % self.size;
+            let diff = i - self.index;
+            //println!("xD {} {} {} {}", self.index, self.size, self.size - diff, i);
             return self.size - diff;
         }
         self.index - i
     }
     fn from_add(self, i: usize) -> usize {
         if self.index + i >= self.size {
-            println!(
-                "{} {} {} {}",
-                self.index,
-                i,
-                self.size,
-                (self.index + i) % self.size
-            );
             return (self.index + i) % self.size;
         }
         self.index + i
@@ -147,7 +144,7 @@ impl Wrapper {
         self.index
     }
     fn update(&mut self) {
-        if self.index + 1 == self.size {
+        if self.index + 1 >= self.size {
             self.index = 0;
         } else {
             self.index += 1;
@@ -208,37 +205,47 @@ impl Triplet {
     }
 }
 #[derive(Debug)]
-pub struct InputBuffor {
+pub struct InputBuffer {
     frame: Vec<char>,
     free_space: usize,
     index: Wrapper,
     last: usize,
+    write: Wrapper,
 }
-impl InputBuffor {
+impl InputBuffer {
     pub fn new(size: usize) -> Self {
         Self {
             frame: vec![' '; size],
             free_space: size,
             index: Wrapper::new(size),
             last: 0,
+            write: Wrapper::new(size),
         }
     }
     pub fn feed(&mut self, data: &str) -> usize {
-        let mut i = Wrapper::from(self.index.get(), self.frame.len());
+        let mut i = 0;
         for c in data.chars() {
             if self.free_space == 0 {
                 break;
             }
             self.last += 1;
-            self.frame[i.get()] = c;
+            self.frame[self.write.get()] = c;
             self.free_space -= 1;
-            i.update();
+            self.write.update();
+            i += 1;
         }
-        self.free_space
+        if self.free_space != 0 {
+            self.last = self.index.from_sub(1);
+        }
+        i
     }
-    pub fn encode(&mut self, dict: &mut DictBuffor) -> Triplet {
-        let mut encoded = dict.lookup(&self.frame, &self.index, self.last);
-        let lost = encoded.length;
+    pub fn encode(&mut self, dict: &mut DictBuffer) -> Triplet {
+        let mut encoded = dict.lookup(&self.frame, &self.index, self.frame.len() - self.free_space);
+        let lost = if encoded.symbol == '\0' {
+            encoded.length - 1
+        } else {
+            encoded.length
+        };
         dict.push_string(
             &self
                 .index
@@ -251,6 +258,8 @@ impl InputBuffor {
         self.index.update_by(lost + 1);
         if self.free_space > self.frame.len() {
             encoded.last = true;
+            encoded.symbol = '\0';
+            self.free_space = self.frame.len();
         }
         encoded
     }
@@ -278,62 +287,55 @@ impl Decoder {
         let mut res = String::new();
         for trip in input {
             let mut i = Wrapper::from(trip.index, self.frame.len());
+            let mut out_str = String::new();
             if trip.length != 0 {
-                println!(
-                    "{:?}, {:?}, indexes {:?}, trip {:?}",
-                    self.frame,
-                    i,
-                    i.range(trip.length)
-                        .into_iter()
-                        .map(|i| i)
-                        .collect::<Vec<usize>>(),
-                    trip
-                );
-                res.push_str(
-                    &i.range(trip.length)
-                        .into_iter()
-                        .map(|ind| self.frame[ind])
-                        .collect::<String>(),
-                );
+                out_str = i
+                    .range(trip.length)
+                    .into_iter()
+                    .map(|ind| self.frame[ind])
+                    .collect::<String>();
+                res.push_str(&out_str);
             }
             if !trip.last {
                 res.push(trip.symbol);
             }
-            for _ in 0..trip.length {
-                self.frame[self.index.get()] = self.frame[i.get()];
-                i.update();
+            for c in out_str.chars() {
+                self.frame[self.index.get()] = c;
                 self.index.update();
             }
-            self.frame[self.index.get()] = trip.symbol;
-            self.index.update();
+            if trip.symbol != '\0' {
+                self.frame[self.index.get()] = trip.symbol;
+                self.index.update();
+            }
         }
         res
     }
 }
 
 fn main() {
-    let mut dict = DictBuffor::new(DICT_SIZE);
-    let mut buff: InputBuffor = InputBuffor::new(INPUT_SIZE);
-    let w = "abcabcabc";
+    let mut dict = DictBuffer::new(DICT_SIZE);
+    let mut buff: InputBuffer = InputBuffer::new(INPUT_SIZE);
+    let w = "fdhfhfhhdhd";
     let mut consumed = 0;
     let mut out: Vec<Triplet> = vec![];
+
+    let mut rdy = w.split_at(consumed).1;
+    //println!("rdy: {} {}", rdy, consumed);
     loop {
-        let (_, rdy) = w.split_at(consumed);
-        buff.feed(rdy);
-        println!("rdy: {} {}", rdy, consumed);
-        while !buff.done() {
-            out.push(buff.encode(&mut dict));
-        }
-        consumed += INPUT_SIZE;
-        if consumed >= w.len() {
+        let got = buff.feed(rdy);
+        out.push(buff.encode(&mut dict));
+        consumed += got;
+        if w.len() <= consumed {
             break;
         }
+        rdy = w.split_at(consumed).1;
+    }
+    while !buff.done() {
+        out.push(buff.encode(&mut dict));
     }
     let mut decoder = Decoder::new(DICT_SIZE);
-    assert_eq!(w, &decoder.decode(&out));
     println!("out:{:?}\n{:?}\n{:?}", out, dict, buff);
-    let mut decoder = Decoder::new(DICT_SIZE);
-    println!("{}", decoder.decode(&out));
+    assert_eq!(w, &decoder.decode(&out));
 }
 
 #[cfg(test)]
@@ -342,36 +344,39 @@ mod tests {
 
     #[test]
     fn test_1() {
-        let words = [
-            "abcabcabc",
-            "abcabc123",
-            "abc123123abc",
-            "111111111111111111111111111111",
-            "abcabcabcabcabcabcabcabcabcabca",
-        ];
-        for w in words.iter() {
-            for i in 2..32 {
-                for j in 2..32 {
-                    println!("DICT-SIZE: {} INPUT_SIZE: {}", i, j);
-                    let mut dict = DictBuffor::new(i);
-                    let mut buff = InputBuffor::new(j);
-                    let mut consumed = 0;
-                    let mut out: Vec<Triplet> = vec![];
-                    loop {
-                        let (_, rdy) = w.split_at(consumed);
-                        buff.feed(rdy);
-                        while !buff.done() {
-                            out.push(buff.encode(&mut dict));
-                        }
-                        consumed += j;
-                        if consumed >= w.len() {
-                            break;
-                        }
+        let w = &lipsum(1000);
+        //    for w in words.iter() {
+        for i in 64..128 {
+            for j in 64..128 {
+                let mut dict = DictBuffer::new(i);
+                let mut buff = InputBuffer::new(j);
+                let mut consumed = 0;
+                let mut out: Vec<Triplet> = vec![];
+                let mut rdy = w.split_at(consumed).1;
+                //println!("rdy: {} {}", rdy, consumed);
+                loop {
+                    let got = buff.feed(rdy);
+                    out.push(buff.encode(&mut dict));
+                    consumed += got;
+                    if w.len() <= consumed {
+                        break;
                     }
-                    let mut decoder = Decoder::new(i);
-                    assert_eq!(w, &decoder.decode(&out));
+                    rdy = w.split_at(consumed).1;
                 }
+                while !buff.done() {
+                    out.push(buff.encode(&mut dict));
+                }
+                let mut decoder = Decoder::new(i);
+                assert_eq!(
+                    w,
+                    &decoder.decode(&out),
+                    "DICT-SIZE: {} INPUT_SIZE: {}, word: {}",
+                    i,
+                    j,
+                    w
+                );
             }
         }
+        //}
     }
 }
