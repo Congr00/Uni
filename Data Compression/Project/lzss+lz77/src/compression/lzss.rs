@@ -1,49 +1,26 @@
+extern crate getopts;
+use bit_vec::BitVec;
+
+use crate::consts::{
+    u32_to_u8, u8_to_u32, DataStoreError, DIVIDER, END_SYMBOL, MAX_MATCH, MIN_LEN,
+};
+
+use fnv::FnvHashMap;
 #[cfg(test)]
 use lipsum::lipsum;
-
-extern crate getopts;
-use bincode;
-use bit_vec::BitVec;
-use getopts::Options;
-use huffman_compress::Tree;
-use std::env;
 use std::fs;
 use std::fs::File;
 
 use std::collections::HashMap;
 use std::collections::VecDeque;
-use std::io;
 use std::io::prelude::*;
-use thiserror::Error;
-
-pub const DICT_SIZE: usize = 4; // 4kb
-pub const INPUT_SIZE: usize = 10; // 10kb
-pub const MAX_MATCH: usize = 3;
-pub const END_SYMBOL: char = 0x1f as char;
-pub const DIVIDER: char = 007 as char;
-
-#[derive(Error, Debug)]
-pub enum DataStoreError {
-    #[error("Error during file byte decoding, possible file corruption")]
-    HuffmanReadError,
-    #[error("Error during deserialization, possible file corruption")]
-    DeserializeError(#[from] bincode::Error),
-    #[error("Error during structure parsing, possible file corruption")]
-    TripletError,
-    #[error("file reading or writing error")]
-    InOutError(#[from] io::Error),
-    #[error("File name not specified")]
-    NoFile,
-    #[error("Wrong argument specified - {0}")]
-    WrongArg(String),
-}
 
 use DataStoreError::*;
 
 #[derive(Debug)]
 pub struct DictBuffer {
     frame: Vec<char>,
-    indexes: HashMap<String, VecDeque<usize>>,
+    indexes: FnvHashMap<String, VecDeque<usize>>,
     start: Wrapper,
     max_match: usize,
 }
@@ -54,7 +31,7 @@ impl DictBuffer {
         }
         Self {
             frame: vec![' '; size],
-            indexes: HashMap::new(),
+            indexes: FnvHashMap::default(),
             start: Wrapper::new(size),
             max_match: match_num,
         }
@@ -80,20 +57,16 @@ impl DictBuffer {
                 .get(&match_str)
                 .and_then(|ind| {
                     ind.into_iter()
+                        // .take(10)
                         .map(|&i| (self.longest_match(i, word, index, last), i))
                         .max()
                 })
                 .unwrap_or_else(|| (0, 0));
-            if len != 0 {
-                if len >= word.len() {
-                    return Triplet::last(id, len);
-                }
-                return match word.get(index.from_add(len)) {
-                    Some(c) => Triplet::new(id, len, *c),
-                    None => Triplet::last(id, len),
-                };
+            if len > MIN_LEN {
+                return Triplet::new(id, len);
             }
         }
+
         Triplet::empty(word[index.get()])
     }
     fn longest_match(&self, start: usize, word: &[char], ind: &Wrapper, last: usize) -> usize {
@@ -174,12 +147,6 @@ impl Wrapper {
         }
         self.index - i
     }
-    fn from_add(self, i: usize) -> usize {
-        if self.index + i >= self.size {
-            return (self.index + i) % self.size;
-        }
-        self.index + i
-    }
     fn get(self) -> usize {
         self.index
     }
@@ -217,78 +184,53 @@ pub struct Triplet {
     pub index: usize,
     pub length: usize,
     pub symbol: char,
+    pub single: bool,
 }
 impl Triplet {
-    fn new(index: usize, len: usize, symbol: char) -> Self {
+    fn new(index: usize, len: usize) -> Self {
         Self {
             index: index,
             length: len,
-            symbol: symbol,
+            symbol: END_SYMBOL,
+            single: false,
         }
     }
     fn empty(symbol: char) -> Self {
         Self {
             index: 0,
-            length: 0,
+            length: 1,
             symbol: symbol,
+            single: true,
         }
-    }
-    fn last(index: usize, len: usize) -> Self {
-        Self {
-            index: index,
-            length: len,
-            symbol: END_SYMBOL,
-        }
-    }
-    fn is_last(self) -> bool {
-        self.symbol == END_SYMBOL
     }
     fn to_u8(self) -> Vec<u8> {
-        let div: String = DIVIDER.to_string();
-        [
-            div.clone(),
-            self.index.to_string(),
-            div.clone(),
-            self.length.to_string(),
-            div.clone(),
-            self.symbol.to_string(),
-        ]
-        .iter()
-        .cloned()
-        .flat_map(|v| v.into_bytes().into_iter())
-        .collect::<Vec<_>>()
-    }
-    fn to_string(self) -> String {
-        let div: String = DIVIDER.to_string();
-        /*let mut vec: Vec<u8> = vec![div];
-        for u in self.index.to_string().as_bytes().into_iter() {
-            vec.push(*u);
+        let div = DIVIDER as u8;
+        let mut res = vec![];
+        res.push(div.clone());
+        if self.single {
+            let bytes = self.symbol.to_string().into_bytes();
+            if (bytes[0] & 0x80) != 0 || (bytes[0] == 0) {
+                res.push(0x00 as u8);
+            }
+            for c in bytes {
+                res.push(c);
+            }
+        } else {
+            let mut bytes = self.index.to_string().into_bytes();
+            if (bytes[0] & 0x80) != 0 {
+                res.push(0x80 as u8);
+            } else {
+                bytes[0] |= 0x80;
+            }
+            for c in bytes {
+                res.push(c);
+            }
+            res.push(div);
+            for c in self.length.to_string().into_bytes() {
+                res.push(c);
+            }
         }
-        vec.push(div);
-        for u in self.length.to_string().as_bytes().into_iter() {
-            vec.push(*u);
-        }
-        vec.push(div);
-        for u in self.symbol.to_string().as_bytes().into_iter() {
-            vec.push(*u);
-        }
-        */
-        String::from_utf8(
-            [
-                div.clone(),
-                self.index.to_string(),
-                div.clone(),
-                self.length.to_string(),
-                div.clone(),
-                self.symbol.to_string(),
-            ]
-            .iter()
-            .cloned()
-            .flat_map(|v| v.into_bytes().into_iter())
-            .collect::<Vec<_>>(),
-        )
-        .unwrap()
-        //String::from_utf8(vec).unwrap()
+        res
     }
 }
 #[derive(Debug)]
@@ -330,24 +272,19 @@ impl InputBuffer {
         i
     }
     pub fn encode(&mut self, dict: &mut DictBuffer) -> Triplet {
-        let mut encoded = dict.lookup(&self.frame, &self.index, self.frame.len() - self.free_space);
-        let lost = if encoded.is_last() {
-            encoded.length - 1
-        } else {
-            encoded.length
-        };
+        let encoded = dict.lookup(&self.frame, &self.index, self.frame.len() - self.free_space);
+        let lost = encoded.length;
         dict.push_string(
             &self
                 .index
-                .range(lost + 1)
+                .range(lost)
                 .into_iter()
                 .map(|ind| self.frame[ind])
                 .collect::<String>(),
         );
-        self.free_space += lost + 1;
-        self.index.update_by(lost + 1);
+        self.free_space += lost;
+        self.index.update_by(lost);
         if self.free_space > self.frame.len() {
-            encoded.symbol = END_SYMBOL;
             self.free_space = self.frame.len();
         }
         encoded
@@ -372,8 +309,26 @@ impl Decoder {
         }
     }
     pub fn from_string(&mut self, input: &[u8]) -> Result<String, DataStoreError> {
-        fn parse_u8(parsed: &[Vec<u8>; 3]) -> Result<Triplet, DataStoreError> {
-            let index: usize = match String::from_utf8_lossy(&parsed[0]).parse::<usize>() {
+        fn parse_u8symbol(parsed: &[Vec<u8>]) -> Result<Triplet, DataStoreError> {
+            let mut sym_u8 = parsed[0].clone();
+            if parsed[0][0] == 0 {
+                sym_u8 = sym_u8.drain(1..).collect::<Vec<u8>>();
+            }
+            let symbol: char = match String::from_utf8_lossy(&sym_u8).chars().next() {
+                Some(c) => c,
+                None => return Err(TripletError),
+            };
+            Ok(Triplet::empty(symbol))
+        }
+        fn parse_u8(parsed: &[Vec<u8>; 2]) -> Result<Triplet, DataStoreError> {
+            let mut ind_u8 = parsed[0].clone();
+            if (parsed[0][0] & 0x80) == 1 {
+                ind_u8 = ind_u8.drain(1..).collect::<Vec<u8>>();
+            } else {
+                ind_u8[0] = ind_u8[0] << 1;
+                ind_u8[0] = ind_u8[0] >> 1;
+            }
+            let index: usize = match String::from_utf8_lossy(&ind_u8).parse::<usize>() {
                 Ok(i) => i,
                 Err(_) => {
                     return Err(TripletError);
@@ -385,51 +340,64 @@ impl Decoder {
                     return Err(TripletError);
                 }
             };
-            let symbol: char = match String::from_utf8_lossy(&parsed[2]).chars().next() {
-                Some(c) => c,
-                None => return Err(TripletError),
-            };
-            Ok(Triplet::new(index, length, symbol))
+            Ok(Triplet::new(index, length))
         }
         let mut result: Vec<Triplet> = vec![];
-        let mut parsed: [Vec<u8>; 3] = [vec![], vec![], vec![]];
+        let mut parsed: [Vec<u8>; 2] = [vec![], vec![]];
         let mut counter = 0;
+        let mut first = true;
+        let mut parse_symbol = false;
         for c in input.into_iter().skip(1) {
             if *c == DIVIDER as u8 {
                 counter += 1;
-                if counter % 3 == 0 {
+                if parse_symbol && counter == 1 {
+                    result.push(parse_u8symbol(&parsed)?);
+                    parsed[0].clear();
+                    parsed[1].clear();
+                    counter = 0;
+                    first = true;
+                } else if counter == 2 {
+                    counter = 0;
                     result.push(parse_u8(&parsed)?);
                     parsed[0].clear();
                     parsed[1].clear();
-                    parsed[2].clear();
+                    first = true;
                 }
                 continue;
             }
-            parsed[counter % 3].push(*c);
+            if first {
+                first = false;
+                parse_symbol = (c >> 7) == 0;
+            }
+            parsed[counter].push(*c);
         }
-        result.push(parse_u8(&parsed)?);
+        if counter == 0 {
+            result.push(parse_u8symbol(&parsed)?);
+        } else if counter == 1 {
+            result.push(parse_u8(&parsed)?);
+        }
         Ok(self.decode(&result))
     }
+
     pub fn decode(&mut self, input: &[Triplet]) -> String {
         let mut res = String::new();
         for trip in input {
             let i = Wrapper::from(trip.index, self.frame.len());
             let mut out_str = String::new();
-            if trip.length != 0 {
+            if trip.length > 1 {
                 out_str = i
                     .range(trip.length)
                     .into_iter()
                     .map(|ind| self.frame[ind])
                     .collect::<String>();
                 res.push_str(&out_str);
+            } else {
+                res.push(trip.symbol);
+                self.frame[self.index.get()] = trip.symbol;
+                self.index.update();
             }
             for c in out_str.chars() {
                 self.frame[self.index.get()] = c;
-                self.index.update();
-            }
-            if !trip.is_last() {
-                res.push(trip.symbol);
-                self.frame[self.index.get()] = trip.symbol;
                 self.index.update();
             }
         }
@@ -437,7 +405,7 @@ impl Decoder {
     }
 }
 
-fn encode_string(
+pub fn encode_string(
     input: &String,
     dict_size: usize,
     input_size: usize,
@@ -455,15 +423,13 @@ fn encode_string(
     };
     let mut consumed = 0;
     let mut out: Vec<u8> = vec![];
-    let mut rdy = input.split_at(consumed).1;
     loop {
-        let got = buff.feed(rdy);
+        let got = buff.feed(&input[consumed..input.len()]);
         out.extend(buff.encode(&mut dict).to_u8().into_iter());
         consumed += got;
         if input.len() <= consumed {
             break;
         }
-        rdy = input.split_at(consumed).1;
     }
     while !buff.done() {
         out.extend(buff.encode(&mut dict).to_u8().into_iter());
@@ -507,7 +473,7 @@ fn to_file(
     filename: String,
 ) -> Result<String, DataStoreError> {
     let mut new_name = filename.split('.').next().unwrap().to_string();
-    new_name.push_str(".77");
+    new_name.push_str(".ss");
     let mut file = std::fs::File::create(new_name.clone())?;
     bincode::serialize_into(&mut file, &(data, weights, size, buffer_size, filename))?;
     Ok(new_name)
@@ -520,28 +486,18 @@ fn from_file(
     bincode::deserialize_from(&file).map_err(DeserializeError)
 }
 
-fn print_usage(program: &str, opts: Options) {
-    let brief = format!("Usage: {} FILE [options]", program);
-    print!("{}", opts.usage(&brief));
+pub fn encode_to_u8(
+    input: &String,
+    dict_size: usize,
+    input_size: usize,
+    max_match: usize,
+) -> Result<Vec<u8>, DataStoreError> {
+    let lzss_encoded = encode_string(&input, dict_size, input_size, max_match);
+    let (encoded, _, _) = to_huffman(&lzss_encoded);
+    Ok(encoded)
 }
 
-fn gen_options() -> Options {
-    let mut opts = Options::new();
-    opts.optopt("o", "out", "set output file name", "NAME");
-    opts.optopt("d", "dict", "set dict buffer size in KB", "DICT_BUFF_SIZE");
-    opts.optopt(
-        "i",
-        "input",
-        "set input buffer sizein KB",
-        "INPUT_BUFF_SIZE",
-    );
-    opts.optopt("m", "match", "set max match for search opt", "MAX_SIZE");
-    opts.optflag("u", "decompress", "set programm to decompression mode");
-    opts.optflag("h", "help", "print this help menu");
-    opts
-}
-
-fn encode_to_file(
+pub fn encode_to_file(
     dict_size: usize,
     input_size: usize,
     max_match: usize,
@@ -549,12 +505,12 @@ fn encode_to_file(
     in_file: &String,
 ) -> Result<String, DataStoreError> {
     let data = fs::read_to_string(in_file)?;
-    let lz77_encoded = encode_string(&data, dict_size, input_size, max_match);
-    let (encoded, weights, size) = to_huffman(&lz77_encoded);
+    let lzss_encoded = encode_string(&data, dict_size, input_size, max_match);
+    let (encoded, weights, size) = to_huffman(&lzss_encoded);
     Ok(to_file(&encoded, &weights, size, dict_size, out_file)?)
 }
 
-fn decode_from_file(in_file: &String, out_file: String) -> Result<String, DataStoreError> {
+pub fn decode_from_file(in_file: &String, out_file: String) -> Result<String, DataStoreError> {
     let (encoded, tree, size, buff_size, original_name) = from_file(in_file.to_string())?;
     let mut decoder = Decoder::new(buff_size);
     let decoded = decoder.from_string(&from_huffman(&encoded, &tree, size)?)?;
@@ -568,79 +524,8 @@ fn decode_from_file(in_file: &String, out_file: String) -> Result<String, DataSt
     Ok(file_name)
 }
 
-fn main() -> Result<(), DataStoreError> {
-    let args: Vec<String> = env::args().collect();
-    let program = args[0].clone();
-    let opts = gen_options();
-    let matches = match opts.parse(&args[1..]) {
-        Ok(m) => m,
-        Err(f) => return Err(WrongArg(f.to_string())),
-    };
-    if matches.opt_present("h") {
-        print_usage(&program, opts);
-        return Ok(());
-    }
-    if matches.free.is_empty() {
-        print_usage(&program, opts);
-        return Err(NoFile);
-    } else if matches.free.len() > 1 {
-        print_usage(&program, opts);
-        return Err(WrongArg(
-            matches
-                .free
-                .into_iter()
-                .skip(1)
-                .collect::<Vec<String>>()
-                .join(" "),
-        ));
-    }
-    let file_name = matches.free[0].clone();
-    let out_file = matches.opt_str("o").unwrap_or(if matches.opt_present("u") {
-        String::new()
-    } else {
-        file_name.clone()
-    });
-    let dict_size = matches
-        .opt_str("d")
-        .unwrap_or(DICT_SIZE.to_string())
-        .parse::<usize>()
-        .map_err(|v| WrongArg(v.to_string()))?
-        * 1024;
-    let input_size = matches
-        .opt_str("i")
-        .unwrap_or(INPUT_SIZE.to_string())
-        .parse::<usize>()
-        .map_err(|v| WrongArg(v.to_string()))?
-        * 1024;
-    let max_match = matches
-        .opt_str("m")
-        .unwrap_or(MAX_MATCH.to_string())
-        .parse::<usize>()
-        .map_err(|v| WrongArg(v.to_string()))?;
-    if matches.opt_present("u") {
-        println!("Decoding {}...", file_name.clone());
-        println!(
-            "Done, decoded file in {}",
-            decode_from_file(&file_name, out_file.clone())?
-        );
-    } else {
-        println!("Encoding {}...", file_name.clone());
-        println!(
-            "Done, encoded file in {}",
-            encode_to_file(
-                dict_size,
-                input_size,
-                max_match,
-                out_file.clone(),
-                &file_name,
-            )?
-        );
-    }
-    Ok(())
-}
-
 #[cfg(test)]
-mod tests {
+mod lzss_tests {
     use super::*;
     #[test]
     fn lipsum_triplet_encode_decode() {
@@ -679,11 +564,11 @@ mod tests {
         }
     }
     #[test]
-    fn triplet_encode_decode() {
+    fn triplet_encode_decode_lzss() {
         let words = [
             "11111111111111111111111111111111",
             "112312312312312312312312",
-            "",
+            " ",
             "adhgrjgnmqwbeuidnemrjr",
             "ababababadjfjjvjjjjvjjvvvvff",
         ];
@@ -723,14 +608,17 @@ mod tests {
         }
     }
     #[test]
-    fn triplet_to_from_string() {
+    fn triplet_to_from_string_lzss() {
         let w = &lipsum(100);
-        for i in 2..32 {
+        for i in 2..100 {
             for j in 2..32 {
                 for k in 2..20 {
                     let res = encode_string(&w, i, j, k);
                     let mut decoder = Decoder::new(i);
                     let decoded = decoder.from_string(&res).unwrap();
+                    if (*w != decoded) {
+                        println!("w:\n{}|\ndebug:\n{}|", w, decoded);
+                    }
                     assert!(*w == decoded);
                 }
             }
@@ -748,17 +636,42 @@ mod tests {
         assert!(w == decoded);
     }
     #[test]
-    fn file_serialization() {
+    fn file_serialization_lzss() {
         let w = lipsum(5000);
         let res = encode_string(&w, 5000, 1000, 1);
         let (encoded, weights, size) = to_huffman(&res);
-        to_file(&encoded, &weights, size, 5000, "test.77".into());
-        let (encoded, weights, size, buff_size, _) = from_file("test.77".into()).unwrap();
+        to_file(&encoded, &weights, size, 5000, "test.ss".into());
+        let (encoded, weights, size, buff_size, _) = from_file("test.ss".into()).unwrap();
         let mut decoder = Decoder::new(buff_size);
         let decoded = decoder
             .from_string(&from_huffman(&encoded, &weights, size).unwrap())
             .unwrap();
-        fs::remove_file("test.77");
+        fs::remove_file("test.ss");
+        assert!(w == decoded);
+    }
+    #[test]
+    fn more_lipsum_lzss() {
+        for _ in 0..10 {
+            let w = lipsum(10000);
+            let res = encode_string(&w, 5000, 1000, 2);
+            let (encoded, weights, size) = to_huffman(&res);
+            to_file(&encoded, &weights, size, 5000, "test.ss".into());
+            let (encoded, weights, size, buff_size, _) = from_file("test.ss".into()).unwrap();
+            let mut decoder = Decoder::new(buff_size);
+            let decoded = decoder
+                .from_string(&from_huffman(&encoded, &weights, size).unwrap())
+                .unwrap();
+            fs::remove_file("test.ss");
+            assert!(w == decoded);
+        }
+    }
+    #[test]
+    fn testin_lzss() {
+        let w = String::from("tetesrererereqweqwwwwwwwwwwwww");
+        let res = encode_string(&w, 5, 5, 2);
+        let mut decoder = Decoder::new(5);
+        let decoded = decoder.from_string(&res).unwrap();
+        println!("w: \n{}\ndecoded: \n{}", w, decoded);
         assert!(w == decoded);
     }
 }
