@@ -448,7 +448,7 @@ fn to_file(
     buffer_size: usize,
     filename: String,
 ) -> Result<String, DataStoreError> {
-    let mut new_name = filename.split('.').last().unwrap().to_string();
+    let mut new_name = filename.split('.').next().unwrap().to_string();
     new_name.push_str(".77");
     let mut file = std::fs::File::create(new_name.clone())?;
     bincode::serialize_into(&mut file, &(data, weights, size, buffer_size, filename))?;
