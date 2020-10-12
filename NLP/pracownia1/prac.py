@@ -1,10 +1,9 @@
 import re
 import random
+from itertools import permutations
 
 def max_match(string, dict):
     index = 0
-    word = ''
-    curr_word = ''
     max_len = 0
     for key in dict:
         max_len = max(max_len, len(key))
@@ -15,11 +14,9 @@ def max_match(string, dict):
         word = ''
         curr_word = ''
         for j, cj in enumerate(string[index:]):
-            #print(string[index:], j)
             curr_word += cj
             if curr_word in dict:
                 word = curr_word
-                #print(word)
             elif j > max_len:
                 tokens.append(word)
                 index = index + len(word)
@@ -67,7 +64,7 @@ def zad1():
 
 def generate_bigram():
     dict = {}
-    with open('../train data/2grams') as bigram:
+    with open('../train data/2grams', 'r', encoding='utf8') as bigram:
         for line in bigram:
             spl = [l for l in line.strip().lower().split(' ') if l]
             occ, w1, w2 = int(spl[0]), spl[1], spl[2]
@@ -100,9 +97,8 @@ def generate_trigram():
                 dict[w2] = [(0, occ, w3)]
     return dict
 
-def zad2_bigram():
-    dict = generate_bigram()
-    #dict = generate_trigram()
+def zad2(bigram=True):
+    dict = generate_bigram() if bigram else generate_trigram()
     word = ''
     curr_word = ''
     asc = []
@@ -119,9 +115,8 @@ def zad2_bigram():
             word = word[0].upper() + word[1:]
             return word
 
-def zad3_bigram():
-    #dict = generate_bigram()
-    dict = generate_trigram()
+def zad3(bigram=True):
+    dict = generate_bigram() if bigram else generate_trigram()
     word = ''
     curr_word = ''
     asc = []
@@ -141,4 +136,36 @@ def zad3_bigram():
             word = word[0].upper() + word[1:]
             return word
 
-print(zad3_bigram())
+def zad4(bigram=True):
+
+    dict = generate_bigram() if bigram else generate_trigram()
+
+    def perm_heu(permutation_list):
+        res = []
+        for w1, w2 in zip(permutation_list, permutation_list[1:]):
+            if not w1 in dict:
+                res.append(-10)
+            else:
+                asc = dict[w1]
+                score = 0
+                for lr, hr, w in asc:
+                    if w == w2:
+                        score = hr - lr
+                res.append(score)
+        print(res)
+        return (' '.join(permutation_list), sum(res))
+
+    test_data = [
+        'Judyta dała wczoraj Stefanowi czekoladki',
+        'Babuleńka miała dwa rogate koziołki',
+        'Wczoraj wieczorem spotkałem pewną piękną kobietę'
+    ]
+    results = []
+    for test in test_data:
+        results.append((test, [perm_heu(perm) for perm in permutations(test.lower().split(' '))]))
+
+    for test, perm_list in results:
+        perm_list.sort(reverse=True, key=lambda x: x[1])
+        print(u'test: {0}\n1* - {1}\n2* - {2}\n3* - {3}\n4* - {4}'.format(test, perm_list[0], perm_list[1], perm_list[2], perm_list[3]))
+
+zad4()
