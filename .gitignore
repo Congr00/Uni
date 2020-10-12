@@ -37,3 +37,8 @@ __pycache__
 *.so
 *.ml~
 policy_for*.txt
+NLP/train data/dict.txt
+NLP/train data/task3_train.txt
+NLP/train data/3grams
+NLP/train data/2grams
+Haskell/lab11/stack.yaml.lock
