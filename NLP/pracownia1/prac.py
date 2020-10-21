@@ -1,6 +1,8 @@
 import re
 import random
 from itertools import permutations
+from functools import reduce
+
 
 def max_match(string, dict):
     index = 0
@@ -26,6 +28,7 @@ def max_match(string, dict):
                 tokens.append(word)
 
 def corpus_to_dict():
+    #grep -Eo "[a-zA-Zżźćółńśąę]+" train_shuf.txt | tr '[:upper:]' '[:lower:]' | sort -u > dict.txt
     dict = {}
     with open('../train data/dict.txt') as corpus:
         for line in corpus:
@@ -62,6 +65,8 @@ def zad1():
 
     print(sum(scores) / len(scores))
 
+
+
 def generate_bigram():
     dict = {}
     with open('../train data/2grams', 'r', encoding='utf8') as bigram:
@@ -69,7 +74,7 @@ def generate_bigram():
             spl = [l for l in line.strip().lower().split(' ') if l]
             occ, w1, w2 = int(spl[0]), spl[1], spl[2]
             if occ < 50:
-                continue
+                break
             if w1 in dict:
                 _, l, _ = dict[w1][-1]
                 dict[w1].append((l+1, occ + l, w2))
@@ -84,7 +89,7 @@ def generate_trigram():
             spl = [l for l in line.strip().lower().split(' ') if l]
             occ, w1, w2, w3 = int(spl[0]), spl[1], spl[2], spl[3]
             if occ < 50:
-                continue
+                break
             if w1 in dict:
                 _, l, _ = dict[w1][-1]
                 dict[w1].append((l+1, occ + l, w2))
@@ -136,36 +141,110 @@ def zad3(bigram=True):
             word = word[0].upper() + word[1:]
             return word
 
-def zad4(bigram=True):
+'''
+Sąsiad. - od głosu? dziękuję. proszę o pomoc w tym wszystkim, i że w mojej pracy, 3) na dziś chyba jednak nie potrzebuję przełomowy dla gmin, które nie u lekarza do innych możliwości realizowania przez pana zdaniem, nie jest szefem komisji polityki społecznej jest fakt, iż w dodatku nie mającej na postawione w programie telewizyjnym programie jest wielu młodych ludzi, a więc byłem zwolennikiem tego, by zabić - no bo na siebie jako swojego miejsca w rybniku. 
+Wskazanym kierunku. wzajemnych stosunkach z kasy chorych w tym względzie, sąd okręgowy w ostatnich latach, gdy w tym nie jest to prawda, że nie słyszę. 
+'''
 
-    dict = generate_bigram() if bigram else generate_trigram()
+def generate_bigram_of(list_of_lists):
+    words = set(reduce(list.__add__, list_of_lists))
+    dict = {}
+    with open('../train data/2grams', 'r', encoding='utf8') as bigram:
+        for line in bigram:
+            spl = [l for l in line.strip().lower().split(' ') if l]
+            occ, w1, w2 = int(spl[0]), spl[1], spl[2]
+            if w1 not in words:
+                continue
+            if w1 in dict:
+                _, l, _ = dict[w1][-1]
+                dict[w1].append((l+1, occ + l, w2))
+            else:
+                dict[w1] = [(0, occ, w2)]
+    return dict
 
-    def perm_heu(permutation_list):
+def zad4():
+    def perm_heu(permutation_list, dict):
         res = []
         for w1, w2 in zip(permutation_list, permutation_list[1:]):
             if not w1 in dict:
-                res.append(-10)
+                continue
             else:
                 asc = dict[w1]
                 score = 0
+                _, last, _ = asc[-1]
                 for lr, hr, w in asc:
                     if w == w2:
-                        score = hr - lr
+                        score = (hr - lr + 1) / last
                 res.append(score)
-        print(res)
         return (' '.join(permutation_list), sum(res))
 
     test_data = [
         'Judyta dała wczoraj Stefanowi czekoladki',
         'Babuleńka miała dwa rogate koziołki',
-        'Wczoraj wieczorem spotkałem pewną piękną kobietę'
+        'Wczoraj wieczorem spotkałem pewną piękną kobietę',
+        'Dlaczego zawsze mam największego pecha',
+        'To był mój najlepszy zagrany mecz w życiu',
+        'Ciągle nie mogę uwierzyć w to, co tam zobaczyłem',
+        'Po raz pierwszy zauważyłem ten szczegół',
+        'Zjadłem pyszną kanapkę z szynką i serem'
     ]
     results = []
+    dict = generate_bigram_of([test.lower().split(' ') for test in test_data])
+
     for test in test_data:
-        results.append((test, [perm_heu(perm) for perm in permutations(test.lower().split(' '))]))
+        results.append((test, [perm_heu(perm, dict) for perm in permutations(test.lower().split(' '))]))
 
     for test, perm_list in results:
         perm_list.sort(reverse=True, key=lambda x: x[1])
-        print(u'test: {0}\n1* - {1}\n2* - {2}\n3* - {3}\n4* - {4}'.format(test, perm_list[0], perm_list[1], perm_list[2], perm_list[3]))
+        print(u'test: {0}\n1* - {1}\n2* - {2}\n'.format(test, perm_list[0], perm_list[1]))
 
 zad4()
+
+def zad5():
+    max_prefix = 5
+    def perm_heu(permutation_list, dict):
+        res = []
+        for w1, w2 in zip(permutation_list, permutation_list[1:]):
+            asc = dict[w1]
+            score = 0
+            _, last, _ = asc[-1]
+            for lr, hr, w in asc:
+                for i in range(1, max_prefix):
+                    if w2[:-i] == w:
+                        score += (hr - lr + 1) / last * (i * 2)
+                if w == w2:
+                    score += (hr - lr + 1) / last
+            res.append(score)
+        return (' '.join(permutation_list), sum(res))
+
+    def extend(list):
+        max_l = len(list)
+        for i in range(max_l):
+            w = list[i]
+            for i in range(1, max_prefix):
+                if i >= len(w):
+                    break
+                list.append(w[:-i])
+        return list
+
+    test_data = [
+        #'Judyta dała wczoraj Stefanowi czekoladki',
+        #'Babuleńka miała dwa rogate koziołki',
+        #'Wczoraj wieczorem spotkałem pewną piękną kobietę',
+        #'Dlaczego zawsze mam największego pecha',
+        #'To jest jakaś masakra',
+        #'To był mój najlepszy zagrany mecz',
+        #'Wciąż nie mogę w to uwierzyć',
+        #'Po raz pierwszy zauważyłem ten szczegół',
+        'Zjadłem pyszną kanapkę z szynką i serem'
+    ]
+    results = []
+    test_dict_data = [extend(test.lower().split(' ')) for test in test_data]
+    dict = generate_bigram_of([test for test in test_dict_data])
+
+    for test in test_data:
+        results.append((test, [perm_heu(perm, dict) for perm in permutations(test.lower().split(' '))]))
+
+    for test, perm_list in results:
+        perm_list.sort(reverse=True, key=lambda x: x[1])
+        print(u'test: {0}\n1* - {1}\n2*'.format(test, perm_list[0], perm_list[1]))
