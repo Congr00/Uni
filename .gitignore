@@ -42,3 +42,11 @@ NLP/train data/task3_train.txt
 NLP/train data/3grams
 NLP/train data/2grams
 Haskell/lab11/stack.yaml.lock
+*.cc
+*.hist
+*.swp
+*.lock
+*.save
+*.swo
+*.hist
+
