@@ -1,0 +1,1 @@
+lambda n. ((fix lambda f. (lambda n. (if n = 0 then 1 else n * (f (n - 1))))) n) 4

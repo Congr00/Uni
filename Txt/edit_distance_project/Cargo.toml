@@ -1,0 +1,31 @@
+[package]
+name = "edit_distance_project"
+version = "0.1.0"
+authors = ["Congr00 <lukasklasinski@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+segment-tree = "2.0.0"
+suffix = "1.2"
+rand = "0.8.0"
+lipsum = "0.6.0"
+shrinkwraprs = "0.3"
+edit_distance_lib = { package = "edit-distance", version = "2.1.0" }
+
+[dev-dependencies]
+lipsum = "0.6.0"
+criterion = "0.3"
+
+[[bench]]
+name = "benchmark"
+harness = false
+
+[lib]
+name = "edit_distance"
+path = "src/algorithms/mod.rs"
+doctest = false
+
+[profile.test]
+opt-level = 3

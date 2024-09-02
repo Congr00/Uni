@@ -137,9 +137,11 @@ def zad3(bigram=True):
                 if num >= lr and num <= hr:
                     curr_word = w
         word += curr_word + ' '
-        if curr_word.endswith('.') and len(word) > 50:
+        if curr_word.endswith('.') and len(word) > 300:
             word = word[0].upper() + word[1:]
             return word
+
+print(zad3(False))
 
 '''
 Sąsiad. - od głosu? dziękuję. proszę o pomoc w tym wszystkim, i że w mojej pracy, 3) na dziś chyba jednak nie potrzebuję przełomowy dla gmin, które nie u lekarza do innych możliwości realizowania przez pana zdaniem, nie jest szefem komisji polityki społecznej jest fakt, iż w dodatku nie mającej na postawione w programie telewizyjnym programie jest wielu młodych ludzi, a więc byłem zwolennikiem tego, by zabić - no bo na siebie jako swojego miejsca w rybniku. 
@@ -198,7 +200,7 @@ def zad4():
         perm_list.sort(reverse=True, key=lambda x: x[1])
         print(u'test: {0}\n1* - {1}\n2* - {2}\n'.format(test, perm_list[0], perm_list[1]))
 
-zad4()
+#zad4()
 
 def zad5():
     max_prefix = 5

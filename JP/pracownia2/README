@@ -1,0 +1,26 @@
+Napisana została podstawowa wersja zadania - zaimplementowany został prosty język rachunku
+lambda z typami prostymi (bool, uint, unit, fix) wraz z prostymi wyjątkami. Zaimplementowane
+zostały podstawowe operacje na danych typach takie jak dodawanie, mnożenie, or, and itp.
+Ewaluacja termów jest wykonywana poprzez funkcję sprowadzającą ją do słabej czołowej postaci
+normalnej z ewaluacją `call by value`. Do rozwiązania nie został doimplementowany parser, zatem
+język należy `pisać` używając struktur ocamlowych - np.
+
+TmAdd (TmNum 0) (TmNum 1) - oznacza 0 + 1.
+TmIf (TmEq (TmNum 0, TmNum 0), TmNum 1, TmNum 2) - oznacza if 0 == 0 then 1 else 2
+...
+
+Dodatkowo zostało dodane kilka funkcji/operatorów, które ułatwiają nieco pracę z `językiem` -
+korzystając z nich można powyższe przykłądy przepisać jako:
+
+TmNum 0 =: TmNum 1
+_if (TmNum 0 =: TmNum 0) (TmNum 1) (TmNum 2)
+
+W pliku core.ml poza samą implementacją, można znaleźć testowych programów napisanych w zaimplementowanym
+języku. Służą one także jako wzorzec korzystania z niego. W celu ich wykonania wystarczy
+wywołać je używając dostarczonej funkcji `eval`, która przyjmuje term, sprawdza, czy się typuje
+(i jeśli nie, to zatrzymuje wykonanie wraz z odpowiednią informacją o tym jaki typ się nie zgadza), a
+następnie wykonuje. W wyniku zwracana jest krotka w postaci (wynik, typ_wyniku). Dodatkowo jeśli w kodzie
+zostanie wywołany wyjątek, który nie zostanie wyłapany, to egzekucja zostanie wstrzymana.
+
+Program najwygodniej jest uruchamiać załadowując plik do interpretera ocamla i uruchamiając odpowiednie
+testy/funkcje.
